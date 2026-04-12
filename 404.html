@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page introuvable — MailOne</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fafafa;--sur:#fff;--bdr:#e4e4e7;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--g400:#a1a1aa;--green:#16a34a;--green-l:#f0fdf4}
+html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink)}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px;text-align:center}
+.num{font-family:'Space Grotesk',sans-serif;font-size:clamp(80px,15vw,140px);font-weight:800;line-height:1;letter-spacing:-.06em;color:var(--bdr);margin-bottom:8px;animation:slideDown .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.ico{font-size:44px;margin-bottom:16px;}
+
+h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(22px,3vw,32px);font-weight:800;letter-spacing:-.03em;margin-bottom:10px}
+p{font-size:15px;color:var(--ink3);line-height:1.65;max-width:420px;margin-bottom:32px}
+.links{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+.link{padding:11px 22px;border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;text-decoration:none;transition:all .15s}
+.l-dark{background:var(--ink);color:var(--bg)}.l-dark:hover{opacity:.85}
+.l-ghost{background:transparent;color:var(--ink2);border:1px solid var(--bdr)}.l-ghost:hover{background:var(--sur)}
+.nav-logo{position:fixed;top:20px;left:24px;font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;color:var(--ink);letter-spacing:-.5px;display:flex;align-items:center;gap:5px;text-decoration:none}
+.nav-mark{width:7px;height:7px;border-radius:50%;background:var(--green)}
+
+/* MOBILE MENU */
+.menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px;color:var(--g700)}
+.menu-toggle svg{width:22px;height:22px}
+.mobile-menu{display:none;position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);flex-direction:column;padding:80px 24px 24px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:17px;font-weight:600;color:var(--g900);padding:14px 0;border-bottom:1px solid var(--g200);text-decoration:none}
+.mobile-menu .btn{margin-top:12px;justify-content:center;width:100%;padding:14px;font-size:15px}
+.mm-close{position:absolute;top:16px;right:20px;background:none;border:none;cursor:pointer;font-size:24px;color:var(--g500)}
+@media(max-width:768px){.menu-toggle{display:block}.nav-links{display:none}}
+@media(min-width:769px){.mobile-menu{display:none!important}}
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mailone.app">
+<meta property="og:title" content="MailOne — Copilote IA">
+<meta property="og:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<meta property="og:image" content="https://mailone.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MailOne — Copilote IA">
+<meta name="twitter:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<meta name="description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<link rel="canonical" href="https://mailone.app/404">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-mark"></span></a>
+<div class="num">404</div>
+<div class="ico">✉️</div>
+<h1>Cette page s'est perdue quelque part</h1>
+<p>L'adresse que vous cherchez n'existe pas ou a été déplacée. Pas d'inquiétude — votre boîte mail, elle, est bien là.</p>
+<div class="links">
+  <a href="index.html" class="link l-dark">← Retour à l'accueil</a>
+  <a href="app.html" class="link l-ghost">Accéder à l'application</a>
+  <a href="contact.html" class="link l-ghost">Signaler un problème</a>
+</div>
+<div style="position:fixed;bottom:20px;font-size:11px;color:var(--ink3)">
+  Si vous pensez que c'est une erreur, <a href="contact.html" style="color:var(--green);text-decoration:none;font-weight:600">contactez-nous</a>.
+</div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /app
+Disallow: /account
+Disallow: /admin
+Disallow: /assistant
+Disallow: /referral
+Disallow: /success
+Disallow: /forgot
+Disallow: /reset-password
+
+Sitemap: https://mailone.app/sitemap.xml

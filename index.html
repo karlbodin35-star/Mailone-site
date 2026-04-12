@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MailOne — Copilote IA pour votre boîte mail</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--white:#fff;--g50:#fafafa;--g100:#f4f4f5;--g200:#e4e4e7;--g300:#d4d4d8;--g400:#a1a1aa;--g500:#71717a;--g600:#52525b;--g700:#3f3f46;--g800:#27272a;--g900:#18181b;--g950:#09090b;--green-50:#f0fdf4;--green-100:#dcfce7;--green-500:#22c55e;--green-600:#16a34a;--green-700:#15803d;--red-50:#fef2f2;--red-500:#ef4444;--red-600:#dc2626;--blue-50:#eff6ff;--blue-500:#3b82f6;--blue-600:#2563eb;--amber-50:#fffbeb;--amber-500:#f59e0b;--amber-600:#d97706;--radius:10px}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--white);color:var(--g900);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;height:60px;background:rgba(255,255,255,.88);backdrop-filter:blur(16px) saturate(180%);border-bottom:1px solid var(--g200);display:flex;align-items:center;padding:0 clamp(20px,5vw,60px)}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;color:var(--g900);letter-spacing:-.5px;text-decoration:none;display:flex;align-items:center;gap:2px}
+.nav-logo span{color:var(--g400)}
+.nav-mark{width:7px;height:7px;border-radius:50%;background:var(--green-500);margin-left:3px}
+.nav-links{display:flex;gap:28px;margin-left:48px}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--g500);text-decoration:none;transition:color .15s}
+.nav-links a:hover{color:var(--g900)}
+.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:6px;transition:all .15s}
+.btn-s{background:var(--white);color:var(--g700);border:1px solid var(--g200)}.btn-s:hover{background:var(--g50);border-color:var(--g300)}
+.btn-p{background:var(--g900);color:var(--white)}.btn-p:hover{background:var(--g800)}
+.btn-g{background:var(--green-600);color:#fff}.btn-g:hover{background:var(--green-700)}
+.btn-lg{padding:13px 26px;font-size:15px;border-radius:var(--radius)}
+
+/* HERO */
+.hero{padding:80px clamp(20px,5vw,60px) 64px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-50);border:1px solid var(--green-100);border-radius:100px;padding:5px 14px 5px 8px;font-size:12px;font-weight:600;color:var(--green-700);margin-bottom:24px}
+.hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--green-500)}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(36px,4.2vw,54px);font-weight:700;line-height:1.08;letter-spacing:-.035em;color:var(--g950);margin-bottom:20px}
+.hero-sub{font-size:17px;line-height:1.65;color:var(--g500);max-width:420px;margin-bottom:32px}
+.hero-ctas{display:flex;gap:10px;margin-bottom:24px}
+.hero-proof{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--g400)}
+.avs{display:flex}.av{width:28px;height:28px;border-radius:50%;border:2px solid #fff;margin-left:-8px;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#fff}.av:first-child{margin-left:0}
+
+/* MOCKUP */
+.mockup{background:var(--g50);border:1px solid var(--g200);border-radius:14px;overflow:hidden;box-shadow:0 24px 48px -12px rgba(0,0,0,.08)}
+.mock-bar{background:var(--g900);padding:10px 14px;display:flex;align-items:center;gap:7px}
+.mock-dots{display:flex;gap:5px}.mock-dot{width:9px;height:9px;border-radius:50%;background:var(--g700)}
+.mock-url{font-size:10.5px;color:var(--g500);margin-left:8px}
+.mock-status{margin-left:auto;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:600;color:var(--green-500)}
+.pulse-dot{width:5px;height:5px;border-radius:50%;background:currentColor;animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.mock-body{padding:12px}
+.mock-mail{background:#fff;border:1px solid var(--g200);border-radius:8px;padding:10px 12px;margin-bottom:6px}
+.mm-row{display:flex;align-items:center;gap:6px;margin-bottom:3px}
+.mm-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.mm-name{font-size:12px;font-weight:600;flex:1}
+.mm-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.03em}
+.mm-subj{font-size:11px;color:var(--g600);margin-bottom:2px}
+.mm-sum{font-size:10px;color:var(--g400)}
+.mock-ai{background:#fff;border:1px solid var(--g200);border-left:3px solid var(--green-600);border-radius:0 8px 8px 0;padding:10px 12px;margin-top:8px}
+.mock-ai-lbl{font-size:9px;font-weight:700;color:var(--green-600);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px;display:flex;align-items:center;gap:4px}
+.mock-ai-txt{font-size:11px;color:var(--g600);line-height:1.55}
+.cursor{display:inline-block;width:1.5px;height:12px;background:var(--green-600);margin-left:1px;vertical-align:middle;animation:cblink 1s step-end infinite}
+@keyframes cblink{0%,100%{opacity:1}50%{opacity:0}}
+
+/* COMPAT */
+.compat{border-top:1px solid var(--g200);border-bottom:1px solid var(--g200);padding:16px clamp(20px,5vw,60px);display:flex;justify-content:center;gap:36px;flex-wrap:wrap}
+.compat span{font-size:13px;font-weight:600;color:var(--g300);letter-spacing:-.01em}
+
+/* SECTIONS */
+.sec-dark{background:var(--g950);padding:88px clamp(20px,5vw,60px)}
+.sec-light{background:var(--white);padding:80px clamp(20px,5vw,60px);border-bottom:1px solid var(--g200)}
+.sec-alt{background:var(--g50);padding:80px clamp(20px,5vw,60px);border-top:1px solid var(--g200);border-bottom:1px solid var(--g200)}
+.container{max-width:1100px;margin:0 auto}
+.sec-label{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.sec-label.l{color:var(--green-500)}.sec-label.d{color:var(--green-600)}
+.sec-title{font-family:'Space Grotesk',sans-serif;font-weight:700;letter-spacing:-.03em;line-height:1.12}
+.sec-sub{font-size:16px;line-height:1.65;margin-top:12px}
+
+/* SCENARIOS */
+.sc{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:28px 30px;display:grid;grid-template-columns:1fr 260px;gap:32px;align-items:center;margin-bottom:14px;transition:background .2s}
+.sc:hover{background:rgba(255,255,255,.05)}
+.sc-tag{display:inline-flex;background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.2);border-radius:100px;padding:3px 10px;font-size:10px;font-weight:700;color:#fca5a5;text-transform:uppercase;letter-spacing:.04em;margin-bottom:14px}
+.sc h3{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;color:var(--g100);line-height:1.3;margin-bottom:10px}
+.sc p{font-size:14px;color:rgba(255,255,255,.38);line-height:1.7;max-width:460px}
+.sc-after{background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.18);border-radius:12px;padding:18px 20px}
+.sc-after-lbl{font-size:10px;font-weight:700;color:var(--green-500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.sc-row{display:flex;align-items:flex-start;gap:9px;font-size:13px;color:rgba(255,255,255,.6);margin-bottom:7px;line-height:1.45}
+.sc-row:last-child{margin-bottom:0}
+.sc-m{color:var(--green-500);font-weight:700;flex-shrink:0;min-width:32px}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.07);border-radius:14px;overflow:hidden;margin-top:48px}
+.stats .cell{background:var(--g950);padding:28px 24px;text-align:center}
+.stats .val{font-family:'Space Grotesk',sans-serif;font-size:40px;font-weight:700;color:var(--green-500);line-height:1;letter-spacing:-.03em}
+.stats .lbl{font-size:13px;color:rgba(255,255,255,.4);margin-top:6px;line-height:1.45}
+
+/* STEPS */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--g200);border-radius:14px;overflow:hidden;margin-top:44px}
+.step{padding:28px 22px;border-right:1px solid var(--g200)}
+.step:last-child{border-right:none}
+.step-num{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:var(--g300);text-transform:uppercase;letter-spacing:.1em;margin-bottom:16px}
+.step-ico{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:14px;font-size:18px}
+.step-t{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;margin-bottom:8px}
+.step-d{font-size:12.5px;color:var(--g500);line-height:1.6}
+
+/* FEATURES */
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:44px}
+.fc{background:var(--g50);border:1px solid var(--g200);border-radius:12px;padding:24px;transition:all .2s}
+.fc:hover{border-color:var(--g300);box-shadow:0 4px 16px rgba(0,0,0,.04)}
+.fc-ico{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;margin-bottom:14px}
+.fc-t{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;margin-bottom:6px}
+.fc-d{font-size:13px;color:var(--g500);line-height:1.6}
+.fc-tier{display:inline-block;margin-top:10px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em}
+.t-all{background:var(--green-50);color:var(--green-700)}
+.t-team{background:var(--amber-50);color:var(--amber-600);border:1px solid #fde68a}
+.t-ent{background:#f5f0ff;color:#6d28d9}
+
+/* TESTIMONIALS */
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:44px}
+.tc{background:#fff;border:1px solid var(--g200);border-radius:12px;padding:24px;display:flex;flex-direction:column}
+.tc.feat{border-color:var(--green-500);box-shadow:0 4px 20px rgba(22,163,74,.08)}
+.tc-stars{color:var(--amber-500);font-size:14px;margin-bottom:14px;letter-spacing:2px}
+.tc-text{font-size:13.5px;color:var(--g600);line-height:1.7;flex:1;margin-bottom:18px}
+.tc-author{display:flex;align-items:center;gap:10px;border-top:1px solid var(--g200);padding-top:16px}
+.tc-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.tc-name{font-size:13px;font-weight:600}
+.tc-role{font-size:11px;color:var(--g400)}
+
+/* PRICING */
+.price-sec{background:var(--g950);padding:88px clamp(20px,5vw,60px)}
+.btoggle{display:flex;gap:2px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:3px;margin-bottom:14px}
+.btoggle button{padding:8px 22px;border-radius:100px;border:none;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:600;transition:all .2s}
+.btoggle .on{background:#fff;color:var(--g900)}
+.btoggle .off{background:transparent;color:rgba(255,255,255,.4)}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;align-items:start}
+.plan{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:28px;position:relative;transition:all .2s}
+.plan:hover{background:rgba(255,255,255,.07)}
+.plan.feat{background:#fff;border-color:#fff;transform:translateY(-8px);box-shadow:0 32px 64px rgba(0,0,0,.3)}
+.plan-pop{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--green-600);color:#fff;font-size:10px;font-weight:700;padding:4px 14px;border-radius:100px;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}
+.plan-name{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.plan:not(.feat) .plan-name{color:rgba(255,255,255,.35)}.plan.feat .plan-name{color:var(--g400)}
+.plan-price{font-family:'Space Grotesk',sans-serif;font-size:44px;font-weight:700;line-height:1;margin-bottom:4px;letter-spacing:-.03em}
+.plan:not(.feat) .plan-price{color:#fff}.plan.feat .plan-price{color:var(--g900)}
+.plan-price sup{font-size:18px;vertical-align:super}
+.plan-price sub{font-size:13px;font-weight:400;vertical-align:baseline}
+.plan:not(.feat) .plan-price sub{color:rgba(255,255,255,.42)}.plan.feat .plan-price sub{color:var(--g400)}
+.plan-tag{font-size:12.5px;line-height:1.5;margin-bottom:16px}
+.plan:not(.feat) .plan-tag{color:rgba(255,255,255,.3)}.plan.feat .plan-tag{color:var(--g500)}
+.plan-per{text-align:center;font-size:11px;margin-bottom:10px}
+.plan:not(.feat) .plan-per{color:rgba(255,255,255,.45)}.plan.feat .plan-per{color:var(--g400)}
+.plan-save{border-radius:8px;padding:8px 10px;margin-bottom:16px;font-size:12px;font-weight:600;text-align:center}
+.plan:not(.feat) .plan-save{background:rgba(22,163,74,.12);border:1px solid rgba(22,163,74,.2);color:#4ade80}
+.plan.feat .plan-save{background:var(--green-50);border:1px solid var(--green-100);color:var(--green-700)}
+.plan-div{height:1px;margin-bottom:18px}
+.plan:not(.feat) .plan-div{background:rgba(255,255,255,.07)}.plan.feat .plan-div{background:var(--g200)}
+.plan-feats{list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:8px}
+.plan-feats li{display:flex;align-items:flex-start;gap:8px;font-size:13px;line-height:1.45}
+.plan:not(.feat) .plan-feats li{color:rgba(255,255,255,.55)}.plan.feat .plan-feats li{color:var(--g600)}
+.chk{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:2px}
+.plan:not(.feat) .chk{background:rgba(22,163,74,.15);color:var(--green-500)}.plan.feat .chk{background:var(--green-50);color:var(--green-600)}
+.plan-btn{width:100%;padding:12px;border-radius:var(--radius);border:none;font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:700;cursor:pointer;transition:all .15s;letter-spacing:.01em}
+.plan-btn-o{background:transparent;color:rgba(255,255,255,.45);border:1px solid rgba(255,255,255,.1)}.plan-btn-o:hover{background:rgba(255,255,255,.06);color:#fff}
+.plan-btn-g{background:var(--green-600);color:#fff}.plan-btn-g:hover{background:var(--green-700)}
+
+/* FAQ */
+.faq-sec{padding:72px clamp(20px,5vw,60px);max-width:720px;margin:0 auto}
+.faq-title{font-family:'Space Grotesk',sans-serif;font-size:28px;font-weight:700;letter-spacing:-.03em;text-align:center;margin-bottom:36px}
+.faq-item{border-bottom:1px solid var(--g200)}
+.faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 0;cursor:pointer;font-size:14.5px;font-weight:600;color:var(--g900);gap:14px}
+.faq-arrow{font-size:18px;color:var(--g400);transition:transform .2s;flex-shrink:0;font-weight:300}
+.faq-a{font-size:14px;color:var(--g500);line-height:1.7;padding-bottom:18px;display:none}
+.faq-item.open .faq-a{display:block}
+.faq-item.open .faq-arrow{transform:rotate(45deg)}
+
+/* REFERRAL */
+.ref{background:var(--green-600);padding:48px clamp(20px,5vw,60px);text-align:center}
+.ref h3{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:-.02em;margin-bottom:10px}
+.ref p{font-size:14.5px;color:rgba(255,255,255,.72);margin-bottom:22px;line-height:1.6;max-width:550px;margin-left:auto;margin-right:auto}
+.ref a{display:inline-block;padding:12px 26px;background:#fff;color:var(--green-700);border-radius:var(--radius);font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;text-decoration:none;transition:opacity .15s}
+.ref a:hover{opacity:.9}
+
+/* FOOTER */
+footer{background:var(--g950);padding:48px clamp(20px,5vw,60px) 28px}
+.ft-in{max-width:1100px;margin:0 auto}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px}
+.ft-logo{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:-.5px;display:flex;align-items:center;gap:2px;margin-bottom:10px;text-decoration:none}
+.ft-logo span{color:var(--g600)}
+.ft-tag{font-size:13px;color:rgba(255,255,255,.42);line-height:1.6;max-width:220px}
+.ft-col-t{font-size:10px;font-weight:700;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.1em;margin-bottom:12px}
+.ft-links{list-style:none;display:flex;flex-direction:column;gap:8px}
+.ft-links a{font-size:13px;color:rgba(255,255,255,.35);text-decoration:none;transition:color .15s}
+.ft-links a:hover{color:#fff}
+.ft-bot{border-top:1px solid rgba(255,255,255,.06);padding-top:20px;display:flex;justify-content:space-between;font-size:11.5px;color:rgba(255,255,255,.35);flex-wrap:wrap;gap:8px}
+
+/* COOKIE */
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;z-index:999;background:var(--g900);border-top:1px solid rgba(255,255,255,.08);padding:14px clamp(20px,5vw,60px);display:none;align-items:center;gap:14px;flex-wrap:wrap}
+#cookie-banner.show{display:flex}
+.c-txt{flex:1;font-size:12.5px;color:rgba(255,255,255,.5);line-height:1.5;min-width:200px}
+.c-txt a{color:var(--green-500);text-decoration:none}
+.c-btns{display:flex;gap:6px}
+.c-btn{padding:7px 14px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none}
+.c-accept{background:var(--green-500);color:var(--g950)}
+.c-refuse{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}
+
+/* OVERLAY */
+.overlay{position:fixed;inset:0;background:rgba(9,9,11,.55);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:500}
+.overlay.open{display:flex}
+.modal{background:#fff;border:1px solid var(--g200);border-radius:16px;padding:40px 32px;text-align:center;max-width:400px;width:90%}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .mockup{display:none}
+  .nav-links{display:none}
+  .feat-grid{grid-template-columns:1fr 1fr}
+  .sc{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr 1fr}
+  .steps{grid-template-columns:1fr 1fr}
+  .step:nth-child(2){border-right:none}
+  .step{border-bottom:1px solid var(--g200)}
+  .tg{grid-template-columns:1fr}
+  .plans{grid-template-columns:1fr}
+  .plan.feat{transform:none}
+  .ft-grid{grid-template-columns:1fr 1fr}
+}
+
+/* MOBILE MENU */
+.menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px;color:var(--g700)}
+.menu-toggle svg{width:22px;height:22px}
+.mobile-menu{display:none;position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);flex-direction:column;padding:80px 24px 24px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:17px;font-weight:600;color:var(--g900);padding:14px 0;border-bottom:1px solid var(--g200);text-decoration:none}
+.mobile-menu .btn{margin-top:12px;justify-content:center;width:100%;padding:14px;font-size:15px}
+.mm-close{position:absolute;top:16px;right:20px;background:none;border:none;cursor:pointer;font-size:24px;color:var(--g500)}
+@media(max-width:768px){.menu-toggle{display:block}.nav-links{display:none}}
+@media(min-width:769px){.mobile-menu{display:none!important}}
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mailone.app">
+<meta property="og:title" content="MailOne — Copilote IA pour votre boîte mail">
+<meta property="og:description" content="Vos mails triés, résumés, répondus en 30 secondes. IA pour artisans et PME.">
+<meta property="og:image" content="https://mailone.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MailOne — Copilote IA pour votre boîte mail">
+<meta name="twitter:description" content="Vos mails triés, résumés, répondus en 30 secondes. IA pour artisans et PME.">
+<meta name="description" content="Vos mails triés, résumés, répondus en 30 secondes. IA pour artisans et PME.">
+<link rel="canonical" href="https://mailone.app/">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<div id="cookie-banner" data-consent-required="true">
+  <div class="c-txt">MailOne utilise des cookies essentiels et d'analyse. <a href="legal.html#cookies">Politique de cookies</a></div>
+  <div class="c-btns">
+    <button class="c-btn c-refuse" onclick="acceptCookies('essential')">Refuser</button>
+    <button class="c-btn c-accept" onclick="acceptCookies('all')">Accepter</button>
+  </div>
+</div>
+
+<nav>
+  <a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-mark"></span></a>
+  <div class="nav-links">
+    <a href="#pourquoi">Pourquoi MailOne ?</a>
+    <a href="#features">Fonctionnalités</a>
+    <a href="#pricing">Tarifs</a>
+    <a href="#faq">FAQ</a>
+    <a href="demo.html">Démo</a>
+  </div>
+  
+<button class="menu-toggle" onclick="document.getElementById('mobile-menu').classList.add('open')" aria-label="Menu">
+  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+
+  <div class="nav-right" id="nav-right">
+    <a href="login.html" class="btn btn-s">Se connecter</a>
+    <a href="#pricing" class="btn btn-p">Démarrer</a>
+  </div>
+</nav>
+
+<section style="background:#fff">
+<div class="hero">
+  <div>
+    <div class="hero-badge"><span class="hero-badge-dot"></span>Copilote IA — Artisans & PME</div>
+    <h1>Vos mails triés,<br>résumés, répondus.<br>En 30 secondes.</h1>
+    <p class="hero-sub">MailOne analyse votre boîte mail, classe vos emails par priorité et rédige les réponses. Vous relisez, vous copiez, vous envoyez.</p>
+    <div class="hero-ctas">
+      <a href="#pricing" class="btn btn-g btn-lg">Essai gratuit 14 jours</a>
+      <a href="demo.html" class="btn btn-s btn-lg">Voir la démo</a>
+    </div>
+    <div class="hero-proof">
+      <div class="avs">
+        <div class="av" style="background:linear-gradient(135deg,#f97316,#dc2626)">JM</div>
+        <div class="av" style="background:linear-gradient(135deg,#16a34a,#0d9373)">SB</div>
+        <div class="av" style="background:linear-gradient(135deg,#6d28d9,#4f46e5)">RL</div>
+        <div class="av" style="background:linear-gradient(135deg,#2563eb,#0891b2)">MT</div>
+      </div>
+      <span>Essai 14 jours · Sans carte bancaire</span>
+    </div>
+  </div>
+
+  <div class="mockup">
+    <div class="mock-bar">
+      <div class="mock-dots"><div class="mock-dot"></div><div class="mock-dot"></div><div class="mock-dot"></div></div>
+      <div class="mock-url">app.mailone.fr</div>
+      <div class="mock-status"><span class="pulse-dot"></span>Connecté</div>
+    </div>
+    <div class="mock-body">
+      <div class="mock-mail">
+        <div class="mm-row"><div class="mm-dot" style="background:var(--red-500)"></div><div class="mm-name">B. Talon</div><span class="mm-tag" style="background:var(--red-50);color:var(--red-600)">Urgent</span></div>
+        <div class="mm-subj">Chaudière en panne — 12°C, enfants</div>
+        <div class="mm-sum">Critique · Intervention J0 · Client fidèle</div>
+      </div>
+      <div class="mock-mail">
+        <div class="mm-row"><div class="mm-dot" style="background:var(--blue-500)"></div><div class="mm-name">S. Leclerc</div><span class="mm-tag" style="background:var(--blue-50);color:var(--blue-600)">Devis</span></div>
+        <div class="mm-subj">SDB 12m² — budget 8–10k€ · Relance</div>
+        <div class="mm-sum">Lead chaud · Concurrent contacté · Agir aujourd'hui</div>
+      </div>
+      <div class="mock-ai">
+        <div class="mock-ai-lbl"><span class="pulse-dot" style="color:var(--green-600)"></span>Réponse IA</div>
+        <div class="mock-ai-txt">Bonjour M. Talon, je prends en charge votre urgence immédiatement. Un technicien interviendra<span class="cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<div class="compat">
+  <span>Gmail</span><span>Outlook</span><span>OVH Mail</span><span>Zapier</span><span>20 langues</span><span>RGPD</span>
+</div>
+
+<!-- PAIN POINTS -->
+<section class="sec-dark" id="pourquoi">
+<div class="container">
+  <div style="text-align:center;margin-bottom:52px">
+    <div class="sec-label l">Ça vous parle ?</div>
+    <h2 class="sec-title" style="font-size:clamp(26px,3.5vw,42px);color:var(--g100)">Ces situations, vous les vivez<br>chaque semaine.</h2>
+    <p class="sec-sub" style="color:rgba(255,255,255,.35);max-width:480px;margin:12px auto 0">MailOne a été conçu exactement pour ça.</p>
+  </div>
+
+  <div class="sc">
+    <div>
+      <div class="sc-tag">Avant MailOne</div>
+      <h3>18h00. La journée se termine.<br>30 mails non traités vous attendent.</h3>
+      <p>Urgence ou pas ? Client ou démarchage ? Devis à relancer ? Vous lisez tout, un par un. Une heure de perdue.</p>
+    </div>
+    <div class="sc-after">
+      <div class="sc-after-lbl">Avec MailOne</div>
+      <div class="sc-row"><span class="sc-m">2s</span>30 mails triés et résumés</div>
+      <div class="sc-row"><span class="sc-m">→</span>3 urgences identifiées en tête</div>
+      <div class="sc-row"><span class="sc-m">→</span>Réponses rédigées, vous validez</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div>
+      <div class="sc-tag">Avant MailOne</div>
+      <h3>Retour de vacances.<br>150 mails non lus.</h3>
+      <p>Un client en colère. Un devis à 8 000€ parti chez le concurrent. La rentrée vire au cauchemar.</p>
+    </div>
+    <div class="sc-after">
+      <div class="sc-after-lbl">Avec MailOne</div>
+      <div class="sc-row"><span class="sc-m">1min</span>150 mails analysés et classés</div>
+      <div class="sc-row"><span class="sc-m">→</span>Urgences remontées en premier</div>
+      <div class="sc-row"><span class="sc-m">→</span>Devis à relancer identifiés</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div>
+      <div class="sc-tag">Avant MailOne</div>
+      <h3>En plein chantier.<br>Notification. Urgent ou pas ?</h3>
+      <p>Sortir le téléphone, lire 3 paragraphes, rédiger une réponse approximative. 8 minutes perdues.</p>
+    </div>
+    <div class="sc-after">
+      <div class="sc-after-lbl">Avec MailOne</div>
+      <div class="sc-row"><span class="sc-m">1 ligne</span>Le résumé IA dit l'essentiel</div>
+      <div class="sc-row"><span class="sc-m">→</span>Urgent ou pas — en 2 secondes</div>
+      <div class="sc-row"><span class="sc-m">→</span>Réponse prête, copier-coller</div>
+    </div>
+  </div>
+
+  <div class="sc">
+    <div>
+      <div class="sc-tag">Avant MailOne</div>
+      <h3>Un client rappelle pour son devis.<br>Vous ne vous souvenez plus de rien.</h3>
+      <p>Vous cherchez dans vos mails. Le client a signé ailleurs. 5 000€ perdus.</p>
+    </div>
+    <div class="sc-after">
+      <div class="sc-after-lbl">Avec MailOne</div>
+      <div class="sc-row"><span class="sc-m">Auto</span>Relances non répondues détectées</div>
+      <div class="sc-row"><span class="sc-m">→</span>Alerte avant que le client rappelle</div>
+      <div class="sc-row"><span class="sc-m">→</span>Zéro devis oublié</div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="cell"><div class="val">2h</div><div class="lbl">gagnées par jour</div></div>
+    <div class="cell"><div class="val">0</div><div class="lbl">devis oublié</div></div>
+    <div class="cell"><div class="val">30s</div><div class="lbl">par mail traité</div></div>
+    <div class="cell"><div class="val">100%</div><div class="lbl">urgences identifiées</div></div>
+  </div>
+
+  <div style="text-align:center;margin-top:40px">
+    <a href="#pricing" class="btn btn-g btn-lg">Essayer MailOne 14 jours gratuits</a>
+    <div style="font-size:12px;color:rgba(255,255,255,.38);margin-top:12px">Sans carte bancaire · Annulation à tout moment</div>
+  </div>
+</div>
+</section>
+
+<!-- COMMENT ÇA MARCHE -->
+<section class="sec-light">
+<div class="container" style="text-align:center">
+  <div class="sec-label d">Comment ça marche</div>
+  <h2 class="sec-title" style="font-size:clamp(22px,3vw,34px);color:var(--g900)">Connecté à votre boîte mail.<br>Jamais un envoi sans vous.</h2>
+  <p class="sec-sub" style="color:var(--g500);max-width:560px;margin:12px auto 0">MailOne se connecte en <strong style="color:var(--g900)">lecture seule</strong> via OAuth. Il lit vos mails et rédige les réponses. Vous copiez et envoyez vous-même. <strong style="color:var(--g900)">MailOne ne peut jamais envoyer en votre nom.</strong></p>
+  <div class="steps">
+    <div class="step"><div class="step-num">Étape 01</div><div class="step-ico" style="background:var(--green-50);color:var(--green-600)">🔗</div><div class="step-t">Connexion lecture seule</div><div class="step-d">Connectez votre Gmail ou Outlook via OAuth sécurisé. MailOne lit vos mails, c'est tout.</div></div>
+    <div class="step"><div class="step-num">Étape 02</div><div class="step-ico" style="background:var(--blue-50);color:var(--blue-600)">⚡</div><div class="step-t">Analyse & rédaction</div><div class="step-d">L'IA analyse, classe et rédige une réponse adaptée au contexte de chaque mail.</div></div>
+    <div class="step"><div class="step-num">Étape 03</div><div class="step-ico" style="background:var(--amber-50);color:var(--amber-600)">👁</div><div class="step-t">Vous relisez & ajustez</div><div class="step-d">Lisez la réponse et modifiez si besoin. Chaque envoi reste votre décision.</div></div>
+    <div class="step"><div class="step-num">Étape 04</div><div class="step-ico" style="background:var(--green-50);color:var(--green-600)">📋</div><div class="step-t">Copier & envoyer</div><div class="step-d">Un clic pour copier. Collez dans Gmail ou Outlook. 3 secondes.</div></div>
+  </div>
+</div>
+</section>
+
+<!-- FEATURES -->
+<section class="sec-alt" id="features">
+<div class="container">
+  <div class="sec-label d">Fonctionnalités</div>
+  <h2 class="sec-title" style="font-size:clamp(24px,3vw,36px);color:var(--g900)">Tout ce qu'il faut pour ne plus<br>subir vos emails.</h2>
+  <p class="sec-sub" style="color:var(--g500);max-width:500px">Agent IA local, analyse en temps réel, zéro donnée stockée sur nos serveurs.</p>
+  <div class="feat-grid">
+    <div class="fc"><div class="fc-ico" style="background:var(--red-50);color:var(--red-500)">📩</div><div class="fc-t">Tri intelligent</div><div class="fc-d">Urgences, devis, RDV, factures — classés automatiquement par catégorie et priorité.</div><span class="fc-tier t-all">Tous les plans</span></div>
+    <div class="fc"><div class="fc-ico" style="background:var(--green-50);color:var(--green-600)">📝</div><div class="fc-t">Résumé instantané</div><div class="fc-d">Chaque mail résumé en une phrase. L'essentiel sans tout lire.</div><span class="fc-tier t-all">Tous les plans</span></div>
+    <div class="fc"><div class="fc-ico" style="background:var(--blue-50);color:var(--blue-600)">💬</div><div class="fc-t">Réponse IA Pro</div><div class="fc-d">Réponses professionnelles en contexte. Adaptées au ton, au métier, à l'historique.</div><span class="fc-tier t-all">Tous les plans</span></div>
+    <div class="fc"><div class="fc-ico" style="background:var(--amber-50);color:var(--amber-600)">⏰</div><div class="fc-t">Alertes relances</div><div class="fc-d">Devis sans réponse et suivis oubliés détectés. Zéro opportunité perdue.</div><span class="fc-tier t-all">Tous les plans</span></div>
+    <div class="fc"><div class="fc-ico" style="background:#f5f0ff;color:#6d28d9">👥</div><div class="fc-t">Tableau de bord équipe</div><div class="fc-d">Vision globale. Assignation, suivi et rapports hebdomadaires.</div><span class="fc-tier t-team">Équipe</span></div>
+    <div class="fc"><div class="fc-ico" style="background:#f5f0ff;color:#6d28d9">🔌</div><div class="fc-t">API & intégrations</div><div class="fc-d">CRM, Zapier, outils existants. SSO et sécurité avancée.</div><span class="fc-tier t-ent">Entreprise</span></div>
+  </div>
+</div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="sec-light" style="border-top:1px solid var(--g200)">
+<div class="container" style="text-align:center">
+  <div class="sec-label d">Ils nous font confiance</div>
+  <h2 class="sec-title" style="font-size:clamp(24px,3vw,36px);color:var(--g900)">Ce que disent nos utilisateurs</h2>
+  <div style="margin-top:8px"><span style="color:var(--amber-500);font-size:16px">★★★★★</span><span style="font-size:13px;color:var(--g400);margin-left:6px">4,9/5 · Utilisateurs beta</span></div>
+  <div class="tg">
+    <div class="tc">
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-text">« Avant MailOne, je perdais 2h par jour sur mes mails entre deux chantiers. Maintenant en 20 minutes le matin, tout est traité. Les réponses sont professionnelles. »</p>
+      <div class="tc-author"><div class="tc-av" style="background:linear-gradient(135deg,#f97316,#dc2626)">JM</div><div><div class="tc-name">Jean-Michel Pérez</div><div class="tc-role">Plombier-chauffagiste · Lyon</div></div></div>
+    </div>
+    <div class="tc feat">
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-text">« Retour de vacances — 200 mails, tout classé et priorisé en 2 minutes. J'ai récupéré un devis à 12 000€ que j'aurais raté. »</p>
+      <div class="tc-author"><div class="tc-av" style="background:linear-gradient(135deg,#16a34a,#0d9373)">SB</div><div><div class="tc-name">Sophie Bertrand</div><div class="tc-role">Électricienne · Bordeaux</div></div></div>
+    </div>
+    <div class="tc">
+      <div class="tc-stars">★★★★★</div>
+      <p class="tc-text">« 8 artisans dans mon équipe. On avait toujours des mails qui passaient entre les mailles. Depuis MailOne Équipe, zéro relance client manquée en 4 mois. »</p>
+      <div class="tc-author"><div class="tc-av" style="background:linear-gradient(135deg,#6d28d9,#4f46e5)">RL</div><div><div class="tc-name">Rémi Lacombe</div><div class="tc-role">Gérant · Lacombe Rénovations · Paris</div></div></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- PRICING -->
+<section class="price-sec" id="pricing">
+<div class="container">
+  <div style="text-align:center;margin-bottom:8px">
+    <div class="sec-label l">Tarifs</div>
+    <h2 class="sec-title" style="font-size:clamp(26px,3.5vw,40px);color:#fff">Tout Premium. Toujours.</h2>
+    <p class="sec-sub" style="color:rgba(255,255,255,.35)">IA MailOne Pro incluse dans chaque offre. 14 jours gratuits. Sans carte bancaire.</p>
+  </div>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:14px;margin-bottom:36px">
+    <div class="btoggle">
+      <button class="on" id="toggle-monthly" onclick="setBilling('monthly')">Mensuel</button>
+      <button class="off" id="toggle-annual" onclick="setBilling('annual')">Annuel</button>
+    </div>
+    <div id="annual-badge" style="display:none;background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.18);border-radius:100px;padding:6px 16px;font-size:12px;font-weight:600;color:var(--green-500);align-items:center;gap:6px">2 mois offerts — jusqu'à 3 560€ d'économies</div>
+    <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(22,163,74,.1);border:1px solid rgba(22,163,74,.18);border-radius:100px;padding:5px 14px;font-size:12px;font-weight:600;color:var(--green-500)"><span class="pulse-dot" style="color:var(--green-500)"></span>IA MailOne Pro incluse dans toutes les offres</div>
+  </div>
+
+  <div class="plans">
+    <div class="plan">
+      <div class="plan-name">Solo</div>
+      <div id="price-solo" class="plan-price"><sup>€</sup>99<sub>/mois</sub></div>
+      <div id="tag-solo" class="plan-tag">1 boîte mail · Artisan indépendant</div>
+      <div id="per-solo" class="plan-per">99€ / boîte / mois</div>
+      <div id="save-solo" class="plan-save" style="display:none"><span id="save-solo-txt">2 mois offerts — économisez 198€</span></div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li><span class="chk">✓</span>1 boîte mail</li>
+        <li><span class="chk">✓</span>Tri & résumé IA illimité</li>
+        <li><span class="chk">✓</span><strong>IA MailOne Pro</strong></li>
+        <li><span class="chk">✓</span>Relances automatiques</li>
+        <li><span class="chk">✓</span>Recherche intelligente</li>
+        <li><span class="chk">✓</span>20 langues</li>
+        <li><span class="chk">✓</span>Support email</li>
+      </ul>
+      <button class="plan-btn plan-btn-o" id="btn-solo" onclick="goToSignup('solo')">Démarrer — 14j gratuits</button>
+    </div>
+    <div class="plan feat">
+      <div class="plan-pop">Meilleur rapport</div>
+      <div class="plan-name">Équipe</div>
+      <div id="price-team" class="plan-price"><sup>€</sup>900<sub>/mois</sub></div>
+      <div id="tag-team" class="plan-tag">10 boîtes · Petite équipe</div>
+      <div id="per-team" class="plan-per">90€ / boîte / mois</div>
+      <div id="save-team" class="plan-save" style="display:none"><span id="save-team-txt">2 mois offerts — économisez 1 800€</span></div>
+      <div class="plan-save" id="vol-save-team">Économisez 90€ vs 10 × Solo</div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li><span class="chk">✓</span><strong>10 boîtes mail</strong></li>
+        <li><span class="chk">✓</span>Tout le plan Solo</li>
+        <li><span class="chk">✓</span><strong>Tableau de bord équipe</strong></li>
+        <li><span class="chk">✓</span><strong>Assignation des mails</strong></li>
+        <li><span class="chk">✓</span><strong>Analytics équipe</strong></li>
+        <li><span class="chk">✓</span>Rapports hebdomadaires</li>
+        <li><span class="chk">✓</span>Support prioritaire</li>
+      </ul>
+      <button class="plan-btn plan-btn-g" id="btn-team" onclick="goToSignup('team')">Démarrer — 14j gratuits</button>
+    </div>
+    <div class="plan">
+      <div class="plan-name">Entreprise</div>
+      <div id="price-ent" class="plan-price"><sup>€</sup>1 780<sub>/mois</sub></div>
+      <div id="tag-ent" class="plan-tag">20 boîtes · PME établie</div>
+      <div id="per-ent" class="plan-per">89€ / boîte / mois</div>
+      <div id="save-ent" class="plan-save" style="display:none"><span id="save-ent-txt">2 mois offerts — économisez 3 560€</span></div>
+      <div class="plan-save" id="vol-save-ent" style="background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.2);color:#fbbf24">Économisez 200€ vs 20 × Solo</div>
+      <div class="plan-div"></div>
+      <ul class="plan-feats">
+        <li><span class="chk">✓</span><strong>20 boîtes mail</strong></li>
+        <li><span class="chk">✓</span>Tout le plan Équipe</li>
+        <li><span class="chk">✓</span><strong>API & Zapier</strong></li>
+        <li><span class="chk">✓</span><strong>SSO & sécurité avancée</strong></li>
+        <li><span class="chk">✓</span><strong>Intégrations CRM</strong></li>
+        <li><span class="chk">✓</span>SLA garanti 99,5%</li>
+        <li><span class="chk">✓</span>Support dédié + formation</li>
+      </ul>
+      <button class="plan-btn plan-btn-o" id="btn-ent" onclick="goToSignup('enterprise')">Démarrer — 14j gratuits</button>
+    </div>
+  </div>
+  <div id="annual-note" style="display:none;text-align:center;margin-top:20px;font-size:12px;color:rgba(255,255,255,.42)">Facturation annuelle en une seule fois · Économies calculées vs abonnement mensuel × 12</div>
+</div>
+</section>
+
+<!-- FAQ -->
+<div class="faq-sec" id="faq">
+  <h2 class="faq-title">Questions fréquentes</h2>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Quelle est la différence entre mensuel et annuel ?<span class="faq-arrow">+</span></div><div class="faq-a">L'abonnement mensuel est sans engagement. L'annuel est facturé en une fois et vous offre <strong>2 mois gratuits</strong>. Le plan Solo passe de 99€/mois à 990€/an (82,50€/mois effectif).</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">MailOne envoie-t-il les mails à ma place ?<span class="faq-arrow">+</span></div><div class="faq-a">Non, jamais. MailOne se connecte en <strong>lecture seule</strong>. C'est vous qui copiez, collez et appuyez sur Envoyer.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Quel accès MailOne a-t-il sur ma boîte ?<span class="faq-arrow">+</span></div><div class="faq-a">Un accès <strong>lecture seule</strong> via OAuth. Aucun envoi, suppression ou modification possible. Révocable à tout moment.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Puis-je annuler à tout moment ?<span class="faq-arrow">+</span></div><div class="faq-a">Oui, sans conditions ni frais, en un clic. Votre accès reste actif jusqu'à la fin de la période payée.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Mes mails sont-ils en sécurité ?<span class="faq-arrow">+</span></div><div class="faq-a">L'agent IA traite vos mails localement dans votre navigateur. Vos emails ne transitent jamais par nos serveurs. Données chiffrées, hébergement EU, conformité RGPD.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Compatible avec Gmail et Outlook ?<span class="faq-arrow">+</span></div><div class="faq-a">Oui. Gmail, Outlook/Office 365, OVH Mail, Ionos et tout fournisseur IMAP.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Qu'est-ce que l'IA MailOne Pro ?<span class="faq-arrow">+</span></div><div class="faq-a">Notre moteur d'IA avancé intégré à tous les plans. Réponses nuancées et contextuelles pour les mails complexes.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Politique de remboursement ?<span class="faq-arrow">+</span></div><div class="faq-a">Remboursement intégral dans les <strong>14 premiers jours</strong> après votre premier paiement, à <span class="email-protect" data-u="support" data-d="mailone.app"></span>. Annuel remboursable au prorata dans les 30 premiers jours.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Comment contacter le support ?<span class="faq-arrow">+</span></div><div class="faq-a">Par email à <strong><span class="email-protect" data-u="support" data-d="mailone.app"></span></strong> — réponse sous 24h. <a href="contact.html" style="color:var(--green-600)">Page contact</a> ou chat dans l'application.</div></div>
+</div>
+
+<section class="ref">
+  <h3>Parrainez un confrère, gagnez 1 mois gratuit</h3>
+  <p>Chaque confrère abonné via votre lien = 1 mois offert. Aucune limite.</p>
+  <a href="referral.html">Découvrir le programme</a>
+</section>
+
+<footer>
+  <div class="ft-in">
+    <div class="ft-grid">
+      <div><a href="index.html" class="ft-logo">Mail<span>One</span><span class="nav-mark"></span></a><p class="ft-tag">Copilote IA pour artisans & PME. Agent local, 20 langues, conformité RGPD.</p></div>
+      <div><div class="ft-col-t">Produit</div><ul class="ft-links"><li><a href="#pourquoi">Pourquoi MailOne ?</a></li><li><a href="#features">Fonctionnalités</a></li><li><a href="#pricing">Tarifs</a></li><li><a href="app.html">Application</a></li></ul></div>
+      <div><div class="ft-col-t">Compte</div><ul class="ft-links"><li><a href="login.html">Se connecter</a></li><li><a href="login.html#signup">Créer un compte</a></li><li><a href="app.html">Accéder à l'app</a></li></ul></div>
+      <div><div class="ft-col-t">Légal</div><ul class="ft-links"><li><a href="legal.html#cgu">CGU</a></li><li><a href="cgv.html">CGV</a></li><li><a href="legal.html#privacy">Confidentialité</a></li><li><a href="legal.html#mentions">Mentions légales</a></li></ul></div>
+    </div>
+    <div class="ft-bot"><span>© 2025 MailOne SAS. Tous droits réservés.</span><div style="display:flex;gap:12px;align-items:center">
+        <a href="https://linkedin.com/company/mailone" style="color:rgba(255,255,255,.35);text-decoration:none;font-size:13px;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.35)'">LinkedIn</a>
+        <a href="https://twitter.com/mailone_app" style="color:rgba(255,255,255,.35);text-decoration:none;font-size:13px;transition:color .15s" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.35)'">Twitter</a>
+      </div></div>
+  </div>
+</footer>
+
+<script src="mailone.js"></script>
+<script>
+const user=Auth.getUser();
+if(user){document.getElementById('nav-right').innerHTML=`<span style="font-size:13px;color:var(--g500)">Bonjour, ${user.name?.split(' ')[0]}</span><a href="account.html" class="btn btn-s" style="font-size:12px">Mon compte</a><a href="app.html" class="btn btn-g">Mon application</a>`}
+
+if(!localStorage.getItem('mailone_cookies')){setTimeout(()=>document.getElementById('cookie-banner').classList.add('show'),1500)}
+function acceptCookies(c){localStorage.setItem('mailone_cookies',JSON.stringify({choice:c,date:Date.now()}));document.getElementById('cookie-banner').classList.remove('show')}
+function goToSignup(plan){PlanManager.set(plan);localStorage.setItem('mailone_billing',billingCycle);window.location.href='login.html?action=signup&plan='+plan+'&billing='+billingCycle}
+
+const PRICING={monthly:{solo:{display:'99',sub:'/mois',per:'99€ / boîte / mois',tag:'1 boîte mail · Artisan indépendant'},team:{display:'900',sub:'/mois',per:'90€ / boîte / mois',tag:'10 boîtes · Petite équipe'},ent:{display:'1 780',sub:'/mois',per:'89€ / boîte / mois',tag:'20 boîtes · PME établie'}},annual:{solo:{display:'990',sub:'/an',per:'82,50€ / boîte / mois',tag:'1 boîte · Facturé annuellement',save:'2 mois offerts — économisez 198€'},team:{display:'9 000',sub:'/an',per:'75€ / boîte / mois',tag:'10 boîtes · Facturé annuellement',save:'2 mois offerts — économisez 1 800€'},ent:{display:'17 800',sub:'/an',per:'74,17€ / boîte / mois',tag:'20 boîtes · Facturé annuellement',save:'2 mois offerts — économisez 3 560€'}}};
+let billingCycle='monthly';
+
+function setBilling(cycle){
+  billingCycle=cycle;const p=PRICING[cycle];
+  const mBtn=document.getElementById('toggle-monthly'),aBtn=document.getElementById('toggle-annual');
+  if(cycle==='monthly'){mBtn.className='on';aBtn.className='off'}else{aBtn.className='on';mBtn.className='off'}
+  document.getElementById('price-solo').innerHTML=`<sup>€</sup>${p.solo.display}<sub>${p.solo.sub}</sub>`;
+  document.getElementById('tag-solo').textContent=p.solo.tag;
+  document.getElementById('per-solo').textContent=p.solo.per;
+  document.getElementById('price-team').innerHTML=`<sup>€</sup>${p.team.display}<sub>${p.team.sub}</sub>`;
+  document.getElementById('tag-team').textContent=p.team.tag;
+  document.getElementById('per-team').textContent=p.team.per;
+  document.getElementById('price-ent').innerHTML=`<sup>€</sup>${p.ent.display}<sub>${p.ent.sub}</sub>`;
+  document.getElementById('tag-ent').textContent=p.ent.tag;
+  document.getElementById('per-ent').textContent=p.ent.per;
+  const isA=cycle==='annual';
+  ['solo','team','ent'].forEach(id=>{const el=document.getElementById('save-'+id);if(el)el.style.display=isA?'block':'none'});
+  if(isA){document.getElementById('save-solo-txt').textContent=p.solo.save;document.getElementById('save-team-txt').textContent=p.team.save;document.getElementById('save-ent-txt').textContent=p.ent.save}
+  ['vol-save-team','vol-save-ent'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display=isA?'none':'block'});
+  const ab=document.getElementById('annual-badge'),an=document.getElementById('annual-note');
+  if(ab)ab.style.display=isA?'flex':'none';if(an)an.style.display=isA?'block':'none';
+  const labels={monthly:['Démarrer — 14j gratuits','Démarrer — 14j gratuits','Démarrer — 14j gratuits'],annual:['Choisir l\'annuel — 14j gratuits','Choisir l\'annuel — 14j gratuits','Choisir l\'annuel — 14j gratuits']};
+  ['solo','team','ent'].forEach((id,i)=>{const btn=document.getElementById('btn-'+id);if(btn)btn.textContent=labels[cycle][i]});
+}
+
+function toggleFaq(el){const item=el.parentElement;const wasOpen=item.classList.contains('open');d</body>
+</html>

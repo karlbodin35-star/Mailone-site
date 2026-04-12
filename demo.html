@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Démo interactive — MailOne</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f7f4f0;--sur:#fff;--bdr:#e4e4e7;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--ink4:#a1a1aa;--green:#16a34a;--green-l:#f0fdf4;--teal:#0d9488;--amber:#d97706;--amber-l:#fffbeb;--red:#c93820;--red-l:#fef1ee;--blue:#1a66cc;--blue-l:#eef4fd;--purple:#9333ea;--purple-l:#faf5ff}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink)}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;background:rgba(247,244,240,.94);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 5vw;gap:12px}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.5px;display:flex;align-items:center;gap:6px;text-decoration:none}
+.nav-mark{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.nb{padding:7px 14px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s;text-decoration:none}
+.nb:hover{background:#ece8e3}
+.nb-green{background:var(--green);color:#fff;border-color:var(--green)}.nb-green:hover{opacity:.88}
+
+/* HERO */
+.demo-hero{padding:90px 5vw 60px;text-align:center;background:var(--sur);border-bottom:1px solid var(--bdr)}
+.demo-eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--purple-l);border:1px solid #ddd6fe;border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:var(--purple);text-transform:uppercase;letter-spacing:.06em;margin-bottom:18px}
+.demo-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(30px,4.5vw,52px);font-weight:800;letter-spacing:-.04em;line-height:1.08;margin-bottom:14px}
+.demo-title span{color:var(--green)}
+.demo-sub{font-size:16px;color:var(--ink3);line-height:1.7;max-width:520px;margin:0 auto 28px}
+.demo-meta{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink3)}
+.demo-meta-item{display:flex;align-items:center;gap:5px}
+
+/* SCENARIO PICKER */
+.scenario-section{max-width:900px;margin:0 auto;padding:52px 5vw}
+.sc-title{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;text-align:center;margin-bottom:8px}
+.sc-sub{font-size:14px;color:var(--ink3);text-align:center;margin-bottom:28px}
+.scenarios{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:44px}
+.scenario-card{background:var(--sur);border:2px solid var(--bdr);border-radius:14px;padding:20px;cursor:pointer;transition:all .2s;text-align:left}
+.scenario-card:hover{border-color:var(--bdr);box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px)}
+.scenario-card.active{border-color:var(--purple);background:var(--purple-l)}
+.sc-ico{font-size:26px;margin-bottom:10px}
+.sc-name{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:800;margin-bottom:4px}
+.sc-desc{font-size:12px;color:var(--ink3);line-height:1.5}
+.scenario-card.active .sc-desc{color:var(--purple)}
+
+/* DEMO PLAYER */
+.demo-player{background:var(--ink);border-radius:20px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.25);max-width:900px;margin:0 auto}
+.player-bar{padding:12px 18px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.07)}
+.player-dots{display:flex;gap:5px}
+.player-dot{width:10px;height:10px;border-radius:50%}
+.player-dot:nth-child(1){background:#ef4444}.player-dot:nth-child(2){background:#f59e0b}.player-dot:nth-child(3){background:#22c55e}
+.player-title{font-family:'Space Grotesk',sans-serif;font-size:11px;color:rgba(255,255,255,.35);margin-left:4px}
+.player-step{margin-left:auto;font-size:10px;font-weight:700;color:rgba(255,255,255,.3);background:rgba(255,255,255,.06);border-radius:20px;padding:3px 10px}
+
+/* STEPS */
+.steps-nav{display:flex;background:rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.07);overflow-x:auto}
+.steps-nav::-webkit-scrollbar{display:none}
+.step-tab{padding:12px 18px;font-size:11px;font-weight:600;color:rgba(255,255,255,.32);cursor:pointer;transition:all .15s;white-space:nowrap;border-bottom:2px solid transparent;flex-shrink:0}
+.step-tab.active{color:#fff;border-bottom-color:var(--green)}
+.step-tab.done{color:rgba(94,234,212,.7)}
+.step-tab.done::after{content:' ✓'}
+
+.demo-content{display:grid;grid-template-columns:1fr 1fr;min-height:380px}
+.demo-left{border-right:1px solid rgba(255,255,255,.07);padding:24px;display:flex;flex-direction:column}
+.demo-right{padding:24px;display:flex;flex-direction:column}
+
+.demo-step-title{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:14px}
+.demo-mail-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all .2s}
+.demo-mail-card:hover{background:rgba(255,255,255,.08)}
+.demo-mail-card.selected{border-color:rgba(94,234,212,.4);background:rgba(94,234,212,.06)}
+.dmc-row{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.dmc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.dmc-sender{font-size:12px;font-weight:700;color:#fff}
+.dmc-tag{font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+.dmc-subj{font-size:11px;color:rgba(255,255,255,.55);margin-bottom:3px}
+.dmc-sum{font-size:10px;color:rgba(255,255,255,.35)}
+.dmc-time{font-size:10px;color:rgba(255,255,255,.42);margin-left:auto}
+
+/* AI Analysis panel */
+.ai-panel-demo{flex:1;display:flex;flex-direction:column;gap:10px}
+.ai-block{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:12px}
+.ai-block-title{font-size:9px;font-weight:800;color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.ai-kv{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.ai-kv:last-child{border-bottom:none;padding-bottom:0}
+.ai-kv-k{color:rgba(255,255,255,.35)}
+.ai-kv-v{color:#fff;font-weight:600}
+.ai-kv-v.red{color:#fca5a5}
+.ai-kv-v.green{color:#22c55e}
+.ai-kv-v.amber{color:#fcd34d}
+.ai-reply-box{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:11px;font-size:11px;color:rgba(255,255,255,.65);line-height:1.7;flex:1;min-height:120px}
+.typing-cursor{display:inline-block;width:1.5px;height:10px;background:#22c55e;margin-left:1px;vertical-align:middle;animation:blink 1s step-end infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+.ai-gen-lbl{font-size:9px;font-weight:800;color:#22c55e;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.ai-gen-pulse{width:5px;height:5px;border-radius:50%;background:#22c55e;animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* COPY BUTTON */
+.copy-btn{margin-top:10px;padding:9px 16px;background:#22c55e;color:var(--ink);border:none;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;width:100%;transition:all .2s;display:none}
+.copy-btn.show{display:block}
+.copy-btn.copied{background:#22c55e;color:#fff}
+
+/* STEP CONTROLS */
+.step-controls{padding:16px 20px;border-top:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.progress-dots{display:flex;gap:6px}
+.prog-dot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.35);transition:all .2s}
+.prog-dot.active{background:var(--green);transform:scale(1.3)}
+.prog-dot.done{background:rgba(94,234,212,.5)}
+.step-btn{padding:8px 16px;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all .15s;border:none}
+.step-prev{background:rgba(255,255,255,.08);color:rgba(255,255,255,.5)}.step-prev:hover{background:rgba(255,255,255,.14)}
+.step-next{background:var(--green);color:#fff}.step-next:hover{opacity:.87}
+.step-cta{background:linear-gradient(90deg,#7c3aed,#4f46e5);color:#fff}.step-cta:hover{opacity:.87}
+
+/* INSIGHT SECTION */
+.insights{max-width:900px;margin:0 auto;padding:44px 5vw;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.insight-card{background:var(--sur);border:1px solid var(--bdr);border-radius:14px;padding:22px}
+.ins-ico{font-size:28px;margin-bottom:12px}
+.ins-num{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;color:var(--green);line-height:1;margin-bottom:4px}
+.ins-label{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.ins-desc{font-size:12px;color:var(--ink3);line-height:1.55}
+
+/* CTA */
+.demo-cta{background:var(--ink);padding:72px 5vw;text-align:center}
+.cta-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,3.5vw,40px);font-weight:800;color:#f7f4f0;letter-spacing:-.03em;margin-bottom:12px}
+.cta-sub{font-size:15px;color:rgba(247,244,240,.4);margin-bottom:32px;line-height:1.6}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.cta-btn-main{padding:15px 32px;background:var(--green);color:#fff;border:none;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:opacity .15s;text-decoration:none}
+.cta-btn-main:hover{opacity:.87}
+.cta-btn-sec{padding:15px 28px;background:transparent;color:rgba(247,244,240,.55);border:1px solid rgba(255,255,255,.14);border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:600;cursor:pointer;text-decoration:none;transition:all .15s}
+.cta-btn-sec:hover{background:rgba(255,255,255,.06);color:rgba(247,244,240,.8)}
+
+@media(max-width:720px){
+  .scenarios{grid-template-columns:1fr}
+  .demo-content{grid-template-columns:1fr}
+  .demo-left{border-right:none;border-bottom:1px solid rgba(255,255,255,.07)}
+  .insights{grid-template-columns:1fr}
+}
+
+/* MOBILE MENU */
+.menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px;color:var(--g700)}
+.menu-toggle svg{width:22px;height:22px}
+.mobile-menu{display:none;position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);flex-direction:column;padding:80px 24px 24px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:17px;font-weight:600;color:var(--g900);padding:14px 0;border-bottom:1px solid var(--g200);text-decoration:none}
+.mobile-menu .btn{margin-top:12px;justify-content:center;width:100%;padding:14px;font-size:15px}
+.mm-close{position:absolute;top:16px;right:20px;background:none;border:none;cursor:pointer;font-size:24px;color:var(--g500)}
+@media(max-width:768px){.menu-toggle{display:block}.nav-links{display:none}}
+@media(min-width:769px){.mobile-menu{display:none!important}}
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="shared.css">
+<meta property="og:title" content="Démo — MailOne">
+<meta property="og:description" content="Démo interactive MailOne.">
+<link rel="canonical" href="https://mailone.app/demo">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-mark"></span></a>
+  
+<button class="menu-toggle" onclick="document.getElementById('mobile-menu').classList.add('open')" aria-label="Menu">
+  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+
+  <div class="nav-right">
+    <a href="index.html" class="nb">← Accueil</a>
+    <a href="login.html" class="nb">Se connecter</a>
+    <a href="login.html?action=signup" class="nb nb-green">Essai gratuit →</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="demo-hero">
+  <div class="demo-eyebrow">🎬 Démonstration interactive</div>
+  <h1 class="demo-title">Voyez MailOne en action.<br><span>En 60 secondes.</span></h1>
+  <p class="demo-sub">Choisissez votre métier et suivez le scénario pas-à-pas. Exactement ce que vous vivrez tous les jours.</p>
+  <div class="demo-meta">
+    <div class="demo-meta-item">⏱ 60 secondes</div>
+    <div class="demo-meta-item">·</div>
+    <div class="demo-meta-item">🎯 4 étapes</div>
+    <div class="demo-meta-item">·</div>
+    <div class="demo-meta-item">✨ IA en temps réel</div>
+    <div class="demo-meta-item">·</div>
+    <div class="demo-meta-item">🔒 Aucune inscription</div>
+  </div>
+</div>
+
+<!-- SCENARIO PICKER -->
+<div class="scenario-section">
+  <div class="sc-title">Choisissez votre scénario</div>
+  <div class="sc-sub">Chaque métier a ses propres types de mails. Sélectionnez celui qui vous ressemble.</div>
+
+  <div class="scenarios">
+    <div class="scenario-card active" id="sc-plombier" onclick="selectScenario('plombier')">
+      <div class="sc-ico">🔧</div>
+      <div class="sc-name">Plombier / Chauffagiste</div>
+      <div class="sc-desc">Urgences chaudière, devis salle de bain, RDV diagnostics, factures impayées</div>
+    </div>
+    <div class="scenario-card" id="sc-electricien" onclick="selectScenario('electricien')">
+      <div class="sc-ico">⚡</div>
+      <div class="sc-name">Électricien</div>
+      <div class="sc-desc">Pannes électriques, tableaux électriques, devis renovation, certifications</div>
+    </div>
+    <div class="scenario-card" id="sc-pme" onclick="selectScenario('pme')">
+      <div class="sc-ico">🏢</div>
+      <div class="sc-name">PME / Commerce</div>
+      <div class="sc-desc">Commandes clients, fournisseurs, réclamations, devis et contrats</div>
+    </div>
+  </div>
+
+  <!-- DEMO PLAYER -->
+  <div class="demo-player">
+    <div class="player-bar">
+      <div class="player-dots"><div class="player-dot"></div><div class="player-dot"></div><div class="player-dot"></div></div>
+      <span class="player-title" id="player-title">MailOne Pro — Démonstration Plombier</span>
+      <div class="player-step" id="player-step">Étape 1/4</div>
+    </div>
+
+    <div class="steps-nav" id="steps-nav">
+      <div class="step-tab active" id="tab-0" onclick="goStep(0)">1 · Vos mails arrivent</div>
+      <div class="step-tab" id="tab-1" onclick="goStep(1)">2 · Tri & résumés IA</div>
+      <div class="step-tab" id="tab-2" onclick="goStep(2)">3 · Analyse intelligente</div>
+      <div class="step-tab" id="tab-3" onclick="goStep(3)">4 · Réponse générée</div>
+    </div>
+
+    <div class="demo-content" id="demo-content">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="step-controls">
+      <div class="progress-dots" id="progress-dots">
+        <div class="prog-dot active"></div>
+        <div class="prog-dot"></div>
+        <div class="prog-dot"></div>
+        <div class="prog-dot"></div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="step-btn step-prev" id="btn-prev" onclick="prevStep()" style="display:none">← Précédent</button>
+        <button class="step-btn step-next" id="btn-next" onclick="nextStep()">Suivant →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INSIGHTS -->
+<div class="insights">
+  <div class="insight-card">
+    <div class="ins-ico">⚡</div>
+    <div class="ins-num">&lt; 2s</div>
+    <div class="ins-label">Pour analyser 30 mails</div>
+    <div class="ins-desc">L'agent IA traite et résume tous vos mails entrants en moins de 2 secondes. Même 150 mails de vacances.</div>
+  </div>
+  <div class="insight-card">
+    <div class="ins-ico">🎯</div>
+    <div class="ins-num">100%</div>
+    <div class="ins-label">Des urgences détectées</div>
+    <div class="ins-desc">Chaudière en panne, fuite d'eau, enfants au froid — l'agent ne rate jamais une urgence et la remonte en tête.</div>
+  </div>
+  <div class="insight-card">
+    <div class="ins-ico">⏱</div>
+    <div class="ins-num">30s</div>
+    <div class="ins-label">Par mail traité</div>
+    <div class="ins-desc">Contre 8 minutes en moyenne sans outil. Vous copiez la réponse, vous la collez dans Gmail, vous envoyez.</div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="demo-cta">
+  <h2 class="cta-title">Prêt à essayer sur vos vrais mails ?</h2>
+  <p class="cta-sub">14 jours gratuits, sans carte bancaire. Connectez votre Gmail ou Outlook en 2 minutes.</p>
+  <div class="cta-btns">
+    <a href="login.html?action=signup" class="cta-btn-main">Démarrer gratuitement →</a>
+    <a href="index.html#pricing" class="cta-btn-sec">Voir les tarifs</a>
+  </div>
+  <div style="font-size:12px;color:rgba(247,244,240,.2);margin-top:16px">Aucune carte bancaire · Annulation à tout moment · Données sécurisées EU</div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// SCENARIO DATA
+// ════════════════════════════════════════════════════════════════
+const SCENARIOS = {
+  plombier: {
+    title: 'MailOne Pro — Démonstration Plombier / Chauffagiste',
+    mails: [
+      {id:1,cat:'urgent',sender:'B. Talon',subject:'URGENT — Chaudière en panne, pas de chauffage',summary:'Chaudière HS cette nuit. Famille, 12°C. Code E3.',time:'07h48',color:'#c93820',tagBg:'rgba(201,56,32,.15)',tagColor:'#fca5a5',tagLabel:'🚨 Urgent',prio:'🔴 Critique',delay:'Immédiat',action:'Appel + intervention J0',tone:'Rassurant',analyse:'Client fidèle. Famille avec enfants. 12°C = urgence absolue. Code E3 = défaut allumage. Intervention J0 impérative.',reply:'Bonjour M. Talon,\n\nJe prends en charge votre urgence immédiatement. Avec des enfants à la maison par ce froid, c\'est ma priorité absolue.\n\nJe vous rappelle dans les 15 prochaines minutes pour fixer l\'intervention.\n\nCordialement,\n[VOTRE NOM]\n[VOTRE TÉLÉPHONE]'},
+      {id:2,cat:'quote',sender:'S. Leclerc',subject:'Re : Devis — Rénovation SDB 12m² — Relance',summary:'Relance devis SDB. Budget 8-10k€. Concurrent contacté.',time:'09h15',color:'#1a66cc',tagBg:'rgba(26,102,204,.15)',tagColor:'#93c5fd',tagLabel:'📋 Devis',prio:'🔥 Commercial',delay:'Aujourd\'hui',action:'Proposer visite',tone:'Commercial',analyse:'Lead chaud. Budget confirmé 8-10k€. Relance spontanée. Concurrent contacté. Fenêtre max 24-48h.',reply:'Bonjour Mme Leclerc,\n\nMerci pour votre relance. Je comprends que vous souhaitez avancer rapidement, et je vais tout faire pour vous proposer la meilleure solution.\n\nJe suis disponible pour une visite technique mardi ou jeudi cette semaine. Quand vous convient-il ?\n\nCordialement,\n[VOTRE NOM]'},
+      {id:3,cat:'appt',sender:'Agence Bellevue',subject:'RDV diagnostic — 14 rue des Lilas',summary:'3 créneaux pour diagnostic avant vente. Non confirmé.',time:'Hier',color:'#147a50',tagBg:'rgba(20,122,80,.15)',tagColor:'#6ee7b7',tagLabel:'📅 RDV',prio:'🟢 Planification',delay:'< 24h',action:'Confirmer créneau',tone:'Pro',analyse:'Diagnostic avant vente. Pas de confirmation depuis 2 jours. Relation agence = projets futurs.',reply:'Bonjour,\n\nJe confirme ma disponibilité pour le jeudi 30 mars, toute la journée.\n\nPouvez-vous me communiquer l\'adresse exacte et le code d\'accès ?\n\n[VOTRE NOM]'},
+    ]
+  },
+  electricien: {
+    title: 'MailOne Pro — Démonstration Électricien',
+    mails: [
+      {id:1,cat:'urgent',sender:'Résidence Les Pins',subject:'URGENT — Panne électrique partielle immeuble',summary:'Disjoncteur général déclenché. 4 appartements sans courant.',time:'08h12',color:'#c93820',tagBg:'rgba(201,56,32,.15)',tagColor:'#fca5a5',tagLabel:'🚨 Urgent',prio:'🔴 Critique',delay:'Immédiat',action:'Intervention J0',tone:'Rassurant',analyse:'Immeuble 4 appartements sans courant. Syndic. Urgence technique et sécurité. Client contrat maintenance.',reply:'Bonjour,\n\nJe prends en charge cette urgence immédiatement. Une panne partielle sur un immeuble peut présenter des risques — je serai sur place dans les 2 heures.\n\nJe vous rappelle pour confirmer l\'heure précise.\n\nCordialement,\nVotre Électricien'},
+      {id:2,cat:'quote',sender:'M. Fontaine',subject:'Devis mise aux normes tableau électrique — Maison 1970',summary:'Tableau électrique ancienne génération. Maison vendue. Budget 2-3k€.',time:'10h30',color:'#1a66cc',tagBg:'rgba(26,102,204,.15)',tagColor:'#93c5fd',tagLabel:'📋 Devis',prio:'🔥 Commercial',delay:'< 48h',action:'Visite diagnostic',tone:'Expert',analyse:'Mise aux normes obligatoire pour vente. Budget réaliste 2-3k€. Délai contraint par calendrier notaire.',reply:'Bonjour M. Fontaine,\n\nLa mise aux normes d\'un tableau de 1970 est effectivement obligatoire pour la vente. Je peux effectuer un diagnostic complet.\n\nQuelles sont vos disponibilités cette semaine pour une visite ?\n\nCordialement'},
+      {id:3,cat:'invoice',sender:'Cabinet IMMO SUD',subject:'Règlement intervention N°2024-156 — RIB',summary:'Paiement 1 840€ bloqué. Attente IBAN.',time:'Lundi',color:'#b86c0a',tagBg:'rgba(184,108,10,.15)',tagColor:'#fcd34d',tagLabel:'💰 Facture',prio:'🟡 Admin',delay:'Aujourd\'hui',action:'Envoyer IBAN',tone:'Pro',analyse:'Paiement prêt. Attente simple RIB. Envoyer aujourd\'hui = encaissement sous 5 jours.',reply:'Bonjour,\n\nVoici mes coordonnées bancaires pour le règlement de 1 840€ :\n\nTitulaire : [VOTRE NOM]\nIBAN : [VOTRE IBAN]\nBIC : [VOTRE BIC]\n\nCordialement'},
+    ]
+  },
+  pme: {
+    title: 'MailOne Pro — Démonstration PME / Commerce',
+    mails: [
+      {id:1,cat:'urgent',sender:'Client Duchamp SAS',subject:'RÉCLAMATION — Livraison incorrecte — Commande 4521',summary:'Mauvais produit livré. Client mécontent. Commande urgente.',time:'09h05',color:'#c93820',tagBg:'rgba(201,56,32,.15)',tagColor:'#fca5a5',tagLabel:'🚨 Urgent',prio:'🔴 Critique',delay:'Immédiat',action:'Excuses + solution J0',tone:'Empathique',analyse:'Erreur de livraison. Client important (commande récurrente). Risque perte contrat si réponse tardive. Solution immédiate requise.',reply:'Bonjour,\n\nJe suis sincèrement désolé pour cette erreur de livraison. Ce type d\'incident ne devrait pas arriver et je comprends votre mécontentement.\n\nJe prends personnellement en charge la correction : le bon produit vous sera livré demain matin en priorité. Je vous adresse également un avoir de 15% sur votre prochaine commande.\n\nCordialement,\nService Client'},
+      {id:2,cat:'quote',sender:'Mairie de Villefranche',subject:'Appel d\'offres — Fournitures bureau 2025-2026',summary:'Marché public fournitures. Volume estimé 45-60k€/an. Dossier avant 30 avril.',time:'Hier',color:'#1a66cc',tagBg:'rgba(26,102,204,.15)',tagColor:'#93c5fd',tagLabel:'📋 Devis',prio:'🔥 Commercial',delay:'Avant 30 avril',action:'Demander le cahier des charges',tone:'Formel',analyse:'Marché public 45-60k€/an. Contrat récurrent 2 ans. Délai confortable mais dossier technique requis.',reply:'Madame, Monsieur,\n\nNous accusons réception de votre appel d\'offres et confirmons notre intérêt pour ce marché.\n\nPourriez-vous nous faire parvenir le cahier des charges complet afin que nous puissions vous soumettre une offre détaillée avant le 30 avril ?\n\nCordialement'},
+      {id:3,cat:'appt',sender:'Fournisseur Méditex',subject:'Visite commercial — Nouveaux tarifs 2025',summary:'Représentant propose visite. Nouveaux tarifs négociables.',time:'Vendredi',color:'#147a50',tagBg:'rgba(20,122,80,.15)',tagColor:'#6ee7b7',tagLabel:'📅 RDV',prio:'🟢 Planification',delay:'Cette semaine',action:'Proposer créneau',tone:'Cordial',analyse:'Visite annuelle fournisseur. Opportunité renégociation tarifs. Pas urgent mais utile.',reply:'Bonjour,\n\nMerci pour votre contact. Je suis disponible jeudi 28 mars à partir de 14h ou vendredi 29 mars toute la matinée.\n\nQuel créneau vous convient ?\n\nCordialement'},
+    ]
+  }
+};
+
+// ════════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════════
+let currentScenario = 'plombier';
+let currentStep = 0;
+let selectedMailId = 1;
+let typingTimeout = null;
+const TOTAL_STEPS = 4;
+
+// ════════════════════════════════════════════════════════════════
+// SCENARIO SELECTION
+// ════════════════════════════════════════════════════════════════
+function selectScenario(name) {
+  currentScenario = name;
+  currentStep = 0;
+  selectedMailId = 1;
+  document.querySelectorAll('.scenario-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('sc-' + name).classList.add('active');
+  document.getElementById('player-title').textContent = SCENARIOS[name].title;
+  renderStep();
+  updateNav();
+}
+
+// ════════════════════════════════════════════════════════════════
+// STEP NAVIGATION
+// ════════════════════════════════════════════════════════════════
+function goStep(n) {
+  currentStep = n;
+  renderStep();
+  updateNav();
+}
+function nextStep() {
+  if (currentStep < TOTAL_STEPS - 1) { currentStep++; renderStep(); updateNav(); }
+  else window.location.href = 'login.html?action=signup';
+}
+function prevStep() {
+  if (currentStep > 0) { currentStep--; renderStep(); updateNav(); }
+}
+
+function updateNav() {
+  document.getElementById('player-step').textContent = `Étape ${currentStep+1}/${TOTAL_STEPS}`;
+  document.getElementById('btn-prev').style.display = currentStep > 0 ? 'block' : 'none';
+  const btnNext = document.getElementById('btn-next');
+  if (currentStep === TOTAL_STEPS - 1) {
+    btnNext.textContent = 'Essayer gratuitement →';
+    btnNext.className = 'step-btn step-cta';
+  } else {
+    btnNext.textContent = 'Suivant →';
+    btnNext.className = 'step-btn step-next';
+  }
+  // Tabs
+  for (let i = 0; i < TOTAL_STEPS; i++) {
+    const tab = document.getElementById('tab-' + i);
+    if (i < currentStep) { tab.className = 'step-tab done'; }
+    else if (i === currentStep) { tab.className = 'step-tab active'; }
+    else { tab.className = 'step-tab'; }
+  }
+  // Progress dots
+  const dots = document.querySelectorAll('.prog-dot');
+  dots.forEach((d, i) => {
+    if (i < currentStep) d.className = 'prog-dot done';
+    else if (i === currentStep) d.className = 'prog-dot active';
+    else d.className = 'prog-dot';
+  });
+}
+
+// ════════════════════════════════════════════════════════════════
+// RENDER STEPS
+// ════════════════════════════════════════════════════════════════
+function renderStep() {
+  if (typingTimeout) { clearTimeout(typingTimeout); typingTimeout = null; }
+  const sc = SCENARIOS[currentScenario];
+  const content = document.getElementById('demo-content');
+  if (currentStep === 0) renderStep0(sc, content);
+  else if (currentStep === 1) renderStep1(sc, content);
+  else if (currentStep === 2) renderStep2(sc, content);
+  else if (currentStep === 3) renderStep3(sc, content);
+}
+
+function mailCardHTML(mail, selected=false) {
+  return `<div class="demo-mail-card ${selected?'selected':''}" onclick="selectMail(${mail.id})">
+    <div class="dmc-row">
+      <div class="dmc-dot" style="background:${mail.color}"></div>
+      <div class="dmc-sender">${mail.sender}</div>
+      <span class="dmc-tag" style="background:${mail.tagBg};color:${mail.tagColor}">${mail.tagLabel}</span>
+      <div class="dmc-time">${mail.time}</div>
+    </div>
+    <div class="dmc-subj">${mail.subject}</div>
+    <div class="dmc-sum">✨ ${mail.summary}</div>
+  </div>`;
+}
+
+// STEP 0 — Mails arrivent
+function renderStep0(sc, el) {
+  el.innerHTML = `
+    <div class="demo-left">
+      <div class="demo-step-title">📬 Vos nouveaux mails</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:14px;line-height:1.5">Ces mails viennent d'arriver dans votre boîte. Sans MailOne, vous devrez tous les lire un par un pour comprendre ce qui est urgent.</div>
+      <div id="mail-list-0">
+        ${sc.mails.map((m,i) => `<div class="demo-mail-card" style="animation-delay:${i*.15}s;opacity:0;animation:fadeIn .4s ${i*.15}s forwards">${mailCardHTML(m).replace('demo-mail-card ','').replace('demo-mail-card"','').replace(' onclick="selectMail('+m.id+')"','')}<div style="background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:10px;margin-top:8px">
+<div style="height:7px;background:rgba(255,255,255,.07);border-radius:4px;margin-bottom:6px;width:90%"></div>
+<div style="height:7px;background:rgba(255,255,255,.07);border-radius:4px;margin-bottom:6px;width:75%"></div>
+<div style="height:7px;background:rgba(255,255,255,.07);border-radius:4px;width:55%"></div>
+</div></div>`).join('')}
+      </div>
+    </div>
+    <div class="demo-right" style="align-items:center;justify-content:center;text-align:center">
+      <div style="font-size:52px;margin-bottom:20px;opacity:.15">📧</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:rgba(255,255,255,.5);margin-bottom:8px">${sc.mails.length} mails non lus</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.42);line-height:1.65;max-width:200px">Sans MailOne, vous devrez lire et comprendre chaque mail avant de pouvoir répondre.</div>
+      <div style="margin-top:20px;font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:rgba(255,255,255,.35)">≈ 24 min de travail</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.35);margin-top:4px">Pour traiter ces ${sc.mails.length} mails manuellement</div>
+    </div>`;
+  document.querySelector('.demo-left').style.cssText += ';overflow-y:auto;max-height:380px';
+}
+
+// STEP 1 — Tri IA
+function renderStep1(sc, el) {
+  el.innerHTML = `
+    <div class="demo-left" style="overflow-y:auto;max-height:380px">
+      <div class="demo-step-title">✨ Triés et résumés par l'IA</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:14px;line-height:1.5">En moins de 2 secondes, MailOne a analysé tous vos mails, les a classés par catégorie et résumé chacun en une ligne.</div>
+      ${sc.mails.map((m,i) => `<div class="demo-mail-card" style="animation-delay:${i*.12}s" onclick="selectMailStep1(${m.id},'${currentScenario}')">
+        <div class="dmc-row">
+          <div class="dmc-dot" style="background:${m.color}"></div>
+          <div class="dmc-sender">${m.sender}</div>
+          <span class="dmc-tag" style="background:${m.tagBg};color:${m.tagColor}">${m.tagLabel}</span>
+          <div class="dmc-time">${m.time}</div>
+        </div>
+        <div class="dmc-subj">${m.subject}</div>
+        <div class="dmc-sum" style="color:rgba(94,234,212,.7)">✨ ${m.summary}</div>
+      </div>`).join('')}
+    </div>
+    <div class="demo-right" style="align-items:center;justify-content:center;text-align:center">
+      <div style="font-size:48px;margin-bottom:16px">⚡</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;color:#22c55e;margin-bottom:8px">Traité en &lt; 2 secondes</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:16px;text-align:left">
+        <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.55)"><span style="color:#fca5a5">🚨</span>Urgences remontées en tête</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.55)"><span style="color:#93c5fd">📋</span>Devis identifiés et évalués</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.55)"><span style="color:#6ee7b7">📅</span>RDV à confirmer listés</div>
+        <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,.55)"><span style="color:#fcd34d">💰</span>Factures bloquées détectées</div>
+      </div>
+      <div style="margin-top:22px;font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#22c55e">≈ 2 secondes</div>
+      <div style="font-size:11px;color:rgba(255,255,255,.42);margin-top:4px">Avec MailOne</div>
+    </div>`;
+}
+
+// STEP 2 — Analyse
+function renderStep2(sc, el) {
+  const mail = sc.mails.find(m => m.id === selectedMailId) || sc.mails[0];
+  el.innerHTML = `
+    <div class="demo-left" style="overflow-y:auto;max-height:380px">
+      <div class="demo-step-title">🔍 Cliquez sur un mail pour l'analyser</div>
+      ${sc.mails.map(m => `<div class="demo-mail-card ${m.id===selectedMailId?'selected':''}" onclick="selectMailAndAnalyze(${m.id})">
+        <div class="dmc-row">
+          <div class="dmc-dot" style="background:${m.color}"></div>
+          <div class="dmc-sender">${m.sender}</div>
+          <span class="dmc-tag" style="background:${m.tagBg};color:${m.tagColor}">${m.tagLabel}</span>
+          <div class="dmc-time">${m.time}</div>
+        </div>
+        <div class="dmc-subj">${m.subject}</div>
+        <div class="dmc-sum" style="color:rgba(94,234,212,.7)">✨ ${m.summary}</div>
+      </div>`).join('')}
+    </div>
+    <div class="demo-right">
+      <div class="demo-step-title">✨ Analyse IA — ${mail.sender}</div>
+      <div class="ai-panel-demo" id="ai-panel-step2">
+        <div class="ai-block">
+          <div class="ai-block-title">Contexte & analyse</div>
+          <div style="font-size:11px;color:rgba(255,255,255,.6);line-height:1.65">${mail.analyse}</div>
+        </div>
+        <div class="ai-block">
+          <div class="ai-block-title">Recommandation</div>
+          <div class="ai-kv"><span class="ai-kv-k">Priorité</span><span class="ai-kv-v ${mail.prio.includes('🔴')?'red':mail.prio.includes('🔥')?'amber':'green'}">${mail.prio}</span></div>
+          <div class="ai-kv"><span class="ai-kv-k">Délai</span><span class="ai-kv-v amber">${mail.delay}</span></div>
+          <div class="ai-kv"><span class="ai-kv-k">Action</span><span class="ai-kv-v">${mail.action}</span></div>
+          <div class="ai-kv"><span class="ai-kv-k">Ton conseillé</span><span class="ai-kv-v">${mail.tone}</span></div>
+        </div>
+      </div>
+    </div>`;
+}
+
+// STEP 3 — Réponse générée
+function renderStep3(sc, el) {
+  const mail = sc.mails.find(m => m.id === selectedMailId) || sc.mails[0];
+  el.innerHTML = `
+    <div class="demo-left" style="overflow-y:auto;max-height:380px">
+      <div class="demo-step-title">📧 Mail sélectionné</div>
+      <div class="demo-mail-card selected">
+        <div class="dmc-row">
+          <div class="dmc-dot" style="background:${mail.color}"></div>
+          <div class="dmc-sender">${mail.sender}</div>
+          <span class="dmc-tag" style="background:${mail.tagBg};color:${mail.tagColor}">${mail.tagLabel}</span>
+        </div>
+        <div class="dmc-subj">${mail.subject}</div>
+        <div class="dmc-sum" style="color:rgba(94,234,212,.7)">✨ ${mail.summary}</div>
+      </div>
+      <div style="margin-top:14px">
+        ${sc.mails.filter(m=>m.id!==mail.id).map(m=>`<div class="demo-mail-card" onclick="selectMailAndReply(${m.id})" style="opacity:.5">
+          <div class="dmc-row"><div class="dmc-dot" style="background:${m.color}"></div><div class="dmc-sender">${m.sender}</div></div>
+          <div class="dmc-sum" style="font-size:10px">${m.summary}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+    <div class="demo-right" style="display:flex;flex-direction:column">
+      <div class="demo-step-title">✨ Réponse générée — IA MailOne Pro</div>
+      <div class="ai-gen-lbl" id="gen-lbl"><div class="ai-gen-pulse"></div>Agent en cours de rédaction…</div>
+      <div class="ai-reply-box" id="reply-box"></div>
+      <button class="copy-btn" id="copy-btn" onclick="copyDemoReply()">📋 Copier la réponse — Coller dans Gmail / Outlook</button>
+      <div style="font-size:10px;color:rgba(255,255,255,.42);margin-top:8px;line-height:1.5;text-align:center">MailOne génère, vous copiez, vous envoyez depuis votre messagerie habituelle.<br>MailOne ne peut jamais envoyer en votre nom. 🔒</div>
+    </div>`;
+
+  // Type the reply
+  typeReply(mail.reply);
+}
+
+function typeReply(text) {
+  const box = document.getElementById('reply-box');
+  const lbl = document.getElementById('gen-lbl');
+  if (!box) return;
+  const words = text.split(' ');
+  let out = '';
+  let i = 0;
+  function type() {
+    if (i < words.length) {
+      out += (i > 0 ? ' ' : '') + words[i];
+      box.innerHTML = out.replace(/\n/g, '<br>') + '<span class="typing-cursor"></span>';
+      i++;
+      typingTimeout = setTimeout(type, words[i-1]?.includes('\n') ? 60 : words[i-1]?.length > 7 ? 22 : 12);
+    } else {
+      box.innerHTML = out.replace(/\n/g, '<br>');
+      if (lbl) lbl.innerHTML = '✅ Réponse prête';
+      const copyBtn = document.getElementById('copy-btn');
+      if (copyBtn) copyBtn.classList.add('show');
+    }
+  }
+  type();
+}
+
+function copyDemoReply() {
+  const sc = SCENARIOS[currentScenario];
+  const mail = sc.mails.find(m => m.id === selectedMailId) || sc.mails[0];
+  navigator.clipboard.writeText(mail.reply).catch(() => {});
+  const btn = document.getElementById('copy-btn');
+  btn.textContent = '✅ Copié ! Collez dans Gmail ou Outlook';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.textContent = '📋 Copier la réponse — Coller dans Gmail / Outlook';
+    btn.classList.remove('copied');
+  }, 3000);
+}
+
+function selectMailAndAnalyze(id) {
+  selectedMailId = id;
+  renderStep2(SCENARIOS[currentScenario], document.getElementById('demo-content'));
+}
+
+function selectMailAndReply(id) {
+  selectedMailId = id;
+  renderStep3(SCENARIOS[currentScenario], document.getElementById('demo-content'));
+}
+
+function selectMailStep1(id, sc) {
+  selectedMailId = id;
+  currentStep = 2;
+  renderStep();
+  updateNav();
+}
+
+// INIT
+renderStep();
+updateNav();
+</script>
+</body>
+</html>

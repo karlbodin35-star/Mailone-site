@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{width:1200px;height:630px;background:#09090b;font-family:'Space Grotesk',system-ui,sans-serif;display:flex;align-items:center;padding:0 80px;overflow:hidden;position:relative}
+.bg-dot{position:absolute;border-radius:50%;opacity:.08}
+.d1{width:400px;height:400px;background:#22c55e;top:-100px;right:-50px}
+.d2{width:300px;height:300px;background:#22c55e;bottom:-80px;left:100px}
+.content{position:relative;z-index:1}
+.logo{display:flex;align-items:center;gap:4px;margin-bottom:32px}
+.logo-text{font-size:28px;font-weight:700;color:#fff;letter-spacing:-1px}
+.logo-text span{color:#71717a}
+.nav-mark{width:10px;height:10px;border-radius:50%;background:#22c55e;margin-left:4px}
+h1{font-size:56px;font-weight:700;color:#fff;line-height:1.1;letter-spacing:-2px;margin-bottom:20px;max-width:700px}
+h1 em{font-style:normal;color:#22c55e}
+p{font-size:22px;color:#a1a1aa;line-height:1.5;max-width:550px;margin-bottom:32px}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(22,163,74,.15);border:1px solid rgba(22,163,74,.25);border-radius:100px;padding:8px 20px;font-size:15px;font-weight:600;color:#22c55e}
+.badge-dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
+.mockup{position:absolute;right:60px;top:50%;transform:translateY(-50%);width:380px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;z-index:1}
+.mock-mail{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.06);border-radius:10px;padding:12px;margin-bottom:8px}
+.mm-row{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.mm-dot{width:8px;height:8px;border-radius:50%}
+.mm-name{font-size:13px;font-weight:600;color:rgba(255,255,255,.7)}
+.mm-tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;text-transform:uppercase}
+.mm-line{height:8px;border-radius:4px;background:rgba(255,255,255,.06);margin-top:4px}
+.mm-line.w70{width:70%}.mm-line.w50{width:50%}
+.mock-ai{background:rgba(22,163,74,.08);border:1px solid rgba(22,163,74,.15);border-left:3px solid #22c55e;border-radius:0 10px 10px 0;padding:12px;margin-top:12px}
+.ai-label{font-size:10px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.ai-line{height:7px;border-radius:4px;background:rgba(22,163,74,.12);margin-bottom:5px}
+.ai-line.w90{width:90%}.ai-line.w60{width:60%}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mailone.app">
+<meta property="og:title" content="MailOne — Copilote IA">
+<meta property="og:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<meta property="og:image" content="https://mailone.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MailOne — Copilote IA">
+<meta name="twitter:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<meta name="description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+  <div class="bg-dot d1"></div>
+  <div class="bg-dot d2"></div>
+  <div class="content">
+    <div class="logo">
+      <span class="logo-text">Mail<span>One</span></span>
+      <span class="nav-mark"></span>
+    </div>
+    <h1>Vos mails triés, résumés, <em>répondus.</em></h1>
+    <p>Copilote IA pour artisans & PME. 30 secondes par mail au lieu de 8 minutes.</p>
+    <div class="badge"><span class="badge-dot"></span>Essai gratuit 14 jours</div>
+  </div>
+  <div class="mockup">
+    <div class="mock-mail">
+      <div class="mm-row">
+        <div class="mm-dot" style="background:#ef4444"></div>
+        <div class="mm-name">B. Talon</div>
+        <span class="mm-tag" style="background:rgba(239,68,68,.15);color:#ef4444">Urgent</span>
+      </div>
+      <div class="mm-line w70"></div>
+      <div class="mm-line w50"></div>
+    </div>
+    <div class="mock-mail">
+      <div class="mm-row">
+        <div class="mm-dot" style="background:#3b82f6"></div>
+        <div class="mm-name">S. Leclerc</div>
+        <span class="mm-tag" style="background:rgba(59,130,246,.15);color:#3b82f6">Devis</span>
+      </div>
+      <div class="mm-line w70"></div>
+      <div class="mm-line w50"></div>
+    </div>
+    <div class="mock-ai">
+      <div class="ai-label">Réponse IA</div>
+      <div class="ai-line w90"></div>
+      <div class="ai-line w60"></div>
+    </div>
+  </div>
+</body>
+</html>

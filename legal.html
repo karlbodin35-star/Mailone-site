@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentions légales — MailOne</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fafafa;--bg2:#f4f4f5;--sur:#fff;--bdr:#e4e4e7;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--green:#16a34a;--green-l:#f0fdf4;--blue:#2563eb;--amber:#d97706;--amber-l:#fffbeb}
+html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:100;height:58px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 5vw;gap:14px}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.5px;display:flex;align-items:center;gap:6px;text-decoration:none}
+.nav-mark{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.nav-right{margin-left:auto;display:flex;gap:8px}
+.nb{padding:6px 13px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s;text-decoration:none}
+.nb:hover{background:var(--bg2)}
+
+.hero{background:var(--sur);border-bottom:1px solid var(--bdr);padding:52px 5vw 44px;text-align:center}
+.hero h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,3.5vw,40px);font-weight:800;letter-spacing:-.03em;margin-bottom:10px}
+.hero p{font-size:14px;color:var(--ink3);line-height:1.65}
+
+.page{max-width:900px;margin:0 auto;padding:44px 5vw 80px;display:grid;grid-template-columns:200px 1fr;gap:32px;align-items:start}
+
+/* SIDEBAR */
+.toc{background:var(--sur);border:1px solid var(--bdr);border-radius:12px;padding:14px;position:sticky;top:74px}
+.toc-title{font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;padding:0 8px}
+.toc-item{display:flex;align-items:center;gap:7px;padding:8px 9px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:var(--ink2);transition:all .15s;text-decoration:none}
+.toc-item:hover{background:var(--bg);color:var(--ink)}
+.toc-item.active{background:var(--green-l);color:var(--green);font-weight:700}
+.toc-div{height:1px;background:var(--bdr);margin:5px 0}
+
+/* CONTENT */
+.legal-docs{display:flex;flex-direction:column;gap:0}
+.legal-doc{padding:40px 0;border-bottom:1px solid var(--bdr)}
+.legal-doc:last-child{border-bottom:none}
+.doc-header{margin-bottom:28px}
+.doc-badge{display:inline-flex;align-items:center;gap:6px;background:var(--green-l);border:1px solid #dcfce7;border-radius:20px;padding:4px 12px;font-size:10px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.doc-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(22px,3vw,30px);font-weight:800;letter-spacing:-.03em;margin-bottom:8px}
+.doc-date{font-size:11px;color:var(--ink3);background:var(--bg);border:1px solid var(--bdr);border-radius:6px;padding:4px 10px;display:inline-block;margin-bottom:8px}
+.doc-highlight{background:var(--amber-l);border:1px solid #fde68a;border-radius:10px;padding:13px 16px;font-size:13px;color:#92400e;line-height:1.65;margin-bottom:20px;display:flex;gap:9px}
+.doc-body h2{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--ink);margin:24px 0 8px;padding-top:8px;border-top:1px solid var(--bdr)}
+.doc-body h2:first-child{margin-top:0;border-top:none;padding-top:0}
+.doc-body p{font-size:13px;color:var(--ink2);line-height:1.78;margin-bottom:12px}
+.doc-body ul{font-size:13px;color:var(--ink2);line-height:1.78;margin-bottom:12px;padding-left:20px}
+.doc-body li{margin-bottom:5px}
+.doc-body strong{color:var(--ink);font-weight:700}
+.doc-body a{color:var(--blue)}
+.doc-body .info-box{background:var(--green-l);border:1px solid #dcfce7;border-radius:8px;padding:12px 15px;margin:14px 0;font-size:13px;color:var(--ink2)}
+
+@media(max-width:720px){.page{grid-template-columns:1fr}.toc{display:none}}
+
+/* MOBILE MENU */
+.menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px;color:var(--g700)}
+.menu-toggle svg{width:22px;height:22px}
+.mobile-menu{display:none;position:fixed;inset:0;z-index:200;background:rgba(255,255,255,.97);backdrop-filter:blur(20px);flex-direction:column;padding:80px 24px 24px}
+.mobile-menu.open{display:flex}
+.mobile-menu a{font-size:17px;font-weight:600;color:var(--g900);padding:14px 0;border-bottom:1px solid var(--g200);text-decoration:none}
+.mobile-menu .btn{margin-top:12px;justify-content:center;width:100%;padding:14px;font-size:15px}
+.mm-close{position:absolute;top:16px;right:20px;background:none;border:none;cursor:pointer;font-size:24px;color:var(--g500)}
+@media(max-width:768px){.menu-toggle{display:block}.nav-links{display:none}}
+@media(min-width:769px){.mobile-menu{display:none!important}}
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mailone.app">
+<meta property="og:title" content="MailOne — Mentions légales">
+<meta property="og:description" content="CGU, politique de confidentialité et mentions légales.">
+<meta property="og:image" content="https://mailone.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MailOne — Mentions légales">
+<meta name="twitter:description" content="CGU, politique de confidentialité et mentions légales.">
+<meta name="description" content="CGU, politique de confidentialité et mentions légales.">
+<link rel="canonical" href="https://mailone.app/legal">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-mark"></span></a>
+  
+<button class="menu-toggle" onclick="document.getElementById('mobile-menu').classList.add('open')" aria-label="Menu">
+  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+</button>
+
+  <div class="nav-right">
+    <a href="index.html" class="nb">Accueil</a>
+    <a href="contact.html" class="nb">Contact</a>
+  </div>
+</nav>
+
+<div style="background:#fef08a;border-bottom:1px solid #fde047;padding:10px 5vw;text-align:center;font-size:13px;font-weight:600;color:#713f12">
+  ⚠️ <strong>Action requise avant mise en ligne :</strong> Complétez tous les champs jaunes ci-dessous (SIRET, adresse, dirigeant, hébergeur) pour être légalement conforme.
+</div>
+<div class="hero">
+  <h1>Documents légaux</h1>
+  <p>Conditions d'utilisation, confidentialité, mentions légales et politique de cookies.<br>Version en vigueur depuis le 1er janvier 2025.</p>
+</div>
+
+<div class="page">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <div class="toc-title">Documents</div>
+    <a class="toc-item active" href="#cgu" onclick="setActive(this)">📄 CGU</a>
+    <a class="toc-item" href="#privacy" onclick="setActive(this)">🔒 Confidentialité</a>
+    <a class="toc-item" href="#mentions" onclick="setActive(this)">🏢 Mentions légales</a>
+    <div class="toc-div"></div>
+    <a class="toc-item" href="#cookies" onclick="setActive(this)">🍪 Cookies</a>
+    <a class="toc-item" href="cgv.html" style="color:var(--green)">📋 CGV (Conditions de Vente)</a>
+    <a class="toc-item" href="#remboursement" onclick="setActive(this)">💳 Remboursement</a>
+    <div class="toc-div"></div>
+    <a href="contact.html" class="toc-item" style="color:var(--green)">✉️ Nous contacter</a>
+  </div>
+
+  <!-- LEGAL DOCS -->
+  <div class="legal-docs">
+
+    <!-- CGU -->
+    <div class="legal-doc" id="cgu">
+      <div class="doc-header">
+        <div class="doc-badge">📄 Document 1/5</div>
+        <h1 class="doc-title">Conditions Générales d'Utilisation</h1>
+        <div class="doc-date">Version 1.0 — En vigueur depuis le 1er janvier 2025</div>
+        <div class="doc-highlight"><span>⚠️</span><span>Ces CGU constituent un contrat entre vous et MailOne SAS. En créant un compte, vous les acceptez intégralement.</span></div>
+      </div>
+      <div class="doc-body">
+        <h2>1. Présentation du service</h2>
+        <p>MailOne est un service SaaS de gestion intelligente de boîte mail, édité par MailOne SAS. Le service permet à ses utilisateurs de connecter leur messagerie (Gmail, Outlook) en lecture seule, afin de trier, résumer et générer des réponses professionnelles grâce à un agent IA embarqué.</p>
+
+        <h2>2. Accès et conditions d'utilisation</h2>
+        <p>L'accès est réservé aux personnes majeures ou aux personnes morales dûment représentées. En vous inscrivant, vous garantissez que les informations fournies sont exactes. Vous vous engagez à ne pas partager vos identifiants, ne pas utiliser le service à des fins illicites, ni tenter de contourner les mesures de sécurité.</p>
+
+        <h2>3. Plans et abonnements</h2>
+        <ul>
+          <li><strong>Plan Solo (99€/mois HT)</strong> — 1 boîte mail, IA MailOne Pro incluse (quota fair use : 500 réponses IA/mois)</li>
+          <li><strong>Plan Équipe (900€/mois HT)</strong> — 10 boîtes, dashboard équipe, analytics (quota fair use : 2 000 réponses IA/mois)</li>
+          <li><strong>Plan Entreprise (1 780€/mois HT)</strong> — 20 boîtes, API, SSO, SLA garanti (quota fair use : 5 000 réponses IA/mois)</li>
+        </ul>
+        <p>Des abonnements annuels sont disponibles avec une réduction de 2 mois offerts. Les prix s'entendent hors taxe ; la TVA applicable selon votre pays est ajoutée lors du paiement.</p>
+
+        <h2>3bis. Politique d'usage équitable (Fair Use)</h2>
+        <p>L'IA MailOne Pro est incluse dans tous les plans dans le cadre d'un <strong>usage raisonnable</strong>. Les quotas mensuels suivants s'appliquent :</p>
+        <ul>
+          <li><strong>Plan Solo</strong> — 500 réponses IA générées par mois (soit ~17/jour, largement suffisant pour un artisan actif)</li>
+          <li><strong>Plan Équipe</strong> — 2 000 réponses IA générées par mois (soit 200/boîte/mois)</li>
+          <li><strong>Plan Entreprise</strong> — 5 000 réponses IA générées par mois (soit 250/boîte/mois)</li>
+        </ul>
+        <p>En pratique, un artisan traitant 30 mails/jour utilise environ 150-200 réponses IA par mois — bien en dessous du quota. Ces limites visent uniquement à prévenir les usages abusifs automatisés.</p>
+        <p><strong>Au-delà du quota :</strong> L'IA MailOne Pro est temporairement suspendue jusqu'au prochain renouvellement mensuel. L'agent IA local (gratuit, illimité, embarqué dans le navigateur) reste disponible sans restriction. Aucune facturation supplémentaire n'est effectuée automatiquement.</p>
+        <p>MailOne se réserve le droit de contacter tout utilisateur dont la consommation dépasse significativement le quota afin de proposer un plan adapté.</p>
+
+        <h2>4. Essai gratuit</h2>
+        <p>Tous les plans bénéficient d'un essai gratuit de <strong>14 jours</strong> sans carte bancaire. À l'issue, l'abonnement est activé uniquement si vous avez fourni vos informations de paiement.</p>
+
+        <h2>5. Facturation et paiement</h2>
+        <p>Les abonnements sont facturés mensuellement ou annuellement selon votre choix. Le paiement est traité par <strong>Stripe</strong> (PCI-DSS niveau 1). MailOne ne stocke jamais vos données bancaires. En cas d'échec de paiement, votre accès est suspendu après 7 jours de grâce.</p>
+
+        <h2>6. Politique de remboursement</h2>
+        <p>Voir la <a href="#remboursement">section dédiée</a> ci-dessous.</p>
+
+        <h2>7. Résiliation</h2>
+        <p>Vous pouvez résilier à tout moment depuis votre espace client. La résiliation prend effet à la fin de la période de facturation en cours. MailOne peut résilier votre compte en cas de violation des présentes CGU, avec notification préalable sauf urgence.</p>
+
+        <h2>8. Propriété intellectuelle</h2>
+        <p>Le service MailOne, son code source, son design et ses algorithmes sont la propriété de MailOne SAS. Vous bénéficiez d'une licence d'utilisation non-exclusive limitée à l'usage du service. Vos données restent votre propriété exclusive.</p>
+
+        <h2>9. Limitation de responsabilité</h2>
+        <p>MailOne est un outil d'aide à la rédaction. Les réponses générées sont des suggestions — vous êtes seul responsable des communications que vous envoyez. MailOne ne peut être tenu responsable des conséquences de l'utilisation de ces suggestions. Disponibilité garantie à 99,5% mensuelle.</p>
+
+        <h2>10. Modification des CGU</h2>
+        <p>MailOne peut modifier ces CGU avec un préavis de <strong>30 jours par email</strong>. La poursuite de l'utilisation après modification vaut acceptation.</p>
+
+        <h2>11. Droit applicable</h2>
+        <p>Les présentes CGU sont régies par le droit français. Tribunal compétent : <span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ VILLE</span>. Médiation : contact@mailone.app</p>
+      </div>
+    </div>
+
+    <!-- PRIVACY -->
+    <div class="legal-doc" id="privacy">
+      <div class="doc-header">
+        <div class="doc-badge">🔒 Document 2/5</div>
+        <h1 class="doc-title">Politique de confidentialité</h1>
+        <div class="doc-date">Version 1.0 — En vigueur depuis le 1er janvier 2025</div>
+        <div class="doc-highlight"><span>🛡️</span><span>MailOne SAS est engagé dans la protection de vos données personnelles, conformément au RGPD (UE 2016/679) et à la loi Informatique et Libertés.</span></div>
+      </div>
+      <div class="doc-body">
+        <h2>1. Responsable du traitement</h2>
+        <p><strong>MailOne SAS</strong> — Adresse : <span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ À COMPLÉTER</span> — Email DPO : privacy@mailone.app — SIRET : <span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ À COMPLÉTER</span></p>
+
+        <h2>2. Données collectées</h2>
+        <ul>
+          <li><strong>Données de compte</strong> : nom, email, entreprise, mot de passe chiffré. Base légale : exécution du contrat.</li>
+          <li><strong>Données de facturation</strong> : traitées par Stripe. MailOne ne stocke pas vos coordonnées bancaires.</li>
+          <li><strong>Données d'usage</strong> : logs de connexion, métriques anonymisées. Base légale : intérêt légitime.</li>
+          <li><strong>Contenu des emails</strong> : traité <strong>exclusivement en local dans votre navigateur</strong>. Vos emails ne transitent jamais par nos serveurs.</li>
+        </ul>
+
+        <h2>3. Agent IA et vie privée</h2>
+        <div class="info-box">✓ Traitement 100% local · ✓ Aucun email stocké · ✓ Aucun entraînement IA avec vos données · ✓ Effacement local possible à tout moment</div>
+
+        <h2>4. Hébergement et sous-traitants</h2>
+        <p>Données hébergées en Union Européenne. Sous-traitants : Stripe (paiement, couvert par clauses contractuelles UE). Aucune vente de données à des tiers.</p>
+
+        <h2>5. Durée de conservation</h2>
+        <ul>
+          <li>Données de compte actif : durée de l'abonnement + 3 ans</li>
+          <li>Données de facturation : 10 ans (obligation comptable)</li>
+          <li>Logs techniques : 12 mois glissants</li>
+          <li>Compte supprimé : effacement sous 30 jours</li>
+        </ul>
+
+        <h2>6. Vos droits RGPD</h2>
+        <p>Exercez vos droits à tout moment via <a href="mailto:privacy@mailone.app">privacy@mailone.app</a> ou depuis <a href="account.html#rgpd">votre espace compte</a> :</p>
+        <ul>
+          <li><strong>Accès</strong> — obtenir une copie de vos données</li>
+          <li><strong>Rectification</strong> — corriger des données inexactes</li>
+          <li><strong>Effacement</strong> — droit à l'oubli</li>
+          <li><strong>Portabilité</strong> — recevoir vos données en JSON</li>
+          <li><strong>Opposition et limitation</strong></li>
+        </ul>
+        <p>Délai de réponse : 30 jours. Réclamation non résolue : <a href="https://www.cnil.fr" target="_blank">cnil.fr</a></p>
+
+        <h2>7. Sécurité</h2>
+        <p>Chiffrement TLS en transit, chiffrement au repos, contrôle d'accès strict, authentification sécurisée. En cas de violation de données, vous serez notifié dans les 72h.</p>
+      </div>
+    </div>
+
+    <!-- MENTIONS LEGALES -->
+    <div class="legal-doc" id="mentions">
+      <div class="doc-header">
+        <div class="doc-badge">🏢 Document 3/5</div>
+        <h1 class="doc-title">Mentions légales</h1>
+        <div class="doc-date">Conformément à la loi n°2004-575 du 21 juin 2004 (LCEN)</div>
+      </div>
+      <div class="doc-body">
+        <h2>Éditeur</h2>
+        <p><strong>MailOne SAS</strong><br>
+        Capital social : <span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ MONTANT</span> €<br>
+        Siège social : <span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ ADRESSE</span><br>
+        SIRET : <span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ À COMPLÉTER</span><br>
+        Code APE : 6201Z<br>
+        N° TVA intracommunautaire : FR<span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ À COMPLÉTER</span><br>
+        Directeur de la publication : <span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ NOM DIRIGEANT</span><br>
+        Email : contact@mailone.app</p>
+
+        <h2>Hébergement</h2>
+        <p><span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ NOM HÉBERGEUR</span><br><span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ ADRESSE HÉBERGEUR</span><br>Données hébergées en Union Européenne.</p>
+
+        <h2>Propriété intellectuelle</h2>
+        <p>L'ensemble du contenu de ce site est protégé par le droit d'auteur et appartient à MailOne SAS. Toute reproduction sans autorisation écrite est interdite.</p>
+
+        <h2>Médiation</h2>
+        <p>Conformément au Code de la consommation, en cas de litige non résolu : contact@mailone.app. Droit applicable : droit français.</p>
+      </div>
+    </div>
+
+    <!-- COOKIES -->
+    <div class="legal-doc" id="cookies">
+      <div class="doc-header">
+        <div class="doc-badge">🍪 Document 4/5</div>
+        <h1 class="doc-title">Politique de cookies</h1>
+        <div class="doc-date">Version 1.0 — En vigueur depuis le 1er janvier 2025</div>
+      </div>
+      <div class="doc-body">
+        <h2>Cookies essentiels (obligatoires)</h2>
+        <p>Indispensables au fonctionnement : session de connexion, préférences de langue, sécurité CSRF. Ne peuvent pas être désactivés.</p>
+
+        <h2>Cookies d'analyse (optionnels)</h2>
+        <p>Nous permettent de comprendre l'utilisation du site (pages visitées, durée). Données anonymisées et agrégées. Désactivables via votre <a href="account.html">espace compte</a>.</p>
+
+        <h2>Cookies marketing (optionnels)</h2>
+        <p>Actuellement non utilisés. Paramètre prévu pour une utilisation future avec votre consentement explicite.</p>
+
+        <h2>Durée de conservation</h2>
+        <ul>
+          <li>Cookies de session : supprimés à la fermeture du navigateur</li>
+          <li>Préférences cookies : 13 mois maximum (CNIL)</li>
+          <li>Cookies d'analyse : données agrégées 25 mois</li>
+        </ul>
+
+        <h2>Gérer vos préférences</h2>
+        <p>Modifiez vos préférences à tout moment depuis le bandeau cookies ou votre <a href="account.html">espace compte</a>. Pour toute question : <a href="mailto:privacy@mailone.app">privacy@mailone.app</a></p>
+      </div>
+    </div>
+
+    <!-- REMBOURSEMENT -->
+    <div class="legal-doc" id="remboursement">
+      <div class="doc-header">
+        <div class="doc-badge">💳 Document 5/5</div>
+        <h1 class="doc-title">Politique de remboursement</h1>
+        <div class="doc-date">Version 1.0 — En vigueur depuis le 1er janvier 2025</div>
+      </div>
+      <div class="doc-body">
+        <h2>Essai gratuit</h2>
+        <p>L'essai gratuit de 14 jours ne nécessite aucune carte bancaire. Aucune facturation n'a lieu pendant cette période.</p>
+
+        <h2>Garantie satisfait ou remboursé — 14 jours</h2>
+        <p>Si vous n'êtes pas satisfait dans les <strong>14 premiers jours suivant votre premier paiement</strong>, nous vous remboursons intégralement sur simple demande à <a href="mailto:support@mailone.app">support@mailone.app</a>. Aucune justification requise.</p>
+
+        <h2>Abonnements mensuels</h2>
+        <p>Après le délai de 14 jours, aucun remboursement prorata n'est effectué pour les jours restants du mois en cours. Vous conservez l'accès jusqu'à la fin de la période payée.</p>
+
+        <h2>Abonnements annuels</h2>
+        <p>Les abonnements annuels peuvent être remboursés au prorata des mois non utilisés dans les <strong>30 premiers jours</strong> suivant le paiement. Après ce délai : remboursement à la discrétion de MailOne selon le motif.</p>
+
+        <h2>Cas exceptionnels</h2>
+        <p>En cas de défaillance technique prolongée imputable à MailOne, un avoir ou remboursement prorata sera accordé sur demande.</p>
+
+        <h2>Procédure</h2>
+        <p>Envoyez un email à <a href="mailto:support@mailone.app">support@mailone.app</a> avec votre email d'inscription et la raison de votre demande. Traitement sous 5 jours ouvrés. Le remboursement apparaît sur votre relevé sous 5 à 10 jours ouvrés selon votre banque.</p>
+
+        <div class="info-box">💡 Le portail de facturation Stripe est accessible depuis <a href="account.html#plan">votre espace compte</a> pour gérer votre abonnement en autonomie.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function setActive(el) {
+  setTimeout(() => {
+    document.querySelectorAll('.toc-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+  }, 100);
+}
+// Auto-highlight TOC based on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      document.querySelectorAll('.toc-item').forEach(i => i.classList.remove('active'));
+      const link = document.querySelector(`.toc-item[href="#${e.target.id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, {threshold:.3});
+document.querySelectorAll('.legal-doc').forEach(d => observer.observe(d));
+</script>
+</body>
+</html>

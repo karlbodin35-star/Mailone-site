@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parrainage — MailOne</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fafafa;--bg2:#f4f4f5;--sur:#fff;--bdr:#e4e4e7;--bdr2:#d4d4d8;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--ink4:#a1a1aa;--green:#16a34a;--green-l:#f0fdf4;--amber:#d97706;--amber-l:#fffbeb;--purple:#9333ea;--purple-l:#faf5ff;--teal:#0d9488}
+html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+nav{position:sticky;top:0;z-index:100;height:60px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 5vw;gap:14px}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.5px;display:flex;align-items:center;gap:6px;text-decoration:none}
+.nav-mark{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.nav-right{margin-left:auto;display:flex;gap:8px}
+.nb{padding:7px 14px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s;text-decoration:none}
+.nb:hover{background:var(--bg2)}
+.nb-green{background:var(--green);color:#fff;border-color:var(--green)}.nb-green:hover{opacity:.88}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--ink) 0%,#2d2416 100%);padding:80px 5vw 72px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'🎁';position:absolute;font-size:240px;opacity:.04;top:-40px;right:-40px;line-height:1}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(94,234,212,.12);border:1px solid rgba(94,234,212,.2);border-radius:20px;padding:5px 14px;font-size:11px;font-weight:700;color:#22c55e;text-transform:uppercase;letter-spacing:.06em;margin-bottom:18px}
+.hero-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(30px,4.5vw,52px);font-weight:800;color:#fafafa;letter-spacing:-.04em;line-height:1.08;margin-bottom:14px}
+.hero-title span{color:#22c55e}
+.hero-sub{font-size:16px;color:rgba(255,255,255,.5);line-height:1.7;max-width:500px;margin:0 auto 32px}
+.hero-reward{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:14px 22px;font-size:14px;font-weight:600;color:rgba(255,255,255,.8)}
+.hero-reward strong{color:#22c55e}
+
+/* LINK BOX */
+.link-section{max-width:680px;margin:0 auto;padding:52px 5vw 0}
+.link-card{background:var(--sur);border:1px solid var(--bdr);border-radius:20px;padding:32px;box-shadow:0 8px 32px rgba(0,0,0,.07);margin-bottom:28px}
+.lc-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:800;margin-bottom:6px}
+.lc-sub{font-size:13px;color:var(--ink3);margin-bottom:22px;line-height:1.55}
+.link-input-wrap{display:flex;gap:8px;margin-bottom:14px}
+.link-input{flex:1;padding:11px 14px;background:var(--bg);border:1.5px solid var(--bdr);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink2);outline:none}
+.copy-link-btn{padding:11px 18px;background:var(--ink);color:var(--bg);border:none;border-radius:9px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s}
+.copy-link-btn:hover{opacity:.85}
+.copy-link-btn.copied{background:var(--green)}
+.share-row{display:flex;gap:8px;flex-wrap:wrap}
+.share-btn{padding:9px 16px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s;display:flex;align-items:center;gap:6px}
+.share-btn:hover{background:var(--bg2)}
+
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:28px}
+.stat-card{background:var(--sur);border:1px solid var(--bdr);border-radius:14px;padding:20px;text-align:center}
+.stat-val{font-family:'Space Grotesk',sans-serif;font-size:32px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:4px}
+.stat-lbl{font-size:12px;color:var(--ink3)}
+.stat-card.highlight{border-color:var(--green);background:var(--green-l)}
+.stat-card.highlight .stat-val{color:var(--green)}
+
+/* HOW IT WORKS */
+.how-section{max-width:680px;margin:0 auto;padding:0 5vw 32px}
+.how-title{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;margin-bottom:20px}
+.how-steps{display:flex;flex-direction:column;gap:0;background:var(--sur);border:1px solid var(--bdr);border-radius:16px;overflow:hidden}
+.how-step{display:flex;gap:16px;align-items:flex-start;padding:20px 22px;border-bottom:1px solid var(--bdr)}
+.how-step:last-child{border-bottom:none}
+.how-num{width:32px;height:32px;border-radius:50%;background:var(--ink);color:var(--bg);display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;flex-shrink:0}
+.how-step-title{font-size:14px;font-weight:700;margin-bottom:4px}
+.how-step-desc{font-size:12px;color:var(--ink3);line-height:1.6}
+
+/* REFERRALS TABLE */
+.referrals-section{max-width:680px;margin:0 auto;padding:0 5vw 28px}
+.ref-card{background:var(--sur);border:1px solid var(--bdr);border-radius:16px;overflow:hidden}
+.ref-head{padding:16px 20px;border-bottom:1px solid var(--bdr);font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:800}
+.ref-row{display:flex;align-items:center;justify-content:space-between;padding:13px 20px;border-bottom:1px solid var(--bg2);font-size:13px}
+.ref-row:last-child{border-bottom:none}
+.ref-name{font-weight:600;color:var(--ink)}
+.ref-email{font-size:11px;color:var(--ink3)}
+.ref-status{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px}
+.rs-trial{background:var(--amber-l);color:var(--amber)}
+.rs-paid{background:var(--green-l);color:var(--green)}
+.ref-reward{font-size:13px;font-weight:700;color:var(--green)}
+
+/* REWARDS */
+.rewards-section{background:var(--ink);padding:64px 5vw;text-align:center}
+.rewards-title{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;color:#fafafa;margin-bottom:8px;letter-spacing:-.03em}
+.rewards-sub{font-size:14px;color:rgba(255,255,255,.4);margin-bottom:36px}
+.rewards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:700px;margin:0 auto 32px}
+.reward-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:14px;padding:22px}
+.reward-ico{font-size:28px;margin-bottom:10px}
+.reward-val{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:#22c55e;margin-bottom:6px}
+.reward-desc{font-size:12px;color:rgba(255,255,255,.45);line-height:1.55}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:var(--bg);border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:400}
+.toast.on{transform:translateY(0);opacity:1}
+
+@media(max-width:600px){.stats-grid{grid-template-columns:1fr}.rewards-grid{grid-template-columns:1fr}}
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mailone.app">
+<meta property="og:title" content="MailOne — Copilote IA">
+<meta property="og:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<meta property="og:image" content="https://mailone.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MailOne — Copilote IA">
+<meta name="twitter:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<meta name="description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-mark"></span></a>
+  <div class="nav-right">
+    <a href="app.html" class="nb">Mon application</a>
+    <a href="account.html" class="nb">Mon compte</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-badge">🎁 Programme de parrainage</div>
+  <h1 class="hero-title">Parrainez un confrère.<br><span>Gagnez 1 mois gratuit.</span></h1>
+  <p class="hero-sub">Les artisans se recommandent entre eux — c'est votre meilleur outil de vente. Chaque confrère que vous invitez vous rapporte un mois d'abonnement offert.</p>
+  <div class="hero-reward">
+    <span style="font-size:22px">🎁</span>
+    Vous gagnez <strong>1 mois offert</strong> · Votre filleul reçoit <strong>1 mois à -50%</strong>
+  </div>
+</div>
+
+<!-- YOUR LINK -->
+<div class="link-section">
+
+  <div class="link-card">
+    <div class="lc-title">Votre lien de parrainage</div>
+    <div class="lc-sub">Partagez ce lien à vos confrères. Dès qu'ils s'abonnent, vous recevez automatiquement 1 mois gratuit.</div>
+    <div class="link-input-wrap">
+      <input class="link-input" id="referral-link" value="https://mailone.app/ref/jean-pierre-moreau" readonly>
+      <button class="copy-link-btn" id="copy-btn" onclick="copyLink()">📋 Copier</button>
+    </div>
+    <div class="share-row">
+      <button class="share-btn" onclick="shareWhatsApp()">💬 WhatsApp</button>
+      <button class="share-btn" onclick="shareEmail()">📧 Email</button>
+      <button class="share-btn" onclick="shareSMS()">📱 SMS</button>
+      <button class="share-btn" onclick="shareLinkedIn()">💼 LinkedIn</button>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-val" id="stat-invited">3</div>
+      <div class="stat-lbl">Confrères invités</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-val" id="stat-converted">1</div>
+      <div class="stat-lbl">Abonnés actifs</div>
+    </div>
+    <div class="stat-card highlight">
+      <div class="stat-val" id="stat-earned">1</div>
+      <div class="stat-lbl">Mois gratuits gagnés 🎁</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <div class="how-title">Comment ça marche ?</div>
+  <div class="how-steps">
+    <div class="how-step">
+      <div class="how-num">1</div>
+      <div>
+        <div class="how-step-title">Copiez votre lien unique</div>
+        <div class="how-step-desc">Chaque lien est unique et tracé à votre nom. Partagez-le par WhatsApp, email, SMS ou en face à face.</div>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">2</div>
+      <div>
+        <div class="how-step-title">Votre filleul s'inscrit avec 50% de réduction</div>
+        <div class="how-step-desc">Votre confrère bénéficie de son premier mois à moitié prix. Une vraie raison de s'inscrire maintenant.</div>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">3</div>
+      <div>
+        <div class="how-step-title">Il souscrit un abonnement payant</div>
+        <div class="how-step-desc">Dès qu'il passe en abonnement payant (après l'essai gratuit), la récompense est déclenchée automatiquement.</div>
+      </div>
+    </div>
+    <div class="how-step">
+      <div class="how-num">4</div>
+      <div>
+        <div class="how-step-title">Vous recevez 1 mois gratuit</div>
+        <div class="how-step-desc">Le crédit est automatiquement appliqué à votre prochain renouvellement. Visible dans votre espace compte. Aucune limite de filleuls.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REFERRALS TABLE -->
+<div class="referrals-section">
+  <div class="ref-card">
+    <div class="ref-head">🤝 Vos filleuls</div>
+    <div class="ref-row">
+      <div><div class="ref-name">Michel Barbier</div><div class="ref-email">m.barbier@elec-barbier.fr</div></div>
+      <span class="ref-status rs-paid">✓ Abonné Solo</span>
+      <div class="ref-reward">+1 mois 🎁</div>
+    </div>
+    <div class="ref-row">
+      <div><div class="ref-name">Laurence Petit</div><div class="ref-email">lpetit@menuiserie-petit.fr</div></div>
+      <span class="ref-status rs-trial">Essai gratuit</span>
+      <div style="font-size:12px;color:var(--ink4)">En attente</div>
+    </div>
+    <div class="ref-row">
+      <div><div class="ref-name">Thierry Gros</div><div class="ref-email">thierry@plomberie-gros.fr</div></div>
+      <span class="ref-status rs-trial">Essai gratuit</span>
+      <div style="font-size:12px;color:var(--ink4)">En attente</div>
+    </div>
+    <div style="padding:14px 20px;background:var(--bg);font-size:12px;color:var(--ink3);display:flex;align-items:center;justify-content:space-between">
+      <span>💡 Relancez vos filleuls en essai pour déclencher votre récompense</span>
+      <button onclick="relanceFilleuls()" style="padding:6px 13px;border-radius:7px;border:1px solid var(--bdr);background:var(--sur);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--ink2);transition:all .15s">Envoyer une relance</button>
+    </div>
+  </div>
+</div>
+
+<!-- REWARDS -->
+<div class="rewards-section">
+  <div class="rewards-title">Plus vous parrainez, plus vous gagnez</div>
+  <div class="rewards-sub">Aucune limite. Chaque filleul = 1 mois gratuit pour vous.</div>
+  <div class="rewards-grid">
+    <div class="reward-card">
+      <div class="reward-ico">🥉</div>
+      <div class="reward-val">1 filleul</div>
+      <div class="reward-desc">1 mois gratuit — Solo : 99€ offerts</div>
+    </div>
+    <div class="reward-card">
+      <div class="reward-ico">🥈</div>
+      <div class="reward-val">5 filleuls</div>
+      <div class="reward-desc">5 mois gratuits — 495€ économisés</div>
+    </div>
+    <div class="reward-card">
+      <div class="reward-ico">🥇</div>
+      <div class="reward-val">12 filleuls</div>
+      <div class="reward-desc">1 an gratuit — 1 188€ économisés !</div>
+    </div>
+  </div>
+  <a href="#" onclick="copyLink()" style="display:inline-block;padding:14px 32px;background:var(--green);color:#fff;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;text-decoration:none;transition:opacity .15s">Copier mon lien et inviter mes confrères →</a>
+  <div style="font-size:12px;color:rgba(255,255,255,.42);margin-top:12px">Récompenses créditées automatiquement sur votre abonnement · Aucune limite de filleuls</div>
+</div>
+
+<div class="toast" id="toast"><span id="t-ico">✅</span><span id="t-msg"></span></div>
+
+<script>
+const user = JSON.parse(localStorage.getItem('mailone_user')||'{}');
+const userName = user.name || 'jean-pierre-moreau';
+const slug = userName.toLowerCase().replace(/\s+/g,'-').normalize('NFD').replace(/[^\w-]/g,'');
+const refLink = `https://mailone.app/ref/${slug}`;
+document.getElementById('referral-link').value = refLink;
+
+function copyLink() {
+  navigator.clipboard.writeText(refLink).catch(()=>{});
+  const btn = document.getElementById('copy-btn');
+  btn.textContent = '✅ Copié !'; btn.classList.add('copied');
+  setTimeout(()=>{ btn.textContent = '📋 Copier'; btn.classList.remove('copied'); }, 2500);
+  toast('📋', 'Lien copié ! Partagez-le à vos confrères');
+}
+
+function shareWhatsApp() {
+  const text = encodeURIComponent(`Bonjour ! Je te recommande MailOne — un assistant IA qui gère tes mails en quelques secondes. 1er mois à -50% avec mon lien : ${refLink}`);
+  window.open(`https://wa.me/?text=${text}`);
+}
+
+function shareEmail() {
+  const subj = encodeURIComponent('Je te recommande MailOne — 1 mois à -50%');
+  const body = encodeURIComponent(`Bonjour,\n\nJe t'écris pour te recommander MailOne, l'assistant IA qui gère mes mails en quelques secondes.\n\nEn passant par mon lien, tu bénéficies de ton 1er mois à -50% :\n${refLink}\n\nÀ bientôt,\n${user.name||'Un confrère'}`);
+  window.open(`mailto:?subject=${subj}&body=${body}`);
+}
+
+function shareSMS() {
+  const text = encodeURIComponent(`Je te recommande MailOne pour gérer tes mails. 1er mois à -50% : ${refLink}`);
+  window.open(`sms:?body=${text}`);
+}
+
+function shareLinkedIn() {
+  window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(refLink)}`);
+}
+
+function relanceFilleuls() {
+  toast('📧', '2 emails de relance envoyés à vos filleuls en essai');
+}
+
+function toast(ico, msg) {
+  document.getElementById('t-ico').textContent = ico;
+  document.getElementById('t-msg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'), 3200);
+}
+</script>
+<script src="mailone.js"></script>
+</body>
+</html>

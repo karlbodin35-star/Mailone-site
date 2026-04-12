@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mot de passe oublié — MailOne</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fafafa;--bg2:#f4f4f5;--sur:#fff;--bdr:#e4e4e7;--bdr2:#d4d4d8;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--ink4:#a1a1aa;--green:#16a34a;--green-l:#f0fdf4;--red:#dc2626;--red-l:#fef2f2}
+html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink)}
+body{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;padding:24px}
+
+nav{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 5vw}
+.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.5px;display:flex;align-items:center;gap:6px;text-decoration:none}
+.nav-mark{width:7px;height:7px;border-radius:50%;background:var(--green)}
+
+.card{background:var(--sur);border:1px solid var(--bdr);border-radius:20px;padding:44px 40px;width:100%;max-width:420px;box-shadow:0 12px 40px rgba(0,0,0,.07);animation:slideUp .5s cubic-bezier(.34,1.56,.64,1)}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+.card-ico{width:52px;height:52px;border-radius:14px;background:var(--green-l);border:1px solid #dcfce7;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:20px}
+.card-title{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:8px}
+.card-sub{font-size:13px;color:var(--ink3);line-height:1.65;margin-bottom:28px}
+
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:16px}
+label{font-size:12px;font-weight:600;color:var(--ink2)}
+input{padding:11px 14px;border:1.5px solid var(--bdr);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none;transition:all .15s}
+input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,160,106,.12);background:var(--sur)}
+input::placeholder{color:var(--ink4)}
+
+.submit-btn{width:100%;padding:13px;background:var(--ink);color:var(--bg);border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px}
+.submit-btn:hover{opacity:.85}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+
+.back-link{text-align:center;font-size:13px;color:var(--ink3);margin-top:18px}
+.back-link a{color:var(--green);font-weight:600;text-decoration:none}
+
+/* Success state */
+.success-state{display:none;text-align:center}
+.success-state .card-ico{margin:0 auto 20px;background:var(--green-l)}
+.success-state h2{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;margin-bottom:10px}
+.success-state p{font-size:13px;color:var(--ink3);line-height:1.65;margin-bottom:24px}
+.email-preview{background:var(--bg);border:1px solid var(--bdr);border-radius:9px;padding:12px 16px;font-size:13px;color:var(--ink2);margin-bottom:20px;font-weight:600}
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mailone.app">
+<meta property="og:title" content="MailOne — Copilote IA">
+<meta property="og:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<meta property="og:image" content="https://mailone.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MailOne — Copilote IA">
+<meta name="twitter:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<meta name="description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<nav>
+  <a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-mark"></span></a>
+</nav>
+
+<div class="card" style="margin-top:56px">
+
+  <!-- FORM STATE -->
+  <form id="form-state" onsubmit="event.preventDefault();handleReset()" novalidate>
+    <div class="card-ico">🔑</div>
+    <h1 class="card-title">Mot de passe oublié ?</h1>
+    <p class="card-sub">Pas de panique. Entrez votre email et nous vous envoyons un lien pour réinitialiser votre mot de passe en 2 minutes.</p>
+
+    <div class="form-group">
+      <label>Votre email</label>
+      <input type="email" id="reset-email" placeholder="jean@entreprise.fr" autocomplete="email" required>
+    </div>
+
+    <button class="submit-btn" id="reset-btn" onclick="handleReset()">
+      <span id="reset-ico">📧</span>
+      <span id="reset-txt">Envoyer le lien de réinitialisation</span>
+    </button>
+
+    <div class="back-link">
+      Vous vous souvenez ? <a href="login.html">Retour à la connexion →</a>
+    </div>
+  </form>
+
+  <!-- SUCCESS STATE -->
+  <div class="success-state" id="success-state">
+    <div class="card-ico" style="margin:0 auto 20px">✅</div>
+    <h2>Email envoyé !</h2>
+    <p>Un lien de réinitialisation a été envoyé à :</p>
+    <div class="email-preview" id="email-preview">jean@exemple.fr</div>
+    <p style="font-size:12px;color:var(--ink3);margin-bottom:20px">Vérifiez vos spams si vous ne le recevez pas dans 5 minutes. Le lien est valable 24 heures.</p>
+    <a href="login.html" style="display:flex;align-items:center;justify-content:center;gap:7px;width:100%;padding:13px;background:var(--ink);color:var(--bg);border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;text-decoration:none;transition:opacity .15s">
+      ← Retour à la connexion
+    </a>
+    <div style="margin-top:14px;font-size:12px;color:var(--ink3);text-align:center">
+      Toujours pas reçu ? <a href="#" onclick="resend()" style="color:var(--green);font-weight:600;text-decoration:none">Renvoyer l'email</a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+async function handleReset() {
+  const email = document.getElementById('reset-email').value.trim();
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    document.getElementById('reset-email').style.borderColor = 'var(--red)';
+    return;
+  }
+  const btn = document.getElementById('reset-btn');
+  btn.disabled = true;
+  document.getElementById('reset-ico').textContent = '⏳';
+  document.getElementById('reset-txt').textContent = 'Envoi en cours…';
+  try {
+    await Auth.forgotPassword(email);
+  } catch (err) {
+    // On affiche toujours le succès (sécurité : ne pas révéler si l'email existe)
+    console.warn('Forgot password:', err.message);
+  }
+  document.getElementById('form-state').style.display = 'none';
+  document.getElementById('success-state').style.display = 'block';
+  document.getElementById('email-preview').textContent = email;
+}
+
+function resend() {
+  const preview = document.getElementById('email-preview');
+  const orig = preview.textContent;
+  preview.textContent = '📧 Email renvoyé !';
+  preview.style.color = 'var(--green)';
+  setTimeout(() => { preview.textContent = orig; preview.style.color = ''; }, 2500);
+}
+
+document.getElementById('reset-email').addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleReset();
+  document.getElementById('reset-email').style.borderColor = '';
+  document.getElementById('reset-email').style.boxShadow = '';
+});
+</script>
+</body>
+</html>

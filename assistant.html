@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assistant IA — MailOne</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#f7f4f0;--bg2:#f4f4f5;--sur:#fff;--bdr:#e4e4e7;--bdr2:#d4d4d8;
+  --ink:#18181b;--ink2:#52525b;--ink3:#71717a;--ink4:#a1a1aa;
+  --green:#16a34a;--green-l:#f0fdf4;
+  --teal:#0d9488;--teal-l:#f0fdfa;
+  --purple:#9333ea;--purple-l:#faf5ff;
+  --amber:#d97706;--amber-l:#fffbeb;
+  --red:#c93820;--red-l:#fef1ee;
+  --blue:#1a66cc;--blue-l:#eef4fd;
+  --ai-bg:#18181b;--ai-sur:#242018;--ai-bdr:#2e2b24;
+}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+.app{display:flex;height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{width:234px;background:var(--ai-bg);display:flex;flex-direction:column;flex-shrink:0}
+.sb-logo-zone{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.5px;display:flex;align-items:center;gap:7px;text-decoration:none}
+.sb-logo-dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
+.sb-ai-badge{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:rgba(109,40,217,.2);border:1px solid rgba(109,40,217,.3);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:.07em}
+.sb-user{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#f97316,#dc2626)}
+.sb-name{font-size:12px;font-weight:600;color:#fff}
+.sb-email{font-size:10px;color:rgba(255,255,255,.3)}
+.sb-sec{padding:12px 12px 6px}
+.sb-lbl{font-size:9px;font-weight:800;letter-spacing:.14em;color:rgba(255,255,255,.38);text-transform:uppercase;padding:0 7px;margin-bottom:5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:rgba(255,255,255,.46);transition:all .15s;margin-bottom:1px;text-decoration:none}
+.sb-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
+.sb-item.active{background:rgba(109,40,217,.2);color:#a78bfa}
+.sb-ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sb-div{height:1px;background:rgba(255,255,255,.06);margin:5px 12px}
+.sb-bottom{margin-top:auto;padding:12px 14px;border-top:1px solid rgba(255,255,255,.06)}
+
+/* Conversations history */
+.conv-list{padding:8px 12px;overflow-y:auto;flex:1}
+.conv-item{padding:8px 9px;border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:2px}
+.conv-item:hover{background:rgba(255,255,255,.05)}
+.conv-item.active{background:rgba(109,40,217,.15);border:1px solid rgba(109,40,217,.2)}
+.conv-title{font-size:12px;font-weight:600;color:rgba(255,255,255,.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px}
+.conv-item.active .conv-title{color:#c4b5fd}
+.conv-time{font-size:10px;color:rgba(255,255,255,.42)}
+.conv-new{display:flex;align-items:center;gap:7px;padding:8px 9px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;color:rgba(255,255,255,.5);border:1px dashed rgba(255,255,255,.12);transition:all .15s;margin-bottom:8px}
+.conv-new:hover{background:rgba(255,255,255,.05);color:rgba(255,255,255,.8)}
+
+/* ── MAIN ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* Header */
+.chat-header{height:56px;background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0}
+.ch-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;flex:1}
+.ch-sub{font-size:11px;color:var(--ink3)}
+.ch-badge{display:flex;align-items:center;gap:5px;background:var(--purple-l);border:1px solid #ddd6fe;border-radius:20px;padding:4px 11px;font-size:10px;font-weight:700;color:var(--purple)}
+.ch-pulse{width:5px;height:5px;border-radius:50%;background:var(--purple);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ch-right{margin-left:auto;display:flex;gap:8px;align-items:center}
+.ch-btn{padding:6px 12px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--ink2);transition:all .15s;text-decoration:none;display:inline-flex;align-items:center;gap:5px}
+.ch-btn:hover{background:var(--bg2)}
+
+/* Memory bar */
+.memory-bar{background:var(--bg);border-bottom:1px solid var(--bdr);padding:8px 24px;display:flex;align-items:center;gap:8px;flex-shrink:0;overflow-x:auto}
+.memory-bar::-webkit-scrollbar{display:none}
+.mem-chip{display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;border:1px solid var(--bdr);background:var(--sur);cursor:pointer;white-space:nowrap;transition:all .15s;flex-shrink:0}
+.mem-chip:hover{border-color:var(--bdr2);box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.mem-chip.urg{background:var(--red-l);color:var(--red);border-color:#fca99b}
+.mem-chip.quo{background:var(--blue-l);color:var(--blue);border-color:#a5c4f7}
+.mem-chip.apt{background:var(--green-l);color:var(--green);border-color:#a5d9c2}
+.mem-chip.inv{background:var(--amber-l);color:var(--amber);border-color:#f0c878}
+.mem-chip.fol{background:var(--purple-l);color:var(--purple);border-color:#ddd6fe}
+.mem-lbl{font-size:10px;font-weight:600;color:var(--ink4);flex-shrink:0}
+
+/* Chat area */
+.chat-area{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px}
+.chat-area::-webkit-scrollbar{width:4px}
+.chat-area::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}
+
+/* Messages */
+.msg{display:flex;gap:10px;animation:msgIn .25s ease forwards}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{flex-direction:row-reverse}
+.msg-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px}
+.msg-av.ai{background:linear-gradient(135deg,#6d28d9,#4f46e5);font-size:14px}
+.msg-av.user{background:linear-gradient(135deg,#f97316,#dc2626);font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#fff}
+.msg-bubble{max-width:78%;padding:12px 16px;border-radius:14px;font-size:13px;line-height:1.68}
+.msg.ai .msg-bubble{background:var(--sur);border:1px solid var(--bdr);color:var(--ink2);border-radius:4px 14px 14px 14px}
+.msg.user .msg-bubble{background:var(--ink);color:rgba(255,255,255,.88);border-radius:14px 4px 14px 14px}
+.msg-bubble strong{color:var(--ink);font-weight:700}
+.msg.user .msg-bubble strong{color:#fff}
+.msg-bubble .mail-ref{display:inline-flex;align-items:center;gap:5px;background:var(--bg);border:1px solid var(--bdr);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--ink2);margin:4px 2px;cursor:pointer;transition:all .15s}
+.msg-bubble .mail-ref:hover{border-color:var(--bdr2);background:var(--bg2)}
+.msg-time{font-size:10px;color:var(--ink4);margin-top:4px;text-align:right}
+.msg.ai .msg-time{text-align:left}
+
+/* Typing indicator */
+.typing{display:flex;gap:10px;align-items:center}
+.typing-dots{display:flex;gap:4px;padding:12px 16px;background:var(--sur);border:1px solid var(--bdr);border-radius:4px 14px 14px 14px}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--ink4);animation:typingBounce .8s ease-in-out infinite}
+.typing-dot:nth-child(2){animation-delay:.15s}
+.typing-dot:nth-child(3){animation-delay:.3s}
+@keyframes typingBounce{0%,80%,100%{transform:scale(.6);opacity:.4}40%{transform:scale(1);opacity:1}}
+
+/* Suggestions */
+.suggestions{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.suggestion{padding:7px 12px;border-radius:20px;border:1px solid var(--bdr);background:var(--sur);font-size:12px;font-weight:500;color:var(--ink2);cursor:pointer;transition:all .15s}
+.suggestion:hover{border-color:var(--purple);color:var(--purple);background:var(--purple-l)}
+
+/* Mail card in chat */
+.chat-mail-card{background:var(--bg);border:1px solid var(--bdr);border-radius:10px;padding:11px 14px;margin-top:8px;cursor:pointer;transition:all .15s;border-left:3px solid var(--purple)}
+.chat-mail-card:hover{border-color:var(--bdr2);box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.cmc-top{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.cmc-tag{font-size:9px;font-weight:800;padding:2px 6px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+.cmc-sender{font-size:12px;font-weight:700;flex:1}
+.cmc-time{font-size:10px;color:var(--ink4)}
+.cmc-subj{font-size:12px;color:var(--ink2);margin-bottom:3px}
+.cmc-sum{font-size:11px;color:var(--ink3)}
+
+/* Stats card in chat */
+.chat-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
+.chat-stat{background:var(--bg);border:1px solid var(--bdr);border-radius:8px;padding:10px 12px}
+.chat-stat-val{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--ink);line-height:1}
+.chat-stat-lbl{font-size:10px;color:var(--ink3);margin-top:2px}
+
+/* Input area */
+.input-area{background:var(--sur);border-top:1px solid var(--bdr);padding:14px 20px;flex-shrink:0}
+.input-wrap{display:flex;gap:10px;align-items:flex-end;background:var(--bg);border:1.5px solid var(--bdr);border-radius:14px;padding:10px 14px;transition:border-color .2s,box-shadow .2s}
+.input-wrap:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(109,40,217,.1)}
+.chat-input{flex:1;background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);resize:none;max-height:120px;line-height:1.5}
+.chat-input::placeholder{color:var(--ink4)}
+.send-btn{width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:opacity .15s}
+.send-btn:hover{opacity:.84}
+.send-btn:disabled{opacity:.35;cursor:not-allowed}
+.input-hint{font-size:10px;color:var(--ink4);margin-top:7px;text-align:center}
+
+/* Welcome state */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:40px 20px;text-align:center}
+.welcome-ico{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#6d28d9,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 8px 24px rgba(109,40,217,.3)}
+.welcome-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--ink)}
+.welcome-sub{font-size:13px;color:var(--ink3);max-width:420px;line-height:1.65}
+.welcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:480px;margin-top:8px}
+.welcome-card{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:14px;cursor:pointer;text-align:left;transition:all .15s;border:none;font-family:'DM Sans',sans-serif}
+.welcome-card:hover{box-shadow:0 4px 14px rgba(0,0,0,.08);transform:translateY(-2px)}
+.wc-ico{font-size:18px;margin-bottom:7px}
+.wc-title{font-size:12px;font-weight:700;color:var(--ink);margin-bottom:3px}
+.wc-desc{font-size:11px;color:var(--ink3);line-height:1.5}
+
+@media(max-width:768px){.sidebar{display:none}}
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="shared.css">
+<meta property="og:title" content="Assistant IA — MailOne">
+<meta property="og:description" content="Assistant IA MailOne.">
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo-zone">
+    <a href="app.html" class="sb-logo">Mail<span>One</span><span class="sb-logo-dot"></span></a>
+    <div class="sb-ai-badge">✨ Assistant IA</div>
+  </div>
+  <div class="sb-user">
+    <div class="sb-av" id="sb-av">JP</div>
+    <div><div class="sb-name" id="sb-name">Mon compte</div><div class="sb-email" id="sb-email"></div></div>
+  </div>
+
+  <div class="sb-sec">
+    <div class="sb-lbl">Navigation</div>
+    <a href="app.html" class="sb-item"><span class="sb-ico">📬</span>Boîte mail</a>
+    <a href="assistant.html" class="sb-item active"><span class="sb-ico">✨</span>Assistant IA</a>
+    <a href="index.html" class="sb-item"><span class="sb-ico">🏠</span>Accueil</a>
+  </div>
+
+  <div class="sb-div"></div>
+
+  <div class="sb-sec">
+    <div class="sb-lbl">Conversations</div>
+    <div class="conv-new" onclick="newConversation()"><span>+</span>Nouvelle conversation</div>
+    <div class="conv-list" id="conv-list"></div>
+  </div>
+
+  <div class="sb-bottom">
+    <div style="font-size:10px;color:rgba(255,255,255,.42);line-height:1.5">🧠 Mémoire active<br><span style="color:rgba(255,255,255,.15)">8 mails · 6 contacts</span></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- HEADER -->
+  <div class="chat-header">
+    <div class="welcome-ico" style="width:32px;height:32px;border-radius:9px;font-size:16px;box-shadow:none">✨</div>
+    <div>
+      <div class="ch-title">Assistant MailOne Pro</div>
+      <div class="ch-sub">Connaît tous vos mails, contacts et historiques</div>
+    </div>
+    <div class="ch-right">
+      <div class="ch-badge"><div class="ch-pulse"></div>Mémoire active</div>
+      <a href="app.html" class="ch-btn">← Boîte mail</a>
+    </div>
+  </div>
+
+  <!-- MEMORY BAR -->
+  <div class="memory-bar" id="memory-bar">
+    <span class="mem-lbl">Contexte :</span>
+    <!-- Filled by JS -->
+  </div>
+
+  <!-- CHAT AREA -->
+  <div class="chat-area" id="chat-area">
+    <!-- Welcome state shown by JS -->
+  </div>
+
+  <!-- INPUT -->
+  <div class="input-area">
+    <div class="input-wrap">
+      <textarea class="chat-input" id="chat-input" placeholder="Posez une question sur vos mails, vos clients, vos devis…" rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">↑</button>
+    </div>
+    <div class="input-hint">Essayez : "De quoi parle le mail de Bernard ?" · "Mes devis en attente ?" · "Rappelle-moi les urgences"</div>
+  </div>
+
+</div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════════════
+// MÉMOIRE — Base de connaissances complète
+// ════════════════════════════════════════════════════════════════
+const MEMORY = {
+  mails: [
+    {id:1, cat:'urgent', sender:'Bernard Talon', email:'b.talon@sfr.fr', company:'Particulier', subject:'URGENT — Chaudière en panne, pas de chauffage', time:'Aujourd\'hui 07h48', date:'2025-03-26', summary:'Chaudière tombée en panne cette nuit. Famille avec jeunes enfants, 12°C. Code E3.', body:'Notre chaudière est tombée en panne cette nuit et il fait 12°C dans la maison. Nous avons deux jeunes enfants. Votre entreprise a installé la chaudière il y a 3 ans. Le display affiche le code E3. Pouvez-vous envoyer quelqu\'un aujourd\'hui ?', amount:null, read:false, replied:false, follow:false, priority:'critique'},
+    {id:2, cat:'quote', sender:'Sophie Leclerc', email:'sophie.leclerc@orange.fr', company:'Particulier', subject:'Re : Devis — Rénovation salle de bain 12m²', time:'Aujourd\'hui 09h15', date:'2025-03-26', summary:'Relance devis SDB 12m² envoyé il y a 5 jours. Budget 8–10k€. Prête à signer.', body:'Je me permets de vous relancer concernant ma demande de devis pour la rénovation de ma salle de bain. Mon budget est de 8 000 à 10 000 €. J\'ai contacté un autre artisan mais je préfère travailler avec vous.', amount:9000, read:false, replied:false, follow:true, priority:'commercial'},
+    {id:3, cat:'urgent', sender:'Syndic Les Acacias', email:'syndic@acacias-immo.fr', company:'Syndic copropriété', subject:'URGENT — Dégât des eaux cave N°12', time:'Hier', date:'2025-03-25', summary:'Dégât des eaux cave. 3 copropriétaires affectés. Rapport assurance requis sous 48h.', body:'Nous avons un dégât des eaux important en cave N°12. Trois copropriétaires sont touchés et notre assurance attend un rapport d\'intervention sous 48h.', amount:null, read:true, replied:false, follow:false, priority:'critique'},
+    {id:4, cat:'appt', sender:'Agence Bellevue Immobilier', email:'contact@bellevue-immo.fr', company:'Agence immo', subject:'RDV diagnostic — 14 rue des Lilas — Avant vente', time:'Hier', date:'2025-03-25', summary:'3 créneaux proposés pour diagnostic avant vente. Acheteur pressé, pas de confirmation.', body:'Créneaux disponibles : Mardi 28 mars 9h-12h, Jeudi 30 mars toute la journée, Vendredi 31 mars après-midi. L\'acheteur est pressé.', amount:null, read:true, replied:false, follow:true, priority:'planification'},
+    {id:5, cat:'invoice', sender:'Bertrand SARL', email:'compta@bertrand-sarl.fr', company:'Entreprise', subject:'Facture N°2024-089 — RIB manquant', time:'Lundi', date:'2025-03-24', summary:'Paiement 3 240€ TTC bloqué. Compta attend IBAN.', body:'Notre comptabilité a besoin de votre RIB mis à jour (IBAN + BIC) pour le virement de 3 240,00 €.', amount:3240, read:true, replied:false, follow:false, priority:'administratif'},
+    {id:6, cat:'quote', sender:'Jean-Paul Bernard', email:'jpbernard@free.fr', company:'Particulier', subject:'Devis remplacement chauffe-eau — Thermodynamique', time:'Dimanche', date:'2025-03-23', summary:'Remplacement chauffe-eau 200L par thermodynamique. Budget 1 500€. Week-ends.', body:'Mon chauffe-eau électrique 200L a rendu l\'âme. Je souhaite passer au thermodynamique. Budget : 1 500€.', amount:1500, read:true, replied:false, follow:false, priority:'normal'},
+    {id:7, cat:'appt', sender:'Nathalie Rousseau', email:'n.rousseau@wanadoo.fr', company:'Particulier', subject:'Rappel RDV cuisine — Jeudi 28 mars 10h', time:'Samedi', date:'2025-03-22', summary:'Rappel RDV jeudi 28 mars 10h pour prise de mesures cuisine.', body:'Je vous rappelle notre rendez-vous jeudi 28 mars à 10h pour la prise de mesures cuisine.', amount:null, read:true, replied:false, follow:false, priority:'planification'},
+    {id:8, cat:'quote', sender:'Mairie de Saint-Cyr', email:'travaux@mairie-stcyr.fr', company:'Collectivité', subject:'Consultation — Plomberie école Jules Ferry', time:'Vendredi', date:'2025-03-21', summary:'Marché public plomberie école. 40–50k€ HT. Offres avant 15 avril.', body:'La commune lance une consultation pour la réfection plomberie de l\'école Jules Ferry. Estimation : 40 000–50 000 € HT. Offres avant le 15 avril.', amount:45000, read:true, replied:false, follow:false, priority:'commercial'},
+  ],
+
+  // Index par contact
+  get contacts() {
+    const map = {};
+    this.mails.forEach(m => {
+      if (!map[m.sender]) map[m.sender] = {name:m.sender, email:m.email, company:m.company, mails:[]};
+      map[m.sender].mails.push(m);
+    });
+    return map;
+  },
+
+  // Stats rapides
+  get stats() {
+    return {
+      total:    this.mails.length,
+      unread:   this.mails.filter(m=>!m.read).length,
+      unreplied:this.mails.filter(m=>!m.replied).length,
+      urgent:   this.mails.filter(m=>m.cat==='urgent').length,
+      urgentUnreplied: this.mails.filter(m=>m.cat==='urgent'&&!m.replied).length,
+      quotes:   this.mails.filter(m=>m.cat==='quote').length,
+      quotesUnreplied: this.mails.filter(m=>m.cat==='quote'&&!m.replied).length,
+      appts:    this.mails.filter(m=>m.cat==='appt').length,
+      invoices: this.mails.filter(m=>m.cat==='invoice').length,
+      followups:this.mails.filter(m=>m.follow).length,
+      totalAmount: this.mails.filter(m=>m.amount).reduce((s,m)=>s+m.amount,0),
+      pendingAmount: this.mails.filter(m=>m.cat==='invoice'&&!m.replied&&m.amount).reduce((s,m)=>s+m.amount,0),
+    };
+  },
+
+  // Recherche dans les mails
+  search(query) {
+    const q = query.toLowerCase();
+    return this.mails.filter(m =>
+      m.sender.toLowerCase().includes(q) ||
+      m.subject.toLowerCase().includes(q) ||
+      m.body.toLowerCase().includes(q) ||
+      m.summary.toLowerCase().includes(q) ||
+      m.company.toLowerCase().includes(q) ||
+      m.cat.includes(q)
+    );
+  },
+
+  // Trouver un contact par nom partiel
+  findContact(name) {
+    const n = name.toLowerCase();
+    return Object.values(this.contacts).find(c =>
+      c.name.toLowerCase().includes(n) ||
+      c.email.toLowerCase().includes(n)
+    );
+  }
+};
+
+// ════════════════════════════════════════════════════════════════
+// ASSISTANT BRAIN — Comprend les questions et répond
+// ════════════════════════════════════════════════════════════════
+const ASSISTANT = {
+
+  // Patterns d'intention
+  intents: [
+    { pattern: /rappelle.*(mail|message|parle|sujet|objet|dit|écrit).*de\s+(\w+)/i, handler: 'recallMail' },
+    { pattern: /de quoi parle.*(mail|message).*(de\s+)?(\w+)/i, handler: 'recallMail' },
+    { pattern: /c(?:'|'|`)est quoi.*(mail|message).*(de\s+)?(\w+)/i, handler: 'recallMail' },
+    { pattern: /qu(?:'|'|`)est.ce que.*(\w+).*(veut|demande|dit|écrit)/i, handler: 'recallMail' },
+    { pattern: /résume.*(mail|message).*(de\s+)?(\w+)/i, handler: 'summarizeMail' },
+    { pattern: /(\w+).*(devis|budget|offre|prix)/i, handler: 'contactQuote' },
+    { pattern: /devis.*(attente|non.répondu|relance|oubli)/i, handler: 'pendingQuotes' },
+    { pattern: /devis en attente|mes devis|combien de devis/i, handler: 'pendingQuotes' },
+    { pattern: /urgences?|urgent|critique/i, handler: 'urgents' },
+    { pattern: /relance|follow.?up|pas répondu|oubli/i, handler: 'followups' },
+    { pattern: /facture|paiement|iban|virement|argent/i, handler: 'invoices' },
+    { pattern: /rdv|rendez.vous|appointment|créneau/i, handler: 'appointments' },
+    { pattern: /historique|passé|déjà.contact|fois.*contact/i, handler: 'contactHistory' },
+    { pattern: /qui.*contact|contact.*aujourd|nouveau.*contact/i, handler: 'todayContacts' },
+    { pattern: /résumé|résume|bilan|aperçu|quoi de neuf|situation/i, handler: 'overview' },
+    { pattern: /combien|statistique|stat|nombre|total/i, handler: 'stats' },
+    { pattern: /priorité|important|urgent|traiter|faire/i, handler: 'priorities' },
+    { pattern: /bonjour|salut|coucou|hello|bonsoir/i, handler: 'greeting' },
+    { pattern: /merci|parfait|super|bien|ok|oki|nickel/i, handler: 'thanks' },
+    { pattern: /aide|help|comment|quoi faire|que faire/i, handler: 'help' },
+  ],
+
+  // Extraire le nom d'une question
+  extractName(text) {
+    const patterns = [
+      /de\s+([A-Z][a-zéèêëàùâûî]+(?:\s+[A-Z][a-zéèêëàùâûî]+)?)/,
+      /([A-Z][a-zéèêëàùâûî]+(?:\s+[A-Z][a-zéèêëàùâûî]+)?)\s+(?:m'a|ma|a|veut|demande)/,
+      /\b([A-Z][a-zéèêëàùâûî]{2,})\b/,
+    ];
+    for(const p of patterns) {
+      const m = text.match(p);
+      if(m) return m[1];
+    }
+    return null;
+  },
+
+  // Dispatcher principal
+  respond(question) {
+    const q = question.toLowerCase();
+    for(const intent of this.intents) {
+      if(intent.pattern.test(question)) {
+        return this[intent.handler](question);
+      }
+    }
+    // Recherche générique
+    const results = MEMORY.search(q);
+    if(results.length) return this.searchResults(results, question);
+    return this.fallback(question);
+  },
+
+  // ── HANDLERS ──────────────────────────────────────────────────
+
+  greeting(q) {
+    const user = JSON.parse(localStorage.getItem('mailone_user')||'{}');
+    const name = user.name?.split(' ')[0] || 'vous';
+    const s = MEMORY.stats;
+    return {
+      text: `Bonjour ${name} ! 👋\n\nVoici votre situation en ce moment :\n\n**${s.unread} mail${s.unread>1?'s':''} non lu${s.unread>1?'s':''}** dans votre boîte — dont **${s.urgentUnreplied} urgence${s.urgentUnreplied>1?'s':''}** qui nécessite${s.urgentUnreplied>1?'nt':''} une réponse rapide.\n\nJe connais **${s.total} mails** et **${Object.keys(MEMORY.contacts).length} contacts**. Posez-moi n'importe quelle question.`,
+      suggestions: ['Mes urgences ?', 'Devis en attente ?', 'Résume ma journée', 'Que faire en priorité ?'],
+      cards: null
+    };
+  },
+
+  overview(q) {
+    const s = MEMORY.stats;
+    const urgent = MEMORY.mails.filter(m=>m.cat==='urgent'&&!m.replied);
+    return {
+      text: `Voici votre bilan complet :\n\n🚨 **${s.urgentUnreplied} urgence${s.urgentUnreplied>1?'s':''} sans réponse** — à traiter en priorité\n📋 **${s.quotesUnreplied} devis en attente** — ${MEMORY.mails.filter(m=>m.cat==='quote'&&m.follow).length} relance${MEMORY.mails.filter(m=>m.cat==='quote'&&m.follow).length>1?'s':''} détectée${MEMORY.mails.filter(m=>m.cat==='quote'&&m.follow).length>1?'s':''}\n📅 **${s.appts} rendez-vous** à confirmer\n💰 **${s.pendingAmount.toLocaleString('fr-FR')}€** de paiements bloqués\n🔔 **${s.followups} mail${s.followups>1?'s':''}** en attente de relance\n\nAu total, **${s.unreplied} mails** attendent une réponse de votre part.`,
+      suggestions: ['Qui relancer en urgence ?', 'Quel devis est le plus urgent ?', 'Combien d\'argent en attente ?'],
+      cards: urgent.slice(0,2)
+    };
+  },
+
+  urgents(q) {
+    const urgents = MEMORY.mails.filter(m=>m.cat==='urgent');
+    if(!urgents.length) return {text:"Bonne nouvelle — aucun mail urgent en ce moment ! 🎉", suggestions:['Mes devis ?', 'Bilan général ?'], cards:null};
+    const texts = urgents.map(m=>`• **${m.sender}** — ${m.summary}`).join('\n');
+    return {
+      text: `Vous avez **${urgents.length} mail${urgents.length>1?'s':''} urgent${urgents.length>1?'s':''}** :\n\n${texts}\n\n${urgents.filter(m=>!m.replied).length} n'ont pas encore reçu de réponse. Je vous conseille de commencer par **${urgents[0].sender}**.`,
+      suggestions: [`Rappelle-moi le mail de ${urgents[0].sender}`, 'Rédiger une réponse ?', 'Quoi dire à ' + urgents[0].sender.split(' ')[0] + ' ?'],
+      cards: urgents
+    };
+  },
+
+  pendingQuotes(q) {
+    const quotes = MEMORY.mails.filter(m=>m.cat==='quote'&&!m.replied);
+    if(!quotes.length) return {text:"Aucun devis en attente — vous êtes à jour ! ✅", suggestions:['Bilan général ?'], cards:null};
+    const totalPotential = quotes.filter(m=>m.amount).reduce((s,m)=>s+m.amount,0);
+    const relances = quotes.filter(m=>m.follow);
+    const texts = quotes.map(m=>`• **${m.sender}**${m.amount?' — '+m.amount.toLocaleString('fr-FR')+'€':''} ${m.follow?'🔔 RELANCE':''}`).join('\n');
+    return {
+      text: `**${quotes.length} devis** en attente de réponse, représentant un potentiel de **${totalPotential.toLocaleString('fr-FR')}€** :\n\n${texts}\n\n${relances.length>0?`⚠️ **${relances.length} client${relances.length>1?'s ont':'a'} déjà relancé** — répondez aujourd'hui pour ne pas perdre ces contacts.`:''}`,
+      suggestions: quotes.map(m=>`Mail de ${m.sender.split(' ')[0]} ?`).slice(0,3),
+      cards: quotes
+    };
+  },
+
+  followups(q) {
+    const follows = MEMORY.mails.filter(m=>m.follow||(!m.replied && new Date()-new Date(m.date)>86400000*2));
+    if(!follows.length) return {text:"Aucune relance nécessaire pour l'instant. Vous êtes réactif ! 👍", suggestions:['Bilan général ?'], cards:null};
+    return {
+      text: `**${follows.length} contact${follows.length>1?'s':''} attendent une réponse** depuis plusieurs jours :\n\n${follows.map(m=>`• **${m.sender}** — ${m.summary.substring(0,60)}…`).join('\n')}\n\nPlus vous tardez, plus le risque de perdre ces clients augmente.`,
+      suggestions: follows.slice(0,2).map(m=>`Rappelle-moi le mail de ${m.sender.split(' ')[0]}`),
+      cards: follows
+    };
+  },
+
+  invoices(q) {
+    const invoices = MEMORY.mails.filter(m=>m.cat==='invoice');
+    const pending = invoices.filter(m=>!m.replied);
+    const total = invoices.filter(m=>m.amount).reduce((s,m)=>s+m.amount,0);
+    return {
+      text: `**${invoices.length} facture${invoices.length>1?'s':''}** dans votre boîte.\n\n${pending.map(m=>`• **${m.sender}** — ${m.amount?m.amount.toLocaleString('fr-FR')+'€ ':''}${m.summary}`).join('\n')}\n\n${total>0?`💰 Total en attente de règlement : **${total.toLocaleString('fr-FR')}€**\n\nPour débloquer ces paiements, vous n'avez qu'à envoyer votre IBAN — ça prend 2 minutes.`:''}`,
+      suggestions: ['Rédiger la réponse facture ?', `Rappelle-moi le mail de ${invoices[0]?.sender.split(' ')[0]}`],
+      cards: invoices
+    };
+  },
+
+  appointments(q) {
+    const appts = MEMORY.mails.filter(m=>m.cat==='appt');
+    const toConfirm = appts.filter(m=>!m.replied);
+    return {
+      text: `**${appts.length} rendez-vous** dans votre agenda.\n\n${appts.map(m=>`• **${m.sender}** — ${m.summary}`).join('\n')}\n\n${toConfirm.length>0?`📅 **${toConfirm.length} RDV non confirmé${toConfirm.length>1?'s':''}** — répondez pour éviter de paraître peu professionnel.`:'Tous les RDV sont confirmés ✅'}`,
+      suggestions: toConfirm.slice(0,2).map(m=>`Répondre à ${m.sender.split(' ')[0]}`),
+      cards: appts
+    };
+  },
+
+  recallMail(q) {
+    const name = this.extractName(q);
+    if(name) {
+      const contact = MEMORY.findContact(name);
+      if(contact && contact.mails.length) {
+        const mail = contact.mails[0];
+        return {
+          text: `Voici ce que **${mail.sender}** vous a écrit :\n\n**Sujet :** ${mail.subject}\n**Date :** ${mail.time}\n**Résumé :** ${mail.summary}\n\n---\n*"${mail.body.substring(0,180)}${mail.body.length>180?'…':''}"*\n\n${mail.cat==='urgent'?'🚨 Ce mail est marqué **urgent** — répondez rapidement.':mail.cat==='quote'?`📋 Il s'agit d'une demande de devis${mail.amount?' avec un budget de '+mail.amount.toLocaleString('fr-FR')+'€':''}.`:mail.cat==='invoice'?`💰 Il s'agit d'une facture${mail.amount?' de '+mail.amount.toLocaleString('fr-FR')+'€':''}.`:''}`,
+          suggestions: [`Rédiger une réponse à ${mail.sender.split(' ')[0]} ?`, `Historique avec ${mail.sender.split(' ')[0]} ?`, 'Quelle priorité ?'],
+          cards: [mail]
+        };
+      }
+    }
+    // Recherche dans les mails
+    const results = MEMORY.search(q);
+    if(results.length) return this.searchResults(results, q);
+    return {text:`Je n'ai pas trouvé de mail correspondant à votre recherche. Essayez avec le nom exact du contact ou un mot-clé du sujet.`, suggestions:['Tous mes contacts ?', 'Rechercher un devis ?'], cards:null};
+  },
+
+  summarizeMail(q) {
+    return this.recallMail(q);
+  },
+
+  contactQuote(q) {
+    const name = this.extractName(q);
+    if(name) {
+      const contact = MEMORY.findContact(name);
+      if(contact) {
+        const quotes = contact.mails.filter(m=>m.cat==='quote');
+        if(quotes.length) {
+          const q2 = quotes[0];
+          return {
+            text: `**${contact.name}** a envoyé une demande de devis :\n\n**Sujet :** ${q2.subject}\n**Budget :** ${q2.amount?q2.amount.toLocaleString('fr-FR')+'€':'Non précisé'}\n**Statut :** ${q2.replied?'✅ Répondu':'⚠️ En attente de réponse'}${q2.follow?'\n**⚠️ Relance détectée** — ce contact a déjà recontacté sans réponse':''}\n\n${q2.follow?'Ce client est chaud — agissez rapidement pour ne pas le perdre.':''}`,
+            suggestions:[`Rappelle-moi le mail de ${contact.name.split(' ')[0]}`, `Rédiger réponse devis ?`],
+            cards:[q2]
+          };
+        }
+      }
+    }
+    return this.pendingQuotes(q);
+  },
+
+  contactHistory(q) {
+    const name = this.extractName(q);
+    if(name) {
+      const contact = MEMORY.findContact(name);
+      if(contact) {
+        const mails = contact.mails;
+        return {
+          text: `**Historique avec ${contact.name}** (${contact.company}) :\n\n${mails.map((m,i)=>`**${i+1}.** ${m.time} — *${m.cat}* — ${m.summary}`).join('\n\n')}\n\n**${mails.length} mail${mails.length>1?'s':''} au total.** ${mails.filter(m=>!m.replied).length>0?`**${mails.filter(m=>!m.replied).length} sans réponse.**`:'Tous répondus. ✅'}`,
+          suggestions:[`De quoi parle le dernier mail de ${name} ?`, `Rédiger une réponse ?`],
+          cards: mails
+        };
+      }
+    }
+    return {text:`Je n'ai pas trouvé ce contact. Vérifiez l'orthographe ou donnez-moi plus de détails.`, suggestions:['Liste de mes contacts ?'], cards:null};
+  },
+
+  todayContacts(q) {
+    const today = MEMORY.mails.filter(m=>m.date==='2025-03-26');
+    return {
+      text: `**${today.length} mail${today.length>1?'s ont':' a'} été reçu${today.length>1?'s':''} aujourd'hui** :\n\n${today.map(m=>`• **${m.sender}** — ${m.summary}`).join('\n')}`,
+      suggestions: today.map(m=>`Rappelle-moi le mail de ${m.sender.split(' ')[0]}`).slice(0,3),
+      cards: today
+    };
+  },
+
+  stats(q) {
+    const s = MEMORY.stats;
+    const contacts = Object.keys(MEMORY.contacts);
+    return {
+      text: `**Vos statistiques actuelles :**\n\n📬 **${s.total} mails** au total · ${s.unread} non lus\n🚨 **${s.urgent}** urgences · ${s.urgentUnreplied} sans réponse\n📋 **${s.quotes}** demandes de devis · potentiel ${MEMORY.mails.filter(m=>m.cat==='quote'&&m.amount).reduce((s,m)=>s+m.amount,0).toLocaleString('fr-FR')}€\n📅 **${s.appts}** rendez-vous\n💰 **${s.pendingAmount.toLocaleString('fr-FR')}€** de paiements en attente\n🔔 **${s.followups}** relances détectées\n👥 **${contacts.length}** contacts distincts`,
+      suggestions: ['Qui relancer ?', 'Mes urgences ?', 'Devis en attente ?'],
+      cards: null
+    };
+  },
+
+  priorities(q) {
+    const urgent = MEMORY.mails.filter(m=>m.cat==='urgent'&&!m.replied);
+    const followQuotes = MEMORY.mails.filter(m=>m.cat==='quote'&&m.follow);
+    const pendingInv = MEMORY.mails.filter(m=>m.cat==='invoice'&&!m.replied);
+    let text = `Voici ce que je vous recommande de traiter **maintenant**, par ordre de priorité :\n\n`;
+    let i=1;
+    if(urgent.length) { text += `**${i++}. 🚨 URGENT** — Répondre à ${urgent.map(m=>m.sender.split(' ')[0]).join(', ')}. C'est critique.\n\n`; }
+    if(followQuotes.length) { text += `**${i++}. 📋 DEVIS CHAUDS** — ${followQuotes.map(m=>m.sender.split(' ')[0]).join(', ')} ont relancé. Risque de perte si pas de réponse aujourd'hui.\n\n`; }
+    if(pendingInv.length) { text += `**${i++}. 💰 TRÉSORERIE** — Envoyer votre IBAN à ${pendingInv.map(m=>m.sender).join(', ')} pour débloquer ${pendingInv.reduce((s,m)=>s+(m.amount||0),0).toLocaleString('fr-FR')}€.\n\n`; }
+    return {
+      text: text.trim(),
+      suggestions: urgent.length ? [`Rappelle-moi le mail de ${urgent[0].sender.split(' ')[0]}`] : ['Mes devis ?'],
+      cards: [...urgent, ...followQuotes].slice(0,3)
+    };
+  },
+
+  searchResults(results, q) {
+    if(results.length===1) return this.recallMail(results[0].sender);
+    return {
+      text: `J'ai trouvé **${results.length} mails** correspondant à votre recherche :`,
+      suggestions: ['Voir les urgences ?', 'Bilan général ?'],
+      cards: results.slice(0,4)
+    };
+  },
+
+  thanks(q) {
+    return {text:"Avec plaisir ! 😊 N'hésitez pas si vous avez d'autres questions sur vos mails ou vos clients.", suggestions:['Que faire ensuite ?', 'Bilan général ?'], cards:null};
+  },
+
+  help(q) {
+    return {
+      text: `Je peux vous aider avec tout ce qui concerne vos mails. Voici ce que vous pouvez me demander :\n\n**Sur vos mails :**\n• "Rappelle-moi de quoi parle le mail de [nom]"\n• "Résume le mail de Sophie"\n\n**Sur vos clients :**\n• "Quel est l'historique avec Bertrand SARL ?"\n• "Bernard Talon m'a déjà contacté ?"\n\n**Sur votre activité :**\n• "Mes devis en attente"\n• "Que faire en priorité ?"\n• "Combien d'argent en attente ?"`,
+      suggestions: ['Mes urgences ?', 'Devis en attente ?', 'Bilan général ?'],
+      cards: null
+    };
+  },
+
+  fallback(q) {
+    const s = MEMORY.stats;
+    return {
+      text: `Je n'ai pas bien compris votre question. Essayez de préciser le nom d'un contact ou un mot-clé.\n\nPar exemple : *"De quoi parle le mail de Bernard ?"* ou *"Mes devis en attente"*.`,
+      suggestions: ['Mes urgences ?', 'Devis en attente ?', 'Bilan général ?', 'Aide'],
+      cards: null
+    };
+  }
+};
+
+// ════════════════════════════════════════════════════════════════
+// CONVERSATION HISTORY
+// ════════════════════════════════════════════════════════════════
+let conversations = JSON.parse(localStorage.getItem('mailone_convs') || '[]');
+let currentConvId = null;
+let isTyping = false;
+
+function saveConvs() {
+  localStorage.setItem('mailone_convs', JSON.stringify(conversations.slice(-20)));
+}
+
+function newConversation() {
+  currentConvId = Date.now();
+  conversations.push({id:currentConvId, title:'Nouvelle conversation', time:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}), messages:[]});
+  saveConvs();
+  renderConvList();
+  showWelcome();
+}
+
+function loadConversation(id) {
+  currentConvId = id;
+  const conv = conversations.find(c=>c.id===id);
+  if(!conv) return;
+  renderConvList();
+  const chatArea = document.getElementById('chat-area');
+  chatArea.innerHTML = '';
+  conv.messages.forEach(m => renderMessage(m.role, m.text, m.cards, false));
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function getCurrentConv() {
+  return conversations.find(c=>c.id===currentConvId);
+}
+
+// ════════════════════════════════════════════════════════════════
+// UI RENDERING
+// ════════════════════════════════════════════════════════════════
+function catColor(c){return{urgent:'var(--red)',quote:'var(--blue)',appt:'var(--green)',invoice:'var(--amber)'}[c]||'var(--ink3)'}
+function catLabel(c){return{urgent:'🚨 Urgent',quote:'📋 Devis',appt:'📅 RDV',invoice:'💰 Facture'}[c]||c}
+function catClass(c){return{urgent:'urg',quote:'quo',appt:'apt',invoice:'inv'}[c]||''}
+
+function renderConvList() {
+  const list = document.getElementById('conv-list');
+  if(!conversations.length) { list.innerHTML = ''; return; }
+  list.innerHTML = conversations.slice().reverse().slice(0,8).map(c=>`
+    <div class="conv-item ${c.id===currentConvId?'active':''}" onclick="loadConversation(${c.id})">
+      <div class="conv-title">${c.title}</div>
+      <div class="conv-time">${c.time}</div>
+    </div>`).join('');
+}
+
+function renderMemoryBar() {
+  const s = MEMORY.stats;
+  const bar = document.getElementById('memory-bar');
+  bar.innerHTML = `
+    <span class="mem-lbl">Contexte :</span>
+    <div class="mem-chip urg" onclick="askQuestion('Mes urgences ?')">🚨 ${s.urgentUnreplied} urgence${s.urgentUnreplied>1?'s':''}</div>
+    <div class="mem-chip quo" onclick="askQuestion('Mes devis en attente ?')">📋 ${s.quotesUnreplied} devis</div>
+    <div class="mem-chip apt" onclick="askQuestion('Mes rendez-vous ?')">📅 ${s.appts} RDV</div>
+    <div class="mem-chip inv" onclick="askQuestion('Mes factures ?')">💰 ${s.pendingAmount.toLocaleString('fr-FR')}€ en attente</div>
+    ${s.followups>0?`<div class="mem-chip fol" onclick="askQuestion('Qui dois-je relancer ?')">🔔 ${s.followups} relance${s.followups>1?'s':''}</div>`:''}
+    <div class="mem-chip" onclick="askQuestion('Bilan général ?')" style="background:var(--purple-l);color:var(--purple);border-color:#ddd6fe">🧠 ${MEMORY.mails.length} mails mémorisés</div>`;
+}
+
+function showWelcome() {
+  const chatArea = document.getElementById('chat-area');
+  chatArea.innerHTML = `
+    <div class="welcome">
+      <div class="welcome-ico">✨</div>
+      <div class="welcome-title">Bonjour ! Je suis votre assistant MailOne.</div>
+      <div class="welcome-sub">Je connais tous vos mails, vos clients et votre historique. Posez-moi n'importe quelle question — je vous réponds instantanément.</div>
+      <div class="welcome-grid">
+        <button class="welcome-card" onclick="askQuestion('Rappelle-moi de quoi parle le mail de Bernard Talon')">
+          <div class="wc-ico">📬</div>
+          <div class="wc-title">Rappelle-moi un mail</div>
+          <div class="wc-desc">"De quoi parle le mail de Bernard ?"</div>
+        </button>
+        <button class="welcome-card" onclick="askQuestion('Que dois-je traiter en priorité ?')">
+          <div class="wc-ico">🎯</div>
+          <div class="wc-title">Mes priorités</div>
+          <div class="wc-desc">"Que dois-je traiter en priorité ?"</div>
+        </button>
+        <button class="welcome-card" onclick="askQuestion('Mes devis en attente ?')">
+          <div class="wc-ico">📋</div>
+          <div class="wc-title">Devis en attente</div>
+          <div class="wc-desc">"Combien de devis attendent une réponse ?"</div>
+        </button>
+        <button class="welcome-card" onclick="askQuestion('Bilan général de ma boîte mail')">
+          <div class="wc-ico">📊</div>
+          <div class="wc-title">Bilan général</div>
+          <div class="wc-desc">"Donne-moi un résumé de ma situation"</div>
+        </button>
+      </div>
+    </div>`;
+}
+
+function renderMessage(role, text, cards, animate=true) {
+  const chatArea = document.getElementById('chat-area');
+  const user = JSON.parse(localStorage.getItem('mailone_user')||'{}');
+  const initials = user.name?.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?';
+  const time = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+
+  // Format text: **bold** → <strong>
+  const formatted = text
+    .replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')
+    .replace(/\n/g,'<br>');
+
+  // Build mail cards HTML
+  let cardsHTML = '';
+  if(cards && cards.length) {
+    cardsHTML = '<div style="margin-top:10px;display:flex;flex-direction:column;gap:8px">' +
+      cards.map(m=>`
+        <div class="chat-mail-card" onclick="window.location.href='app.html'" title="Ouvrir dans la boîte mail">
+          <div class="cmc-top">
+            <span class="cmc-tag ${m.cat}" style="background:${m.cat==='urgent'?'var(--red-l)':m.cat==='quote'?'var(--blue-l)':m.cat==='appt'?'var(--green-l)':'var(--amber-l)'};color:${catColor(m.cat)}">${catLabel(m.cat)}</span>
+            <span class="cmc-sender">${m.sender}</span>
+            <span class="cmc-time">${m.time}</span>
+          </div>
+          <div class="cmc-subj">${m.subject}</div>
+          <div class="cmc-sum">✨ ${m.summary}</div>
+        </div>`
+      ).join('') + '</div>';
+  }
+
+  const div = document.createElement('div');
+  div.className = `msg ${role}${animate?' ':''}`;
+  div.innerHTML = role==='ai' ? `
+    <div class="msg-av ai">✨</div>
+    <div>
+      <div class="msg-bubble">${formatted}${cardsHTML}</div>
+      <div class="msg-time">${time}</div>
+    </div>` : `
+    <div class="msg-av user">${initials}</div>
+    <div>
+      <div class="msg-bubble">${formatted}</div>
+      <div class="msg-time">${time}</div>
+    </div>`;
+
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function renderSuggestions(suggestions) {
+  if(!suggestions || !suggestions.length) return;
+  const chatArea = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = 'msg ai';
+  div.style.marginTop = '-8px';
+  div.innerHTML = `
+    <div style="width:30px;flex-shrink:0"></div>
+    <div class="suggestions">${suggestions.map(s=>`<button class="suggestion" onclick="askQuestion('${s.replace(/'/g,'\\\'')}')">${s}</button>`).join('')}</div>`;
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function showTyping() {
+  const chatArea = document.getElementById('chat-area');
+  const div = document.createElement('div');
+  div.className = 'typing';
+  div.id = 'typing-indicator';
+  div.innerHTML = `
+    <div class="msg-av ai" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6d28d9,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px">✨</div>
+    <div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
+  chatArea.appendChild(div);
+  chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+function hideTyping() {
+  const t = document.getElementById('typing-indicator');
+  if(t) t.remove();
+}
+
+// ════════════════════════════════════════════════════════════════
+// SEND MESSAGE
+// ════════════════════════════════════════════════════════════════
+function askQuestion(q) {
+  document.getElementById('chat-input').value = q;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const q = input.value.trim();
+  if(!q || isTyping) return;
+
+  // Init conversation if needed
+  if(!currentConvId) newConversation();
+  else {
+    // Remove welcome screen if present
+    const welcome = document.querySelector('.welcome');
+    if(welcome) welcome.closest('.chat-area') && (welcome.remove());
+  }
+
+  // Remove old suggestions
+  document.querySelectorAll('.msg.ai[style*="margin-top"]').forEach(el=>el.remove());
+
+  input.value = '';
+  autoResize(input);
+  document.getElementById('send-btn').disabled = true;
+  isTyping = true;
+
+  // Render user message
+  renderMessage('user', q, null);
+
+  // Save to conv
+  const conv = getCurrentConv();
+  if(conv) {
+    if(conv.messages.length===0) conv.title = q.length>35?q.substring(0,35)+'…':q;
+    conv.messages.push({role:'user', text:q, cards:null});
+    saveConvs();
+    renderConvList();
+  }
+
+  // Thinking delay (feels more natural)
+  showTyping();
+  await new Promise(r=>setTimeout(r, 600+Math.random()*600));
+  hideTyping();
+
+  // Get response
+  const response = ASSISTANT.respond(q);
+
+  // Render AI response
+  renderMessage('ai', response.text, response.cards);
+  if(response.suggestions) renderSuggestions(response.suggestions);
+
+  // Save AI response
+  if(conv) {
+    conv.messages.push({role:'ai', text:response.text, cards:response.cards});
+    saveConvs();
+  }
+
+  document.getElementById('send-btn').disabled = false;
+  isTyping = false;
+}
+
+function handleKey(e) {
+  if(e.key==='Enter'&&!e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height='auto';
+  el.style.height=Math.min(el.scrollHeight,120)+'px';
+}
+
+// ════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════════════════════════════════════════════════════
+// Load user info
+if (!Auth.requireAuth()) throw new Error('redirect');
+const user = JSON.parse(localStorage.getItem('mailone_user')||'{}');
+const initials = user.name?.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase()||'?';
+document.getElementById('sb-av').textContent = initials;
+document.getElementById('sb-name').textContent = user.name||'';
+document.getElementById('sb-email').textContent = user.email||'';
+
+// Memory bar
+renderMemoryBar();
+
+// Conversations
+renderConvList();
+
+// Show welcome or last conversation
+if(conversations.length>0) {
+  const last = conversations[conversations.length-1];
+  currentConvId = last.id;
+  loadConversation(last.id);
+} else {
+  newConversation();
+}
+
+// Greeting automatique si première visite
+const hasVisited = localStorage.getItem('mailone_assistant_visited');
+if(!hasVisited) {
+  localStorage.setItem('mailone_assistant_visited','1');
+  setTimeout(()=>askQuestion('Bonjour'), 500);
+}
+</script>
+<script src="mailone.js"></script>
+</body>
+</html>

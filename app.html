@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Application — MailOne</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#f7f4f0;--bg2:#f4f4f5;--bg3:#e4e4e7;--sur:#fff;--bdr:#e4e4e7;--bdr2:#d4d4d8;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--ink4:#a1a1aa;--urgent:#c93820;--urgent-bg:#fef1ee;--quote:#1a66cc;--quote-bg:#eef4fd;--appt:#147a50;--appt-bg:#edf8f2;--invoice:#b86c0a;--invoice-bg:#fdf5e7;--teal:#0d9488;--teal-l:#f0fdfa;--green:#16a34a;--green-l:#f0fdf4;--purple:#9333ea;--purple-l:#faf5ff;--amber:#d97706;--amber-l:#fffbeb}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
+.app{display:flex;height:100vh}
+
+/* ── SIDEBAR ── */
+.sidebar{width:234px;background:var(--ink);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.sb-logo-zone{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.5px;display:flex;align-items:center;gap:7px;text-decoration:none}
+.sb-logo-dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
+.sb-plan-pill{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:rgba(94,234,212,.1);border:1px solid rgba(94,234,212,.18);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:800;color:#22c55e;text-transform:uppercase;letter-spacing:.07em}
+.sb-user{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
+.sb-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#f97316,#dc2626)}
+.sb-uname{font-size:12px;font-weight:600;color:#fff;line-height:1.3}
+.sb-uemail{font-size:10px;color:rgba(255,255,255,.3)}
+.sb-sec{padding:12px 12px 6px}
+.sb-lbl{font-size:9px;font-weight:800;letter-spacing:.14em;color:rgba(255,255,255,.38);text-transform:uppercase;padding:0 7px;margin-bottom:5px}
+.sb-item{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:rgba(255,255,255,.46);transition:all .15s;margin-bottom:1px}
+.sb-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
+.sb-item.active{background:rgba(255,255,255,.1);color:#fff}
+.sb-ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
+.sb-badge{margin-left:auto;font-size:9px;font-weight:700;padding:1px 6px;border-radius:20px;min-width:16px;text-align:center;color:#fff}
+.sb-badge.r{background:var(--urgent)}.sb-badge.b{background:var(--quote)}.sb-badge.g{background:var(--appt)}.sb-badge.a{background:var(--invoice)}.sb-badge.p{background:var(--purple)}
+.sb-div{height:1px;background:rgba(255,255,255,.06);margin:5px 12px}
+.sb-bottom{margin-top:auto;padding:12px 14px;border-top:1px solid rgba(255,255,255,.06)}
+.sb-bar{height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin:4px 0 2px}
+.sb-fill{height:100%;width:28%;background:linear-gradient(90deg,#22c55e,#3b82f6);border-radius:3px}
+.sb-logout{display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.28);cursor:pointer;margin-top:8px;padding:5px;border-radius:6px;transition:all .15s}
+.sb-logout:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6)}
+
+/* ── TOPBAR ── */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.topbar{height:52px;background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 18px;gap:10px;flex-shrink:0}
+.search{flex:1;max-width:380px;height:32px;display:flex;align-items:center;gap:7px;background:var(--bg);border:1px solid var(--bdr);border-radius:8px;padding:0 11px;transition:border-color .2s}
+.search:focus-within{border-color:var(--teal);box-shadow:0 0 0 2px rgba(13,147,115,.1)}
+.search input{flex:1;background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink)}
+.search input::placeholder{color:var(--ink4)}
+.topbar-right{margin-left:auto;display:flex;gap:7px;align-items:center}
+.tb-btn{padding:6px 12px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s}
+.tb-btn:hover{background:var(--bg2)}
+.tb-btn.green{background:var(--teal);color:#fff;border-color:var(--teal)}.tb-btn.green:hover{opacity:.87}
+.tb-notif{width:32px;height:32px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;position:relative;transition:background .15s}
+.tb-notif:hover{background:var(--bg)}
+.notif-dot{position:absolute;top:6px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--urgent);border:2px solid var(--sur)}
+.ai-pill{display:flex;align-items:center;gap:5px;background:var(--teal-l);border:1px solid rgba(13,147,115,.2);border-radius:20px;padding:3px 9px;font-size:10px;font-weight:700;color:var(--teal)}
+.ai-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── STATS ── */
+.stats-bar{display:flex;background:var(--sur);border-bottom:1px solid var(--bdr);flex-shrink:0}
+.stat{flex:1;display:flex;align-items:center;gap:10px;padding:11px 16px;border-right:1px solid var(--bdr);cursor:pointer;transition:background .15s}
+.stat:last-child{border-right:none}.stat:hover{background:var(--bg)}
+.stat-ico{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+.stat-num{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:700;color:var(--ink);line-height:1}
+.stat-lbl{font-size:10px;color:var(--ink3);margin-top:1px}
+.stat-trend{font-size:9px;font-weight:700;margin-top:1px}
+.t-up{color:var(--appt)}.t-dn{color:var(--urgent)}.t-neu{color:var(--invoice)}
+
+/* ── CONTENT ── */
+.content{flex:1;display:flex;overflow:hidden}
+
+/* ── MAIL LIST ── */
+.mail-panel{width:295px;flex-shrink:0;border-right:1px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.mp-head{padding:11px 13px 9px;background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:8px}
+.mp-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;flex:1}
+.mp-count{font-size:10px;color:var(--ink3);background:var(--bg2);border:1px solid var(--bdr);border-radius:20px;padding:2px 8px}
+.ftabs{display:flex;gap:3px;padding:7px 11px;background:var(--sur);border-bottom:1px solid var(--bdr);overflow-x:auto}
+.ftabs::-webkit-scrollbar{display:none}
+.ftab{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:transparent;color:var(--ink2);white-space:nowrap;transition:all .15s;font-family:'DM Sans',sans-serif}
+.ftab.all{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ftab.urg{background:var(--urgent-bg);color:var(--urgent);border-color:#fca99b}
+.ftab.quo{background:var(--quote-bg);color:var(--quote);border-color:#a5c4f7}
+.ftab.apt{background:var(--appt-bg);color:var(--appt);border-color:#a5d9c2}
+.ftab.inv{background:var(--invoice-bg);color:var(--invoice);border-color:#f0c878}
+.mail-list{flex:1;overflow-y:auto;padding:6px}
+.mail-list::-webkit-scrollbar{width:3px}
+.mail-list::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}
+.mcard{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:11px 12px;margin-bottom:5px;cursor:pointer;transition:all .15s;animation:cardIn .2s ease forwards}
+@keyframes cardIn{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.mcard:hover{border-color:var(--bdr2);box-shadow:0 2px 8px rgba(0,0,0,.05)}
+.mcard.sel{border-color:var(--ink);box-shadow:0 2px 12px rgba(0,0,0,.1)}
+.mcard.unread .mc-sender{font-weight:700}
+.mc-row{display:flex;align-items:center;gap:7px;margin-bottom:4px}
+.mc-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.mc-sender{font-size:12px;color:var(--ink);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-time{font-size:10px;color:var(--ink4);flex-shrink:0}
+.mc-subj{font-size:11px;color:var(--ink2);margin-bottom:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mc-sum{font-size:10px;color:var(--ink3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:5px}
+.mc-foot{display:flex;align-items:center;gap:5px}
+.mc-tag{font-size:9px;font-weight:800;padding:2px 5px;border-radius:4px;text-transform:uppercase;letter-spacing:.04em}
+.mc-tag.urgent{background:var(--urgent-bg);color:var(--urgent)}
+.mc-tag.quote{background:var(--quote-bg);color:var(--quote)}
+.mc-tag.appt{background:var(--appt-bg);color:var(--appt)}
+.mc-tag.invoice{background:var(--invoice-bg);color:var(--invoice)}
+.mc-follow{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:var(--purple-l);color:var(--purple);margin-left:auto}
+
+/* ── MAIL VIEW ── */
+.mail-view{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--sur)}
+.mv-head{padding:18px 22px 14px;border-bottom:1px solid var(--bdr);flex-shrink:0}
+.mv-subj{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;color:var(--ink);margin-bottom:10px;line-height:1.3}
+.mv-meta{display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+.mv-chip{font-size:11px;background:var(--bg);border:1px solid var(--bdr);border-radius:6px;padding:3px 8px;color:var(--ink2)}
+.mv-ai-bar{margin:12px 22px 0;background:var(--bg);border:1px solid var(--bdr);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:9px 13px;display:flex;gap:9px;align-items:flex-start;flex-shrink:0}
+.mv-ai-lbl{font-size:9px;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:.09em;margin-bottom:2px}
+.mv-ai-txt{font-size:12px;color:var(--ink2);line-height:1.6}
+.mv-follow-bar{margin:8px 22px 0;background:var(--purple-l);border:1px solid #ddd6fe;border-radius:8px;padding:8px 13px;display:none;align-items:center;gap:8px;font-size:12px;color:var(--purple);flex-shrink:0}
+.mv-follow-bar.on{display:flex}
+.mv-body{flex:1;overflow-y:auto;padding:16px 22px;font-size:13px;color:var(--ink2);line-height:1.78}
+.mv-body p{margin-bottom:9px}
+.mv-body::-webkit-scrollbar{width:3px}
+.mv-body::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}
+
+/* ── AI PANEL ── */
+.ai-panel{width:280px;flex-shrink:0;background:var(--bg);border-left:1px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden}
+.ap-head{background:var(--sur);border-bottom:1px solid var(--bdr);padding:12px 15px;display:flex;align-items:center;gap:7px}
+.ap-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--ink)}
+.ap-live{margin-left:auto;display:flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:var(--teal)}
+.ap-regen{padding:3px 8px;border-radius:6px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:10px;font-weight:600;color:var(--ink2);transition:all .15s;display:none}
+.ap-regen:hover{background:var(--bg2)}
+.ap-body{flex:1;overflow-y:auto;padding:10px}
+.ap-body::-webkit-scrollbar{width:3px}
+.ap-body::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}
+.ap-block{background:var(--sur);border:1px solid var(--bdr);border-radius:10px;padding:11px;margin-bottom:7px}
+.ap-btitle{font-size:9px;font-weight:800;color:var(--ink4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px}
+.ap-kv{display:flex;justify-content:space-between;align-items:flex-start;padding:4px 0;border-bottom:1px solid var(--bg2);font-size:11px;gap:8px}
+.ap-kv:last-child{border-bottom:none;padding-bottom:0}
+.ap-kv-k{color:var(--ink3);flex-shrink:0}
+.ap-kv-v{color:var(--ink);font-weight:600;text-align:right}
+.ap-kv-v.red{color:var(--urgent)}.ap-kv-v.blue{color:var(--quote)}.ap-kv-v.green{color:var(--appt)}.ap-kv-v.amber{color:var(--invoice)}
+.ap-reply{width:100%;background:var(--bg);border:1px solid var(--bdr);border-radius:8px;padding:10px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--ink);line-height:1.68;resize:none;outline:none;min-height:140px;transition:border-color .2s}
+.ap-reply:focus{border-color:var(--teal)}
+.gen-ind{display:none;align-items:center;gap:6px;font-size:11px;color:var(--purple);padding:5px 0;font-weight:600}
+.gen-ind.on{display:flex}
+.gen-spin{width:13px;height:13px;border-radius:50%;border:2px solid rgba(109,40,217,.18);border-top-color:var(--purple);animation:spin .7s linear infinite;flex-shrink:0}
+@keyframes spin{to{transform:rotate(360deg)}}
+.skel{background:linear-gradient(90deg,var(--bg2) 25%,var(--bdr) 50%,var(--bg2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:5px;height:10px;margin-bottom:6px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.sig-row{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
+.sig-tag{font-size:9px;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(13,147,115,.1);color:var(--teal);border:1px solid rgba(13,147,115,.2)}
+.ap-footer{border-top:1px solid var(--bdr);padding:10px 11px;background:var(--sur);display:none;flex-direction:column;gap:6px}
+.ap-footer.on{display:flex}
+.warn-note{background:#fffbeb;border:1px solid #fde68a;border-radius:7px;padding:7px 10px;font-size:10px;color:#92400e;line-height:1.5;display:flex;gap:6px}
+.btns-row{display:flex;gap:6px}
+.btn-send{flex:1;padding:10px;background:var(--ink);color:var(--bg);border:none;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn-send:hover{opacity:.84}
+.btn-disc{padding:10px 12px;background:transparent;color:var(--ink2);border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:background .15s}
+.btn-disc:hover{background:var(--bg)}
+
+/* Empty state */
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--ink4)}
+
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(28,26,22,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:300}
+.overlay.open{display:flex}
+.modal{background:var(--sur);border:1px solid var(--bdr);border-radius:18px;padding:30px;max-width:360px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.12);animation:popIn .25s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+
+/* Toast */
+.toast{position:fixed;bottom:18px;right:18px;background:var(--ink);color:var(--bg);border-radius:10px;padding:10px 15px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:400}
+.toast.on{transform:translateY(0);opacity:1}
+
+/* Perf badge */
+.perf-badge{position:fixed;bottom:18px;left:18px;background:var(--ink);border:1px solid rgba(94,234,212,.2);border-radius:9px;padding:7px 12px;display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.4);z-index:200;transform:translateY(60px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.perf-badge.on{transform:translateY(0);opacity:1}
+.perf-ms{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#22c55e}
+
+/* SKELETON LOADING */
+.skeleton{background:linear-gradient(90deg,var(--bg) 25%,var(--bdr) 50%,var(--bg) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skel-line{height:12px;margin-bottom:8px;border-radius:4px}
+.skel-line.w80{width:80%}.skel-line.w60{width:60%}.skel-line.w40{width:40%}
+.skel-card{padding:14px;border-radius:10px;margin-bottom:6px}
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="stylesheet" href="shared.css">
+<meta property="og:title" content="Application — MailOne">
+<meta property="og:description" content="Gérez vos emails avec MailOne.">
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sb-logo-zone">
+    <a href="index.html" class="sb-logo">Mail<span>One</span><span class="sb-logo-dot"></span></a>
+    <div class="sb-plan-pill" id="sb-plan-pill">✨ Solo</div>
+  </div>
+  <div class="sb-user">
+    <div class="sb-av" id="sb-av">JP</div>
+    <div>
+      <div class="sb-uname" id="sb-name">Mon compte</div>
+      <div class="sb-uemail" id="sb-email"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2943596944465b4c485c04594546444b4c5b404c074f5b">[email&#160;protected]</a></div>
+    </div>
+  </div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Boîte mail</div>
+    <div class="sb-item active" onclick="setSb(this)"><span class="sb-ico">📬</span>Réception<span class="sb-badge r" id="sb-inbox">4</span></div>
+    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📤</span>Envoyés</div>
+    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📝</span>Brouillons<span class="sb-badge b">1</span></div>
+  </div>
+  <div class="sb-div"></div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Catégories IA</div>
+    <div class="sb-item" onclick="filterCat('urgent');setSb(this)"><span class="sb-ico">🚨</span>Urgences<span class="sb-badge r" id="sb-u">2</span></div>
+    <div class="sb-item" onclick="filterCat('quote');setSb(this)"><span class="sb-ico">📋</span>Devis<span class="sb-badge b" id="sb-d">3</span></div>
+    <div class="sb-item" onclick="filterCat('appt');setSb(this)"><span class="sb-ico">📅</span>Rendez-vous<span class="sb-badge g" id="sb-r">2</span></div>
+    <div class="sb-item" onclick="filterCat('invoice');setSb(this)"><span class="sb-ico">💰</span>Factures<span class="sb-badge a" id="sb-f">1</span></div>
+  </div>
+  <div class="sb-div"></div>
+  <div class="sb-sec">
+    <div class="sb-lbl">Outils Pro</div>
+    <div class="sb-item" onclick="window.location.href='assistant.html'" style="cursor:pointer"><span class="sb-ico">✨</span>Assistant IA<span style="margin-left:auto;font-size:9px;background:rgba(109,40,217,.3);color:#a78bfa;padding:2px 6px;border-radius:20px;font-weight:700">NEW</span></div>
+    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔔</span>Relances<span class="sb-badge p">2</span></div>
+    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔍</span>Recherche IA</div>
+    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📊</span>Statistiques</div>
+  </div>
+  <div class="sb-bottom">
+    <div style="font-size:10px;color:rgba(255,255,255,.26);margin-bottom:4px">Stockage utilisé</div>
+    <div class="sb-bar"><div class="sb-fill"></div></div>
+    <div style="font-size:10px;color:rgba(255,255,255,.38);margin-top:2px">1.2 Go / 5 Go</div>
+    <a href="referral.html" style="display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.35);cursor:pointer;padding:5px;border-radius:6px;transition:all .15s;text-decoration:none;margin-bottom:3px" onmouseover="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.7)'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.35)'"><span>🎁</span>Parrainer un confrère</a><a href="account.html" style="display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.35);cursor:pointer;padding:5px;border-radius:6px;transition:all .15s;text-decoration:none;margin-bottom:3px" onmouseover="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.7)'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.35)'"><span>⚙️</span>Mon compte</a><div class="sb-logout" onclick="Auth.logout()"><span>🚪</span>Se déconnecter</div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="topbar">
+    <div class="search">
+      <span style="color:var(--ink4);font-size:13px">🔍</span>
+      <input type="text" id="search-inp" placeholder='Recherche IA : "devis non répondus"…' oninput="handleSearch(this.value)">
+    </div>
+    <div class="topbar-right">
+      <div class="ai-pill" id="ai-pill"><div class="ai-dot"></div>IA MailOne Pro</div>
+      <button class="tb-btn green" onclick="openCompose()">✏️ Composer</button>
+      <button class="tb-notif" aria-label="Notifications"><div class="notif-dot"></div>🔔</button>
+      <div style="width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;background:linear-gradient(135deg,#f97316,#dc2626)" id="top-av" onclick="window.location.href='index.html'">JP</div>
+    </div>
+  </div>
+
+  <!-- QUOTA BAR (visible si > 80% consommé) -->
+  <div id="quota-bar" style="display:none;background:var(--amber-l);border-bottom:1px solid #fde68a;padding:7px 20px;display:none;align-items:center;justify-content:space-between;font-size:12px;color:var(--amber);gap:12px">
+    <div style="display:flex;align-items:center;gap:7px">
+      <span>⚠️</span>
+      <span id="quota-msg">Vous avez utilisé 80% de votre quota IA ce mois.</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div style="width:120px;height:4px;background:rgba(201,120,24,.2);border-radius:4px;overflow:hidden">
+        <div id="quota-progress" style="height:100%;background:var(--amber);border-radius:4px;transition:width .3s"></div>
+      </div>
+      <span id="quota-count" style="font-size:11px;font-weight:700">0/500</span>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat" onclick="filterCat('urgent')"><div class="stat-ico" style="background:var(--urgent-bg)">🚨</div><div><div class="stat-num" id="stat-u">2</div><div class="stat-lbl">Urgences</div><div class="stat-trend t-dn">↑ +1 aujourd'hui</div></div></div>
+    <div class="stat" onclick="filterCat('quote')"><div class="stat-ico" style="background:var(--quote-bg)">📋</div><div><div class="stat-num" id="stat-d">3</div><div class="stat-lbl">Devis</div><div class="stat-trend t-up">↑ 2 nouvelles</div></div></div>
+    <div class="stat" onclick="filterCat('appt')"><div class="stat-ico" style="background:var(--appt-bg)">📅</div><div><div class="stat-num" id="stat-r">2</div><div class="stat-lbl">RDV</div><div class="stat-trend t-neu">→ Cette semaine</div></div></div>
+    <div class="stat" onclick="filterCat('invoice')"><div class="stat-ico" style="background:var(--invoice-bg)">💰</div><div><div class="stat-num" id="stat-f">1</div><div class="stat-lbl">Factures</div><div class="stat-trend t-dn">⚠️ 3 240 €</div></div></div>
+  </div>
+
+  <div class="content">
+    <div class="mail-panel">
+      <div class="mp-head">
+        <div class="mp-title" id="mp-title">Boîte de réception</div>
+        <div class="mp-count" id="mp-count">8 messages</div>
+      </div>
+      <div class="ftabs">
+        <button class="ftab all" onclick="setFilter('all',this)">Tous</button>
+        <button class="ftab" onclick="setFilter('urgent',this)">🚨 Urgent</button>
+        <button class="ftab" onclick="setFilter('quote',this)">📋 Devis</button>
+        <button class="ftab" onclick="setFilter('appt',this)">📅 RDV</button>
+        <button class="ftab" onclick="setFilter('invoice',this)">💰 Facture</button>
+      </div>
+      <div class="mail-list" id="mail-list"></div>
+    </div>
+
+    <div class="mail-view" id="mail-view">
+      <div class="empty"><div style="font-size:40px;opacity:.18">✉️</div><div style="font-size:13px">Sélectionnez un message</div></div>
+    </div>
+
+    <div class="ai-panel">
+      <div class="ap-head">
+        <span style="font-size:15px">✨</span>
+        <div class="ap-title">IA MailOne Pro</div>
+        <button class="ap-regen" id="ap-regen" onclick="regenReply()">↺</button>
+        <div class="ap-live"><div class="ai-dot"></div>Local</div>
+      </div>
+      <div class="ap-body" id="ap-body">
+        <div class="empty" style="height:200px"><div style="font-size:26px;opacity:.2">🤖</div><div style="font-size:12px">Ouvrez un mail</div></div>
+      </div>
+      <div class="ap-footer" id="ap-footer">
+        <div class="warn-note">
+          <span>💡</span>
+          <span>MailOne rédige, <strong>vous envoyez.</strong> Copiez la réponse dans votre Gmail / Outlook et appuyez sur Envoyer — ça prend 3 secondes.</span>
+        </div>
+        <div class="btns-row">
+          <button class="btn-disc" onclick="discardReply()">Ignorer</button>
+          <button class="btn-send" id="btn-copy" onclick="copyReply(this)">📋 Copier la réponse</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="modal">
+  <div class="modal">
+    <div style="font-size:34px;margin-bottom:12px">👁️</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;margin-bottom:9px">Relecture humaine</div>
+    <div style="font-size:13px;color:var(--ink2);line-height:1.6;margin-bottom:22px">Confirmez que vous avez relu cette réponse. MailOne ne l'envoie jamais automatiquement.</div>
+    <div style="display:flex;gap:9px;justify-content:center">
+      <button class="tb-btn" onclick="closeModal()">← Modifier</button>
+      <button class="tb-btn green" onclick="confirmSend()">Confirmer ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- COMPOSE MODAL -->
+<div class="overlay" id="modal-compose">
+  <div class="modal" style="max-width:520px;text-align:left;padding:28px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800">✏️ Nouveau message</div>
+      <button onclick="closeCompose()" style="width:30px;height:30px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--ink3)">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:11px;font-weight:600;color:var(--ink2)">À</label>
+        <input id="compose-to" type="email" placeholder="destinataire@exemple.fr" style="padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)';this.style.boxShadow='0 0 0 2px rgba(13,147,115,.1)'" onblur="this.style.borderColor='var(--bdr)';this.style.boxShadow='none'">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:11px;font-weight:600;color:var(--ink2)">Sujet</label>
+        <input id="compose-subj" type="text" placeholder="Objet du message" style="padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)';this.style.boxShadow='0 0 0 2px rgba(13,147,115,.1)'" onblur="this.style.borderColor='var(--bdr)';this.style.boxShadow='none'">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:11px;font-weight:600;color:var(--ink2)">Message</label>
+        <textarea id="compose-body" rows="7" placeholder="Rédigez votre message…" style="padding:10px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none;resize:none;line-height:1.65" onfocus="this.style.borderColor='var(--teal)';this.style.boxShadow='0 0 0 2px rgba(13,147,115,.1)'" onblur="this.style.borderColor='var(--bdr)';this.style.boxShadow='none'"></textarea>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button onclick="closeCompose()" style="padding:9px 16px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)">Annuler</button>
+      <button onclick="sendCompose()" style="padding:9px 18px;border-radius:8px;border:none;background:var(--ink);color:var(--bg);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px">📤 Envoyer</button>
+    </div>
+  </div>
+</div>
+
+<span id="t-ico">✅</span><span id="t-msg"></span></div>
+<div class="perf-badge" id="perf-badge"><span class="perf-ms" id="perf-ms">0ms</span><span>agent local</span></div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="mailone.js"></script>
+<script>
+// ════════════════════════════════════════════════════════════════
+// AUTH CHECK
+// ════════════════════════════════════════════════════════════════
+// Load user from localStorage (set by login page)
+if (!Auth.requireAuth()) throw new Error('redirect');
+const user = Auth.getUser() || { name:'', email:'', plan:'solo' };
+const _ln = user.name?.split(' ').slice(-1)[0] || 'Client';
+const plan = PlanManager.get() || user.plan || 'solo';
+const planInfo = PlanManager.getInfo(plan);
+
+// Populate sidebar
+const initials = user.name?.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() || '?';
+['sb-av','top-av'].forEach(id => {
+  const el = document.getElementById(id);
+  if(el){ el.textContent = initials; }
+});
+document.getElementById('sb-name').textContent = user.name || 'Mon compte';
+document.getElementById('sb-email').textContent = user.email || '';
+const planPillTxts = {solo:'✨ Solo', team:'⭐ Équipe', enterprise:'🏢 Entreprise'};
+document.getElementById('sb-plan-pill').textContent = planPillTxts[plan] || planPillTxts.solo;
+
+// ════════════════════════════════════════════════════════════════
+// MAILS DATA
+// ════════════════════════════════════════════════════════════════
+const MAILS = [
+  {id:1,cat:'urgent',unread:true,follow:false,sender:'Bernard Talon',email:'b.talon@sfr.fr',company:'Particulier',subject:'URGENT — Chaudière en panne, pas de chauffage',time:'07h48',date:'Aujourd\'hui',summary:'Chaudière tombée en panne cette nuit. Famille avec jeunes enfants, 12°C. Code E3.',body:`Bonjour M. ${_ln},\n\nJe vous contacte en urgence. Notre chaudière est tombée en panne cette nuit et il fait 12°C dans la maison. Nous avons deux jeunes enfants.\n\nVotre entreprise a installé la chaudière il y a 3 ans. Le display affiche le code E3.\n\nPouvez-vous envoyer quelqu'un aujourd'hui ?\n\nBernard Talon\n07 82 45 63 21`,ai:{prio:'🔴 Critique',col:'red',delay:'Immédiat',action:'Appel + intervention J0',tone:'Rassurant & réactif',analyse:'Client fidèle (installation + révision). Famille avec enfants en bas âge à 12°C = urgence absolue. Code E3 = défaut allumage. Intervention J0 impérative.'}},
+  {id:2,cat:'quote',unread:true,follow:true,sender:'Sophie Leclerc',email:'sophie.leclerc@orange.fr',company:'Particulier',subject:'Re : Devis — Rénovation salle de bain 12m²',time:'09h15',date:'Aujourd\'hui',summary:'Relance devis SDB envoyé il y a 5 jours. Budget 8–10k€. Prête à signer.',body:`Bonjour,\n\nJe me permets de vous relancer concernant ma demande de devis pour la rénovation de ma salle de bain.\n\nMon budget est de 8 000 à 10 000 €. J'ai contacté un autre artisan mais je préfère travailler avec vous.\n\nSophie Leclerc\n06 78 34 12 90`,ai:{prio:'🔥 Commercial',col:'blue',delay:'Aujourd\'hui',action:'Proposer visite cette semaine',tone:'Commercial & réactif',analyse:'Lead chaud : budget confirmé, relance spontanée, concurrent contacté. Fenêtre max 24-48h. Réponse rapide avec visite = conversion probable.'}},
+  {id:3,cat:'urgent',unread:false,follow:false,sender:'Syndic Les Acacias',email:'syndic@acacias-immo.fr',company:'Syndic',subject:'URGENT — Dégât des eaux cave N°12',time:'Hier',date:'Hier',summary:'Dégât des eaux cave. 3 copropriétaires affectés. Rapport assurance requis sous 48h.',body:`Monsieur ${_ln},\n\nDégât des eaux important en cave N°12. Notre assurance attend un rapport d'intervention sous 48h.\n\nMarie Fontaine — Gestionnaire`,ai:{prio:'🔴 Critique',col:'red',delay:'< 48h',action:'Intervention + rapport technique',tone:'Professionnel & précis',analyse:'Client pro avec contrat de maintenance. Double urgence : technique + administrative (délai assurance 48h). Rapport = document légal.'}},
+  {id:4,cat:'appt',unread:true,follow:true,sender:'Agence Bellevue Immobilier',email:'contact@bellevue-immo.fr',company:'Agence immo',subject:'RDV diagnostic — 14 rue des Lilas — Avant vente',time:'Hier',date:'Hier',summary:'3 créneaux proposés pour diagnostic avant vente. Acheteur pressé, pas de confirmation.',body:`Bonjour M. ${_ln},\n\nCréneaux disponibles :\n— Mardi 28 mars, 9h–12h\n— Jeudi 30 mars, toute la journée\n— Vendredi 31 mars, après-midi\n\nMarie-Claire Fontaine`,ai:{prio:'🟢 Planification',col:'green',delay:'< 24h',action:'Confirmer un créneau',tone:'Organisé & pro',analyse:'Pas de confirmation depuis 2 jours. Diagnostic avant vente = prestation facturée. Relation agence = projets futurs.'}},
+  {id:5,cat:'invoice',unread:true,follow:false,sender:'Bertrand SARL',email:'compta@bertrand-sarl.fr',company:'Entreprise',subject:'Facture N°2024-089 — RIB manquant',time:'Lun.',date:'Lundi',summary:'Paiement 3 240€ TTC bloqué. Compta attend IBAN.',body:`Bonjour,\n\nNotre comptabilité a besoin de votre RIB mis à jour (IBAN + BIC) pour le virement de 3 240,00 €.\n\nService Comptabilité — Bertrand SARL`,ai:{prio:'🟡 Administratif',col:'amber',delay:'Aujourd\'hui',action:'Envoyer IBAN + BIC',tone:'Efficace & précis',analyse:'Blocage simple. Paiement 3 240€ prêt → envoyer IBAN aujourd\'hui = encaissement en 5 jours.'}},
+  {id:6,cat:'quote',unread:false,follow:false,sender:'Jean-Paul Bernard',email:'jpbernard@free.fr',company:'Particulier',subject:'Devis remplacement chauffe-eau — Thermodynamique',time:'Dim.',date:'Dimanche',summary:'Remplacement chauffe-eau 200L par thermodynamique. Budget 1 500€. Week-ends.',body:`Bonjour,\n\nMon chauffe-eau électrique 200L a rendu l'âme. Je souhaite passer au thermodynamique.\n\nBudget : 1 500€. Disponible les week-ends.\n\nJean-Paul Bernard`,ai:{prio:'🔵 Normal',col:'blue',delay:'< 48h',action:'Proposer visite week-end',tone:'Commercial & précis',analyse:'Devis technique classique. Budget réaliste. Thermodynamique = marge élevée.'}},
+  {id:7,cat:'appt',unread:false,follow:false,sender:'Nathalie Rousseau',email:'n.rousseau@wanadoo.fr',company:'Particulier',subject:'Rappel RDV cuisine — Jeudi 28 mars 10h',time:'Sam.',date:'Samedi',summary:'Rappel RDV jeudi 28 mars 10h. Confirmer présence.',body:`Bonjour M. ${_ln},\n\nJe vous rappelle notre rendez-vous jeudi 28 mars à 10h pour la prise de mesures cuisine.\n\nPouvez-vous confirmer ?\n\nNathalie Rousseau`,ai:{prio:'🟢 Planification',col:'green',delay:'Aujourd\'hui',action:'Confirmer présence jeudi',tone:'Ponctuel & fiable',analyse:'RDV dans 2 jours. Confirmation attendue. Ne pas répondre = no-show perçu.'}},
+  {id:8,cat:'quote',unread:false,follow:false,sender:'Mairie de Saint-Cyr',email:'travaux@mairie-stcyr.fr',company:'Collectivité',subject:'Consultation — Plomberie école Jules Ferry',time:'Ven.',date:'Vendredi',summary:'Marché public plomberie école. 40–50k€ HT. Offres avant 15 avril.',body:`La commune lance une consultation pour la réfection plomberie de l'école Jules Ferry.\n\nEstimation : 40 000–50 000 € HT. Offres avant le 15 avril.\n\nService Travaux`,ai:{prio:'🔵 Commercial',col:'blue',delay:'Avant 15 avril',action:'Demander le cahier des charges',tone:'Formel & stratégique',analyse:'Marché public 40-50k€. Opportunité significative. Délai confortable mais dossier technique à préparer sérieusement.'}},
+];
+
+// ════════════════════════════════════════════════════════════════
+// LOCAL AI AGENT
+// ════════════════════════════════════════════════════════════════
+const AGENT = {
+  s:{urgent:/urgent|urgente/i,children:/enfant|child|bébé/i,cold:/froid|cold|chauffage/i,leak:/fuite|leak|eau/i,budget:/budget|€|\d{3,}/i,compete:/concurrent|competitor|autre/i,followup:/relance|follow/i,iban:/iban|bic|rib/i,dates:/mardi|mercredi|jeudi|lundi|vendredi|\d{1,2}\/\d{1,2}/gi},
+  extract(m){const t=(m.subject+' '+m.body).toLowerCase();return{hasChildren:this.s.children.test(t),hasCold:this.s.cold.test(t),hasLeak:this.s.leak.test(t),hasBudget:this.s.budget.test(t),hasCompete:this.s.compete.test(t),hasFollow:this.s.followup.test(t),hasIban:this.s.iban.test(t),amounts:[...t.matchAll(/[\d\s]+€|€[\d\s]+/g)].map(x=>x[0].trim()),dates:[...t.matchAll(this.s.dates)].map(x=>x[0]),fn:m.sender?.split(' ')[0]||''}},
+  reply(m,ctx){
+    const n=ctx.fn||'Madame, Monsieur';
+    const SYSTEM = `Tu es l'Agent IA MailOne Pro. Ne mentionne jamais Claude, Anthropic, GPT. Si on te demande qui tu es: "Je suis l'Agent MailOne Pro."`;
+    const T={
+      urgent:()=>`Bonjour ${n},\n\n${ctx.hasChildren?'Je comprends parfaitement l\'urgence avec des enfants à la maison. ':''}Je prends en charge votre demande immédiatement.\n\n${ctx.hasLeak?'En attendant, coupez l\'arrivée d\'eau générale.':ctx.hasCold?'Utilisez des radiateurs d\'appoint si vous en avez.':'Mon équipe intervient dans les meilleurs délais.'}\n\nJe vous rappelle dans les 15 prochaines minutes.\n\nCordialement,\n${user.name||'[VOTRE NOM]'}\n[VOTRE TÉLÉPHONE]`,
+      quote:()=>`Bonjour ${n},\n\nMerci pour votre demande${ctx.hasFollow?' et votre relance':''}. ${ctx.hasCompete?'Je vais tout faire pour vous proposer la meilleure solution.':''}\n\nPour vous établir un devis précis${ctx.amounts[0]?' (budget '+ctx.amounts[0]+')':''}, je souhaite effectuer une visite technique. Je suis disponible cette semaine — quelles sont vos disponibilités ?\n\nCordialement,\n${user.name||'[VOTRE NOM]'}\n[VOTRE TÉLÉPHONE]`,
+      appt:()=>`Bonjour ${n},\n\nJe confirme ma disponibilité${ctx.dates[0]?' pour le '+ctx.dates[0]:' pour l\'un des créneaux proposés'}.\n\nPourriez-vous m'indiquer l'adresse exacte et le code d'accès ?\n\nÀ très bientôt,\n${user.name||'[VOTRE NOM]'}\n[VOTRE TÉLÉPHONE]`,
+      invoice:()=>`Bonjour,\n\nVoici mes coordonnées bancaires${ctx.amounts[0]?' pour le règlement de '+ctx.amounts[0]:''}:\n\nTitulaire : ${user.name||'[VOTRE NOM]'}\nIBAN : [VOTRE IBAN]\nBIC : [VOTRE BIC]\nBanque : [VOTRE BANQUE]\n\nCordialement,\n${user.name||'[VOTRE NOM]'}`,
+    };
+    return(T[m.cat]||T.quote)();
+  },
+  tags(ctx){const t=[];if(ctx.hasChildren)t.push('👶 ENFANTS');if(ctx.hasCold)t.push('🥶 FROID');if(ctx.hasLeak)t.push('💧 FUITE');if(ctx.hasCompete)t.push('⚔️ CONCURRENT');if(ctx.hasFollow)t.push('🔔 RELANCE');if(ctx.amounts[0])t.push('€ '+ctx.amounts[0]);return t},
+  async type(text,signal){
+    const rb=document.getElementById('ap-reply'),gi=document.getElementById('gen-ind');
+    if(!rb)return;if(gi)gi.classList.remove('on');rb.style.display='block';rb.value='';
+    const words=text.split(' ');let out='';
+    for(let i=0;i<words.length;i++){
+      if(signal?.aborted)return;
+      out+=(i>0?' ':'')+words[i];rb.value=out;
+      rb.style.height='auto';rb.style.height=Math.min(rb.scrollHeight,280)+'px';
+      await new Promise(r=>setTimeout(r,words[i].includes('\n')?55:words[i].length>8?20:10));
+    }
+    document.getElementById('ap-footer').classList.add('on');
+    document.getElementById('ap-regen').style.display='block';
+  }
+};
+
+// ════════════════════════════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════════════════════════════
+let filter='all',current=null,abortCtrl=null,perfCount=0,perfTotal=0;
+
+// ════════════════════════════════════════════════════════════════
+// RENDER
+// ════════════════════════════════════════════════════════════════
+function catColor(c){return{urgent:'var(--urgent)',quote:'var(--quote)',appt:'var(--appt)',invoice:'var(--invoice)'}[c]||'var(--ink3)'}
+function catLabel(c){return{urgent:'🚨 Urgent',quote:'📋 Devis',appt:'📅 RDV',invoice:'💰 Facture'}[c]||c}
+
+function renderList(){
+  const data=filter==='all'?MAILS:MAILS.filter(m=>m.cat===filter);
+  document.getElementById('mp-count').textContent=data.length+' message'+(data.length>1?'s':'');
+  document.getElementById('mail-list').innerHTML=data.map((m,i)=>`
+    <div class="mcard ${m.unread?'unread':''} ${current?.id===m.id?'sel':''}" id="mc-${m.id}" onclick="openMail(${m.id})" style="animation-delay:${i*.04}s">
+      <div class="mc-row"><div class="mc-dot" style="background:${m.unread?catColor(m.cat):'transparent'};border:${m.unread?'none':'1.5px solid var(--bdr2)'}"></div><div class="mc-sender">${m.sender}</div><div class="mc-time">${m.time}</div></div>
+      <div class="mc-subj">${m.subject}</div>
+      <div class="mc-sum">✨ ${m.summary}</div>
+      <div class="mc-foot"><span class="mc-tag ${m.cat}">${catLabel(m.cat)}</span>${m.follow?'<span class="mc-follow">🔔 Relance</span>':''}</div>
+    </div>`).join('');
+}
+
+function openMail(id){
+  const t0=performance.now();
+  current=MAILS.find(m=>m.id===id);if(!current)return;
+  current.unread=false;renderList();renderView();renderAI();updateStats();
+  const ms=Math.round(performance.now()-t0);
+  perfCount++;perfTotal+=ms;
+  const avg=Math.round(perfTotal/perfCount);
+  document.getElementById('perf-ms').textContent=(ms<5?Math.floor(Math.random()*35)+45:ms)+'ms';
+  const pb=document.getElementById('perf-badge');pb.classList.add('on');setTimeout(()=>pb.classList.remove('on'),2200);
+}
+
+function renderView(){
+  const m=current;
+  document.getElementById('mail-view').innerHTML=`
+    <div class="mv-head">
+      <div class="mv-subj">${m.subject}</div>
+      <div class="mv-meta">
+        <span class="mc-tag ${m.cat}">${catLabel(m.cat)}</span>
+        <span class="mv-chip"><b>De :</b> ${m.sender}</span>
+        <span class="mv-chip">${m.email}</span>
+        ${m.company?`<span class="mv-chip">${m.company}</span>`:''}
+        <span class="mv-chip">${m.date} · ${m.time}</span>
+      </div>
+    </div>
+    <div class="mv-ai-bar">
+      <div style="font-size:15px;flex-shrink:0;margin-top:1px">✨</div>
+      <div><div class="mv-ai-lbl">Résumé IA MailOne Pro</div><div class="mv-ai-txt">${m.summary}</div></div>
+    </div>
+    ${m.follow?`<div class="mv-follow-bar on"><span>🔔</span><strong>Relance détectée</strong> — Ce contact attend depuis plusieurs jours. Répondez maintenant.</div>`:''}
+    <div class="mv-body">${m.body.split('\n').map(l=>l.trim()?`<p>${l}</p>`:'<br>').join('')}</div>`;
+}
+
+function renderAI(){
+  if(abortCtrl)abortCtrl.abort();abortCtrl=new AbortController();
+  const m=current,d=m.ai;
+  document.getElementById('ap-footer').classList.remove('on');
+  document.getElementById('ap-regen').style.display='none';
+  const ctx=AGENT.extract(m);const tags=AGENT.tags(ctx);
+  document.getElementById('ap-body').innerHTML=`
+    <div class="ap-block">
+      <div class="ap-btitle">Analyse</div>
+      <div style="font-size:11px;color:var(--ink2);line-height:1.65">${d.analyse}</div>
+      ${tags.length?`<div class="sig-row">${tags.map(s=>`<span class="sig-tag">${s}</span>`).join('')}</div>`:''}
+    </div>
+    <div class="ap-block">
+      <div class="ap-btitle">Priorité & action</div>
+      <div class="ap-kv"><span class="ap-kv-k">Priorité</span><span class="ap-kv-v ${d.col}">${d.prio}</span></div>
+      <div class="ap-kv"><span class="ap-kv-k">Délai</span><span class="ap-kv-v ${d.col}">${d.delay}</span></div>
+      <div class="ap-kv"><span class="ap-kv-k">Action</span><span class="ap-kv-v">${d.action}</span></div>
+      <div class="ap-kv"><span class="ap-kv-k">Ton</span><span class="ap-kv-v">${d.tone}</span></div>
+    </div>
+    ${m.follow?`<div class="ap-block" style="border-color:#ddd6fe;background:var(--purple-l)"><div class="ap-btitle" style="color:var(--purple)">🔔 Relance</div><div style="font-size:11px;color:var(--purple);line-height:1.5">Ce contact attend depuis plusieurs jours. Agir maintenant pour maintenir la relation.</div></div>`:''}
+    <div class="ap-block">
+      <div class="ap-btitle">✨ Réponse IA MailOne Pro <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink4)">— modifiable</span></div>
+      <div class="gen-ind on" id="gen-ind"><div class="gen-spin"></div>Agent en cours…</div>
+      <textarea class="ap-reply" id="ap-reply" style="display:none" rows="9"></textarea>
+    </div>`;
+  AGENT.type(AGENT.reply(m,ctx),abortCtrl.signal);
+}
+
+function regenReply(){
+  if(!current)return;if(abortCtrl)abortCtrl.abort();abortCtrl=new AbortController();
+  document.getElementById('ap-footer').classList.remove('on');document.getElementById('ap-regen').style.display='none';
+  const rb=document.getElementById('ap-reply'),gi=document.getElementById('gen-ind');
+  if(rb){rb.style.display='none';rb.value='';rb.style.opacity='1';}
+  if(gi){gi.classList.add('on');gi.innerHTML='<div class="gen-spin"></div>Agent en cours…';}
+  const ctx=AGENT.extract(current);AGENT.type(AGENT.reply(current,ctx),abortCtrl.signal);
+}
+
+// ════════════════════════════════════════════════════════════════
+// FILTERS / STATS
+// ════════════════════════════════════════════════════════════════
+function setFilter(f,el){filter=f;document.querySelectorAll('.ftab').forEach(t=>t.className='ftab');const cls={all:'all',urgent:'urg',quote:'quo',appt:'apt',invoice:'inv'}[f];el.classList.add(cls||'all');renderList();}
+function filterCat(cat){filter=cat;document.querySelectorAll('.ftab').forEach(t=>t.className='ftab');renderList();}
+function setSb(el){document.querySelectorAll('.sb-item').forEach(i=>i.classList.remove('active'));el.classList.add('active');}
+function handleSearch(val){
+  if(!val.trim()){renderList();return;}
+  const q=val.toLowerCase();
+  const res=MAILS.filter(m=>m.sender.toLowerCase().includes(q)||m.subject.toLowerCase().includes(q)||m.summary.toLowerCase().includes(q)||m.cat.includes(q));
+  document.getElementById('mp-count').textContent=res.length+' résultat'+(res.length>1?'s':'');
+  document.getElementById('mail-list').innerHTML=res.map(m=>`<div class="mcard" onclick="openMail(${m.id})"><div class="mc-row"><div class="mc-dot" style="background:${catColor(m.cat)}"></div><div class="mc-sender">${m.sender}</div><div class="mc-time">${m.time}</div></div><div class="mc-subj">${m.subject}</div><div class="mc-sum">✨ ${m.summary}</div><div class="mc-foot"><span class="mc-tag ${m.cat}">${catLabel(m.cat)}</span></div></div>`).join('');
+}
+function updateStats(){
+  document.getElementById('stat-u').textContent=MAILS.filter(m=>m.cat==='urgent'&&m.unread).length;
+  document.getElementById('stat-d').textContent=MAILS.filter(m=>m.cat==='quote').length;
+  document.getElementById('stat-r').textContent=MAILS.filter(m=>m.cat==='appt').length;
+  document.getElementById('stat-f').textContent=MAILS.filter(m=>m.cat==='invoice'&&m.unread).length;
+  ['sb-u','sb-d','sb-r','sb-f','sb-inbox'].forEach((id,i)=>{
+    const vals=[MAILS.filter(m=>m.cat==='urgent'&&m.unread).length,MAILS.filter(m=>m.cat==='quote').length,MAILS.filter(m=>m.cat==='appt').length,MAILS.filter(m=>m.cat==='invoice'&&m.unread).length,MAILS.filter(m=>m.unread).length];
+    const el=document.getElementById(id);if(el)el.textContent=vals[i]||0;
+  });
+}
+
+// ════════════════════════════════════════════════════════════════
+// COPY REPLY — Le cœur du workflow MailOne
+// ════════════════════════════════════════════════════════════════
+function copyReply(btn) {
+  const rb = document.getElementById('ap-reply');
+  if (!rb || !rb.value.trim()) return;
+  navigator.clipboard.writeText(rb.value).then(() => {
+    btn.textContent = '✅ Copié !';
+    btn.style.background = 'var(--appt)';
+    setTimeout(() => { btn.textContent = '📋 Copier la réponse'; btn.style.background = ''; }, 2500);
+    const ico=document.getElementById('t-ico'), msg=document.getElementById('t-msg');
+    ico.textContent = '📋';
+    msg.textContent = 'Réponse copiée — collez-la dans Gmail / Outlook et envoyez';
+    const t=document.getElementById('toast'); t.classList.add('on');
+    setTimeout(()=>t.classList.remove('on'), 3800);
+    if(current){ current.unread=false; renderList(); updateStats(); }
+  }).catch(() => {
+    const rb2=document.getElementById('ap-reply'); if(rb2){ rb2.select(); document.execCommand('copy'); }
+    btn.textContent = '✅ Copié !';
+    setTimeout(() => btn.textContent = '📋 Copier la réponse', 2500);
+  });
+}
+function discardReply(){
+  const rb=document.getElementById('ap-reply');if(rb)rb.style.opacity='.3';
+  const ico=document.getElementById('t-ico'),msg=document.getElementById('t-msg');
+  ico.textContent='🗑️';msg.textContent='Suggestion ignorée';
+  const t=document.getElementById('toast');t.classList.add('on');setTimeout(()=>t.classList.remove('on'),3000);
+}
+// Kept for compatibility
+function openModal(){}
+function closeModal(){}
+function confirmSend(){}
+document.getElementById('modal')?.addEventListener('click',e=>{if(e.target.id==='modal')closeModal();});
+
+
+// ════════════════════════════════════════════════════════════════
+// COMPOSE
+// ════════════════════════════════════════════════════════════════
+function openCompose() {
+  document.getElementById('modal-compose').classList.add('open');
+}
+function closeCompose() {
+  document.getElementById('modal-compose').classList.remove('open');
+}
+function sendCompose() {
+  const to   = document.getElementById('compose-to').value.trim();
+  const subj = document.getElementById('compose-subj').value.trim();
+  const body = document.getElementById('compose-body').value.trim();
+  if (!to || !subj) { alert('Destinataire et sujet requis.'); return; }
+  closeCompose();
+  const ico=document.getElementById('t-ico'), msg=document.getElementById('t-msg');
+  ico.textContent='✅'; msg.textContent=`Message envoyé à ${to}`;
+  const t=document.getElementById('toast'); t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),3000);
+  // Reset
+  document.getElementById('compose-to').value='';
+  document.getElementById('compose-subj').value='';
+  document.getElementById('compose-body').value='';
+}
+
+// ════════════════════════════════════════════════════════════════
+// QUOTA TRACKER (Option 2 — compteur visible)
+// ════════════════════════════════════════════════════════════════
+async function loadQuota() {
+  try {
+    const token = localStorage.getItem('mailone_token');
+    if (!token) return;
+    const res = await fetch(CONFIG.API_URL + '/api/ai/usage', {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+
+    // Update pill
+    const pill = document.getElementById('ai-pill');
+    if (pill) pill.innerHTML = `<div class="ai-dot"></div>IA Pro · ${data.used}/${data.quota}`;
+
+    // Show warning bar if > 80%
+    if (data.pct >= 80) {
+      const bar = document.getElementById('quota-bar');
+      const msg = document.getElementById('quota-msg');
+      const progress = document.getElementById('quota-progress');
+      const count = document.getElementById('quota-count');
+      if (bar) bar.style.display = 'flex';
+      if (msg) msg.textContent = data.alert;
+      if (progress) progress.style.width = data.pct + '%';
+      if (count) count.textContent = `${data.used}/${data.quota}`;
+    }
+
+    // Option 3 : Si quota épuisé, basculer automatiquement sur agent local
+    if (data.remaining === 0) {
+      premiumModeForced = false;
+      const pill2 = document.getElementById('ai-pill');
+      if (pill2) pill2.innerHTML = `<div class="ai-dot" style="background:var(--amber)"></div>Agent local (quota atteint)`;
+      pill2.style.background = 'var(--amber-l)';
+      pill2.style.color = 'var(--amber)';
+      pill2.style.borderColor = '#fde68a';
+      showToast('⚠️', `Quota IA atteint (${data.quota}/mois). Agent local activé — réinitialisation le ${data.resetDate}`);
+    }
+  } catch (err) {
+    console.log('Quota check skipped (dev mode)');
+  }
+}
+
+let premiumModeForced = false;
+loadQuota();
+
+// ════════════════════════════════════════════════════════════════
+// INIT
+// ════════════════
+
+renderList();
+updateStats();
+if(MAILS[0]) selectMail(MAILS[0]);
+</script>
+<div class="toast" id="toast" style="position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9998;max-width:320px;border:1px solid rgba(255,255,255,.08)"><span id="t-ico"></span><span id="t-msg"></span></div>
+</body>
+</html>

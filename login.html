@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion — MailOne</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fafafa;--bg2:#f4f4f5;--sur:#fff;--bdr:#e4e4e7;--bdr2:#d4d4d8;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--ink4:#a1a1aa;--green:#16a34a;--green-l:#f0fdf4;--amber:#d97706;--amber-l:#fffbeb;--red:#dc2626;--purple:#9333ea;--purple-l:#faf5ff;--teal:#0d9488}
+html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink)}
+
+/* SPLIT LAYOUT */
+.split{display:flex;min-height:100vh}
+.split-left{width:44%;background:var(--ink);display:flex;flex-direction:column;padding:40px 48px;position:relative;overflow:hidden;flex-shrink:0}
+.split-left::before{content:'';position:absolute;top:-120px;right:-80px;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(94,234,212,.08) 0%,transparent 70%);pointer-events:none}
+.split-left::after{content:'';position:absolute;bottom:-100px;left:-60px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(21,160,106,.06) 0%,transparent 70%);pointer-events:none}
+.split-right{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 48px}
+
+/* LEFT SIDE */
+.sl-logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.5px;display:flex;align-items:center;gap:6px;text-decoration:none;margin-bottom:auto}
+.nav-mark{width:8px;height:8px;border-radius:50%;background:#22c55e}
+.sl-content{flex:1;display:flex;flex-direction:column;justify-content:center;padding:40px 0}
+.sl-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(26px,3vw,38px);font-weight:800;color:#fff;letter-spacing:-.04em;line-height:1.15;margin-bottom:14px}
+.sl-sub{font-size:14px;color:rgba(255,255,255,.45);line-height:1.7;margin-bottom:36px;max-width:320px}
+.sl-features{display:flex;flex-direction:column;gap:12px}
+.sl-feat{display:flex;align-items:center;gap:11px;font-size:13px;color:rgba(255,255,255,.62)}
+.sl-feat-ico{width:32px;height:32px;border-radius:8px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.sl-plan-preview{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:16px;margin-top:32px}
+.sl-plan-name{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:#22c55e;margin-bottom:4px}
+.sl-plan-price{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;color:#fff;line-height:1}
+.sl-plan-desc{font-size:11px;color:rgba(255,255,255,.35);margin-top:3px}
+.sl-back{font-size:12px;color:rgba(255,255,255,.3);text-decoration:none;margin-top:auto;display:flex;align-items:center;gap:5px;transition:color .15s}
+.sl-back:hover{color:rgba(255,255,255,.6)}
+
+/* RIGHT SIDE — FORM */
+.auth-box{width:100%;max-width:420px}
+.auth-tabs{display:flex;background:var(--bg2);border-radius:10px;padding:3px;margin-bottom:28px;gap:2px}
+.auth-tab{flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;transition:all .2s;background:transparent;color:var(--ink3)}
+.auth-tab.active{background:var(--sur);color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.auth-title{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:6px}
+.auth-sub{font-size:13px;color:var(--ink3);margin-bottom:24px;line-height:1.5}
+
+.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+label{font-size:12px;font-weight:600;color:var(--ink2)}
+input{padding:11px 14px;border:1.5px solid var(--bdr);border-radius:9px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
+input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,160,106,.12);background:var(--sur)}
+input::placeholder{color:var(--ink4)}
+input.error{border-color:var(--red)}
+.input-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.error-msg{font-size:11px;color:var(--red);margin-top:3px;display:none}
+.error-msg.show{display:block}
+
+/* Plan selector in signup */
+.plan-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:14px}
+.plan-opt{border:1.5px solid var(--bdr);border-radius:9px;padding:10px 7px;cursor:pointer;text-align:center;transition:all .15s}
+.plan-opt:hover{border-color:var(--green)}
+.plan-opt.sel{border-color:var(--green);background:var(--green-l)}
+.plan-opt-name{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;margin-bottom:2px}
+.plan-opt.sel .plan-opt-name{color:var(--green)}
+.plan-opt-price{font-size:13px;font-weight:700}
+.plan-opt-period{font-size:9px;color:var(--ink3)}
+
+/* Legal checks */
+.legal-checks{display:flex;flex-direction:column;gap:7px;margin-bottom:14px}
+.legal-check{display:flex;align-items:flex-start;gap:7px}
+.legal-check input[type=checkbox]{width:15px;height:15px;margin-top:2px;flex-shrink:0;accent-color:var(--green);cursor:pointer}
+.legal-check label{font-size:11px;color:var(--ink3);line-height:1.5;cursor:pointer}
+.legal-check a{color:var(--blue);text-decoration:none}
+
+/* Submit */
+.submit-btn{width:100%;padding:13px;background:var(--ink);color:var(--bg);border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
+.submit-btn:hover{opacity:.85}
+.submit-btn:disabled{opacity:.5;cursor:not-allowed}
+.divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--ink4);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--bdr)}
+.switch-link{text-align:center;font-size:13px;color:var(--ink3);margin-top:18px}
+.switch-link a{color:var(--green);font-weight:600;text-decoration:none}
+.forgot-link{text-align:right;font-size:11px;margin-bottom:6px}
+.forgot-link a{color:var(--ink3);text-decoration:none}
+.forgot-link a:hover{color:var(--ink)}
+
+/* Password strength */
+.pwd-strength{height:3px;border-radius:3px;margin-top:5px;transition:all .3s;background:var(--bdr)}
+.pwd-strength.weak{background:var(--red);width:33%}
+.pwd-strength.medium{background:var(--amber);width:66%}
+.pwd-strength.strong{background:var(--green);width:100%}
+.pwd-hint{font-size:10px;color:var(--ink4);margin-top:3px}
+
+@media(max-width:768px){
+  .split-left{display:none}
+  .split-right{padding:24px 20px}
+  .input-row{grid-template-columns:1fr}
+}
+
+/* ── ÉTAPE 2 — PROFIL ── */
+.activity-card{background:var(--bg);border:2px solid var(--bdr);border-radius:12px;padding:12px 14px;cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:10px}
+.activity-card:hover{border-color:var(--bdr2);box-shadow:0 2px 10px rgba(0,0,0,.06)}
+.activity-card.selected{border-color:var(--green);background:var(--green-l)}
+.ac-ico{font-size:22px;flex-shrink:0}
+.ac-label{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:800;color:var(--ink);line-height:1.2}
+.ac-sub{font-size:10px;color:var(--ink3);margin-top:2px}
+.activity-card.selected .ac-sub{color:var(--teal,#0d9373)}
+
+.mail-count-btn{flex:1;padding:9px 6px;background:var(--bg);border:2px solid var(--bdr);border-radius:9px;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;color:var(--ink2);text-align:center;transition:all .15s}
+.mail-count-btn:hover{border-color:var(--bdr2)}
+.mail-count-btn.selected{border-color:var(--green);background:var(--green-l);color:var(--green)}
+
+</style>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://mailone.app">
+<meta property="og:title" content="MailOne — Connexion">
+<meta property="og:description" content="Connectez-vous ou créez votre compte MailOne.">
+<meta property="og:image" content="https://mailone.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="MailOne — Connexion">
+<meta name="twitter:description" content="Connectez-vous ou créez votre compte MailOne.">
+<meta name="description" content="Connectez-vous ou créez votre compte MailOne.">
+<link rel="canonical" href="https://mailone.app/login">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+
+<div class="split">
+
+  <!-- LEFT -->
+  <div class="split-left">
+    <a href="index.html" class="sl-logo">Mail<span>One</span><span class="nav-mark"></span></a>
+
+    <div class="sl-content">
+      <h2 class="sl-title">Gérez votre boîte mail<br>intelligemment.</h2>
+      <p class="sl-sub">IA MailOne Pro incluse. Agent local embarqué. Réponses professionnelles en quelques secondes.</p>
+
+      <div class="sl-features">
+        <div class="sl-feat"><div class="sl-feat-ico">🚨</div>Tri automatique Urgences · Devis · RDV · Factures</div>
+        <div class="sl-feat"><div class="sl-feat-ico">🤖</div>Agent IA local — 0€, illimité, privé</div>
+        <div class="sl-feat"><div class="sl-feat-ico">✨</div>IA MailOne Pro — réponses avancées</div>
+        <div class="sl-feat"><div class="sl-feat-ico">🌍</div>20 langues, détection automatique</div>
+        <div class="sl-feat"><div class="sl-feat-ico">🔒</div>RGPD · Données hébergées en Europe</div>
+      </div>
+
+      <div class="sl-plan-preview" id="plan-preview">
+        <div class="sl-plan-name" id="preview-name">Plan Solo ✨</div>
+        <div class="sl-plan-price" id="preview-price">99€<span style="font-size:13px;font-weight:400;color:rgba(255,255,255,.3)">/mois</span></div>
+        <div class="sl-plan-desc" id="preview-desc">1 boîte mail · IA Pro illimitée · 14j gratuits</div>
+      </div>
+    </div>
+
+    <a href="index.html" class="sl-back">← Retour à l'accueil</a>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="split-right">
+    <div class="auth-box">
+
+      <!-- TABS -->
+      <div class="auth-tabs">
+        <button class="auth-tab" id="tab-login" onclick="showTab('login')">Se connecter</button>
+        <button class="auth-tab active" id="tab-signup" onclick="showTab('signup')">Créer un compte</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <form id="form-login" onsubmit="event.preventDefault();handleLogin()" novalidate style="display:none">
+        <div class="auth-title">Bon retour ! 👋</div>
+        <div class="auth-sub">Connectez-vous pour accéder à votre boîte mail.</div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="login-email" placeholder="jean@entreprise.fr" autocomplete="email">
+          <div class="error-msg" id="err-login-email">Email invalide</div>
+        </div>
+        <div class="form-group">
+          <label>Mot de passe</label>
+          <div class="forgot-link"><a href="#" href="forgot.html">Mot de passe oublié ?</a></div>
+          <input type="password" id="login-pwd" placeholder="••••••••" autocomplete="current-password">
+          <div class="error-msg" id="err-login-pwd">Identifiants incorrects</div>
+        </div>
+
+        <button class="submit-btn" id="btn-login" onclick="handleLogin()">
+          <span id="login-ico">🔑</span><span id="login-txt">Se connecter</span>
+        </button>
+
+        <div class="switch-link">
+          Pas encore de compte ? <a href="#" onclick="showTab('signup')">Créer un compte →</a>
+        </div>
+      </form>
+
+      <!-- SIGNUP FORM -->
+      <div id="form-signup">
+
+        <!-- ── ÉTAPE 1 — Infos compte ── -->
+        <div id="step-1">
+          <div class="auth-title">Créer votre compte</div>
+          <div class="auth-sub">14 jours gratuits, sans carte bancaire. Prêt en 2 minutes.</div>
+
+          <!-- Indicateur étapes -->
+          <div style="display:flex;gap:6px;margin-bottom:20px">
+            <div style="flex:1;height:3px;border-radius:3px;background:var(--green)"></div>
+            <div style="flex:1;height:3px;border-radius:3px;background:var(--bdr)" id="step2-bar"></div>
+          </div>
+          <div style="font-size:11px;color:var(--ink3);margin-bottom:16px">Étape 1/2 — Vos informations</div>
+
+          <!-- Plan selector -->
+          <div class="plan-selector" id="plan-selector">
+            <div class="plan-opt" id="opt-solo" onclick="choosePlan('solo')">
+              <div class="plan-opt-name">Solo ✨</div>
+              <div class="plan-opt-price">99€</div>
+              <div class="plan-opt-period">1 boîte/mois</div>
+            </div>
+            <div class="plan-opt sel" id="opt-team" onclick="choosePlan('team')">
+              <div class="plan-opt-name" style="color:var(--green)">Équipe ⭐</div>
+              <div class="plan-opt-price">900€</div>
+              <div class="plan-opt-period">10 boîtes/mois</div>
+            </div>
+            <div class="plan-opt" id="opt-enterprise" onclick="choosePlan('enterprise')">
+              <div class="plan-opt-name">Entrep. 🏢</div>
+              <div class="plan-opt-price">1 780€</div>
+              <div class="plan-opt-period">20 boîtes/mois</div>
+            </div>
+          </div>
+
+          <div class="input-row">
+            <div class="form-group">
+              <label>Prénom *</label>
+              <input type="text" id="su-prenom" placeholder="Jean" required autocomplete="given-name">
+            </div>
+            <div class="form-group">
+              <label>Nom *</label>
+              <input type="text" id="su-nom" placeholder="Dupont" required autocomplete="family-name">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Email professionnel *</label>
+            <input type="email" id="su-email" placeholder="jean@entreprise.fr" required autocomplete="email">
+            <div class="error-msg" id="err-su-email">Email invalide</div>
+          </div>
+          <div class="form-group">
+            <label>Entreprise</label>
+            <input type="text" id="su-company" placeholder="Plomberie Dupont" autocomplete="organization">
+          </div>
+          <div class="form-group">
+            <label>Mot de passe *</label>
+            <input type="password" id="su-pwd" placeholder="8 caractères minimum" minlength="8" required oninput="checkPwdStrength(this.value)" autocomplete="new-password">
+            <div class="pwd-strength" id="pwd-strength"></div>
+            <div class="pwd-hint" id="pwd-hint">Entrez au moins 8 caractères</div>
+          </div>
+
+          <div class="legal-checks">
+            <div class="legal-check">
+              <input type="checkbox" id="chk-cgu" required>
+              <label for="chk-cgu">J'accepte les <a href="legal.html#cgu">CGU</a></li><li><a href="cgv.html">CGV</a> et la <a href="legal.html#privacy">Politique de confidentialité</a> de MailOne. *</label>
+            </div>
+            <div class="legal-check">
+              <input type="checkbox" id="chk-marketing">
+              <label for="chk-marketing">J'accepte de recevoir des communications de MailOne (optionnel).</label>
+            </div>
+          </div>
+
+          <button class="submit-btn" id="btn-step1" onclick="goToStep2()">
+            Continuer →
+          </button>
+
+          <div class="switch-link">
+            Déjà un compte ? <a href="#" onclick="showTab('login')">Se connecter →</a>
+          </div>
+        </div>
+
+        <!-- ── ÉTAPE 2 — Profil activité ── -->
+        <div id="step-2" style="display:none">
+          <div class="auth-title">Votre activité</div>
+          <div class="auth-sub">Pour personnaliser MailOne à votre métier — 30 secondes.</div>
+
+          <!-- Indicateur étapes -->
+          <div style="display:flex;gap:6px;margin-bottom:20px">
+            <div style="flex:1;height:3px;border-radius:3px;background:var(--green)"></div>
+            <div style="flex:1;height:3px;border-radius:3px;background:var(--green)"></div>
+          </div>
+          <div style="font-size:11px;color:var(--ink3);margin-bottom:20px">Étape 2/2 — Votre profil</div>
+
+          <!-- TYPE D'ACTIVITÉ -->
+          <div style="margin-bottom:20px">
+            <label style="font-size:12px;font-weight:700;color:var(--ink2);display:block;margin-bottom:10px">Quel est votre type d'activité ? *</label>
+            <div id="activity-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div class="activity-card" onclick="selectActivity('artisan', this)" data-value="artisan">
+                <span class="ac-ico">🔧</span>
+                <div class="ac-label">Artisan & BTP</div>
+                <div class="ac-sub">Plombier, électricien, maçon…</div>
+              </div>
+              <div class="activity-card" onclick="selectActivity('commerce', this)" data-value="commerce">
+                <span class="ac-ico">🛍️</span>
+                <div class="ac-label">Commerce & Retail</div>
+                <div class="ac-sub">Boutique, magasin, e-commerce…</div>
+              </div>
+              <div class="activity-card" onclick="selectActivity('restauration', this)" data-value="restauration">
+                <span class="ac-ico">🍽️</span>
+                <div class="ac-label">Restauration & Food</div>
+                <div class="ac-sub">Restaurant, boulangerie, traiteur…</div>
+              </div>
+              <div class="activity-card" onclick="selectActivity('transport', this)" data-value="transport">
+                <span class="ac-ico">🚚</span>
+                <div class="ac-label">Transport & Logistique</div>
+                <div class="ac-sub">Transporteur, livreur, déménageur…</div>
+              </div>
+              <div class="activity-card" onclick="selectActivity('sante', this)" data-value="sante">
+                <span class="ac-ico">🏥</span>
+                <div class="ac-label">Santé & Bien-être</div>
+                <div class="ac-sub">Kiné, coiffeur, coach…</div>
+              </div>
+              <div class="activity-card" onclick="selectActivity('services', this)" data-value="services">
+                <span class="ac-ico">💼</span>
+                <div class="ac-label">Services & Libéral</div>
+                <div class="ac-sub">Comptable, avocat, architecte…</div>
+              </div>
+              <div class="activity-card" onclick="selectActivity('agriculture', this)" data-value="agriculture">
+                <span class="ac-ico">🌿</span>
+                <div class="ac-label">Agriculture & Nature</div>
+                <div class="ac-sub">Agriculteur, paysagiste…</div>
+              </div>
+              <div class="activity-card" onclick="selectActivity('pme', this)" data-value="pme">
+                <span class="ac-ico">🏢</span>
+                <div class="ac-label">PME & Entreprise</div>
+                <div class="ac-sub">Gérant, dirigeant, responsable…</div>
+              </div>
+              <div class="activity-card" onclick="selectActivity('autre', this)" data-value="autre" style="grid-column:span 2">
+                <span class="ac-ico">🎯</span>
+                <div class="ac-label">Autre activité</div>
+                <div class="ac-sub">Mon activité n'est pas listée ci-dessus</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- MAILS PAR JOUR -->
+          <div style="margin-bottom:20px">
+            <label style="font-size:12px;font-weight:700;color:var(--ink2);display:block;margin-bottom:10px">Combien de mails recevez-vous par jour ? *</label>
+            <div style="display:flex;gap:8px">
+              <div class="mail-count-btn" onclick="selectMailCount('5-10', this)">5-10</div>
+              <div class="mail-count-btn" onclick="selectMailCount('10-20', this)">10-20</div>
+              <div class="mail-count-btn" onclick="selectMailCount('20-30', this)">20-30</div>
+              <div class="mail-count-btn" onclick="selectMailCount('30+', this)">30+</div>
+            </div>
+          </div>
+
+          <!-- TEMPS SUR LES MAILS -->
+          <div style="margin-bottom:20px">
+            <label style="font-size:12px;font-weight:700;color:var(--ink2);display:block;margin-bottom:10px">Combien de temps par jour sur vos mails ? *</label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <div class="mail-count-btn" onclick="selectTimeSpent('30min', this)">30 min</div>
+              <div class="mail-count-btn" onclick="selectTimeSpent('1h', this)">1 heure</div>
+              <div class="mail-count-btn" onclick="selectTimeSpent('2h', this)">2 heures</div>
+              <div class="mail-count-btn" onclick="selectTimeSpent('3h+', this)">3h+</div>
+            </div>
+          </div>
+
+          <!-- ROI PREVIEW (apparaît après sélection) -->
+          <div id="roi-preview" style="display:none;background:var(--green-l);border:1px solid #dcfce7;border-radius:12px;padding:14px 16px;margin-bottom:16px">
+            <div style="font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">✨ Votre ROI estimé avec MailOne</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div style="text-align:center">
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--green)" id="roi-hours">0h</div>
+                <div style="font-size:10px;color:var(--ink3)">gagnées / an</div>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--green)" id="roi-value">0€</div>
+                <div style="font-size:10px;color:var(--ink3)">de valeur récupérée</div>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--ink)" id="roi-cost">1 188€</div>
+                <div style="font-size:10px;color:var(--ink3)">MailOne / an</div>
+              </div>
+              <div style="text-align:center">
+                <div style="font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--green)" id="roi-pct">0%</div>
+                <div style="font-size:10px;color:var(--ink3)">ROI estimé</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px">
+            <button onclick="handleSignup()" class="btn btn-s" style="font-size:12px">Passer cette étape →</button>
+            <button onclick="backToStep1()" style="padding:12px 16px;border-radius:10px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--ink2)">← Retour</button>
+            <button class="submit-btn" id="btn-signup" onclick="handleSignup()" style="flex:1">
+              <span id="signup-ico">🚀</span><span id="signup-txt">Créer mon compte gratuitement</span>
+            </button>
+          </div>
+
+          <div style="font-size:11px;color:var(--ink4);text-align:center;margin-top:10px">Sans carte bancaire · 14 jours gratuits · Annulation à tout moment</div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="mailone.js"></script>
+<script>
+// ─────────────────────────────────────────────
+// READ URL PARAMS
+// ─────────────────────────────────────────────
+const params = new URLSearchParams(window.location.search);
+const action = params.get('action');
+const planParam = params.get('plan');
+const redirect = params.get('redirect') || 'app.html';
+
+// Redirect if already logged in
+Auth.redirectIfLoggedIn(redirect);
+
+// Set initial tab
+if (action === 'login') showTab('login');
+else showTab('signup');
+
+// Pre-select plan if passed from index
+let selectedPlan = planParam || PlanManager.get() || 'team';
+choosePlan(selectedPlan);
+
+// ─────────────────────────────────────────────
+// TABS
+// ─────────────────────────────────────────────
+function showTab(tab) {
+  document.getElementById('form-login').style.display = tab === 'login' ? 'block' : 'none';
+  document.getElementById('form-signup').style.display = tab === 'signup' ? 'block' : 'none';
+  document.getElementById('tab-login').classList.toggle('active', tab === 'login');
+  document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+}
+
+// ─────────────────────────────────────────────
+// PLAN SELECTOR
+// ─────────────────────────────────────────────
+const PLAN_INFO = {
+  solo:       { name:'Plan Solo ✨',       price:'99€',    desc:'1 boîte mail · IA Pro illimitée · 14j gratuits' },
+  team:       { name:'Plan Équipe ⭐',     price:'900€',   desc:'10 boîtes · IA Pro · Dashboard équipe · 14j gratuits' },
+  enterprise: { name:'Plan Entreprise 🏢', price:'1 780€', desc:'20 boîtes · Tout inclus · Support dédié · 14j gratuits' },
+};
+
+function choosePlan(plan) {
+  selectedPlan = plan;
+  PlanManager.set(plan);
+  document.querySelectorAll('.plan-opt').forEach(el => {
+    el.classList.remove('sel');
+    const nm = el.querySelector('.plan-opt-name');
+    if (nm) nm.style.color = '';
+  });
+  const el = document.getElementById('opt-' + plan);
+  if (el) { el.classList.add('sel'); el.querySelector('.plan-opt-name').style.color = 'var(--green)'; }
+
+  // Update left panel
+  const info = PLAN_INFO[plan];
+  if (info) {
+    document.getElementById('preview-name').textContent = info.name;
+    document.getElementById('preview-price').innerHTML = `${info.price}<span style="font-size:13px;font-weight:400;color:rgba(255,255,255,.3)">/mois</span>`;
+    document.getElementById('preview-desc').textContent = info.desc;
+  }
+}
+
+// ─────────────────────────────────────────────
+// PASSWORD STRENGTH
+// ─────────────────────────────────────────────
+function checkPwdStrength(val) {
+  const bar = document.getElementById('pwd-strength');
+  const hint = document.getElementById('pwd-hint');
+  if (!val) { bar.className = 'pwd-strength'; hint.textContent = 'Entrez au moins 8 caractères'; return; }
+  const strong = /[A-Z]/.test(val) && /[0-9]/.test(val) && val.length >= 10;
+  const medium = val.length >= 8;
+  if (strong)       { bar.className = 'pwd-strength strong'; hint.textContent = '✓ Mot de passe fort'; hint.style.color = 'var(--green)'; }
+  else if (medium)  { bar.className = 'pwd-strength medium'; hint.textContent = 'Moyen — ajoutez des chiffres ou majuscules'; hint.style.color = 'var(--amber)'; }
+  else              { bar.className = 'pwd-strength weak';   hint.textContent = 'Trop court'; hint.style.color = 'var(--red)'; }
+}
+
+
+// ── ÉTAPE 2 — NAVIGATION ────────────────────────────────────
+let selectedActivity = '';
+let selectedMailCount = '';
+let selectedTimeSpent = '';
+
+function goToStep2() {
+  const prenom = document.getElementById('su-prenom').value.trim();
+  const nom    = document.getElementById('su-nom').value.trim();
+  const email  = document.getElementById('su-email').value.trim();
+  const pwd    = document.getElementById('su-pwd').value;
+  const cgu    = document.getElementById('chk-cgu').checked;
+
+  if (!prenom || !nom) { showToast('⚠️', 'Prénom et nom requis.'); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFieldError('su-email', 'Email invalide.'); return; }
+  if (pwd.length < 8) { showFieldError('su-pwd', '8 caractères minimum.'); return; }
+  if (!cgu) { showToast('⚠️', 'Veuillez accepter les CGU.'); return; }
+
+  // Passer à l'étape 2
+  document.getElementById('step-1').style.display = 'none';
+  document.getElementById('step-2').style.display = 'block';
+  document.getElementById('step2-bar').style.background = 'var(--green)';
+}
+
+function backToStep1() {
+  document.getElementById('step-2').style.display = 'none';
+  document.getElementById('step-1').style.display = 'block';
+}
+
+function selectActivity(val, el) {
+  selectedActivity = val;
+  document.querySelectorAll('.activity-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  updateROI();
+}
+
+function selectMailCount(val, el) {
+  selectedMailCount = val;
+  document.querySelectorAll('.mail-count-btn').forEach(b => {
+    if (b.textContent.trim() !== '' && ['5-10','10-20','20-30','30+'].includes(b.textContent.trim())) {
+      b.classList.remove('selected');
+    }
+  });
+  el.classList.add('selected');
+  updateROI();
+}
+
+function selectTimeSpent(val, el) {
+  selectedTimeSpent = val;
+  document.querySelectorAll('.mail-count-btn').forEach(b => {
+    if (['30 min','1 heure','2 heures','3h+'].includes(b.textContent.trim())) {
+      b.classList.remove('selected');
+    }
+  });
+  el.classList.add('selected');
+  updateROI();
+}
+
+// ── CALCULATEUR ROI ──────────────────────────────────────────
+function updateROI() {
+  if (!selectedMailCount || !selectedTimeSpent) return;
+
+  // Temps perdu par an (en heures)
+  const timeMap = { '30min': 0.5, '1h': 1, '2h': 2, '3h+': 3 };
+  const hoursPerDay = timeMap[selectedTimeSpent] || 1;
+  const hoursPerYear = Math.round(hoursPerDay * 220); // 220 jours travaillés
+
+  // Valeur horaire selon l'activité
+  const rateMap = {
+    'artisan': 55, 'commerce': 40, 'restauration': 35,
+    'transport': 40, 'sante': 60, 'services': 80,
+    'agriculture': 35, 'pme': 70, 'autre': 50,
+  };
+  const hourlyRate = rateMap[selectedActivity] || 50;
+
+  // MailOne économise 80% du temps mail
+  const savedHours = Math.round(hoursPerYear * 0.8);
+  const savedValue = savedHours * hourlyRate;
+  const mailoneCost = selectedPlan === 'solo' ? 1188 : selectedPlan === 'team' ? 10800 : 21360;
+  const roi = Math.round((savedValue - mailoneCost) / mailoneCost * 100);
+
+  // Afficher
+  document.getElementById('roi-hours').textContent = savedHours + 'h';
+  document.getElementById('roi-value').textContent = savedValue.toLocaleString('fr-FR') + '€';
+  document.getElementById('roi-cost').textContent = mailoneCost.toLocaleString('fr-FR') + '€';
+  document.getElementById('roi-pct').textContent = roi + '%';
+  document.getElementById('roi-preview').style.display = 'block';
+
+  // Sauvegarder pour la page succès
+  localStorage.setItem('mailone_roi', JSON.stringify({
+    activity: selectedActivity,
+    mailCount: selectedMailCount,
+    timeSpent: selectedTimeSpent,
+    savedHours,
+    savedValue,
+    mailoneCost,
+    roi,
+  }));
+}
+
+// ─────────────────────────────────────────────
+// LOGIN — Vraie API
+// ─────────────────────────────────────────────
+async function handleLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pwd   = document.getElementById('login-pwd').value;
+  if (!email || !pwd) return;
+
+  const btn = document.getElementById('btn-login');
+  setButtonLoading(btn, true, '⏳ Connexion…');
+  clearFieldError('login-email');
+  clearFieldError('login-pwd');
+
+  try {
+    await Auth.login({ email, password: pwd });
+    window.location.href = redirect;
+  } catch (err) {
+    setButtonLoading(btn, false);
+    if (err.status === 401) {
+      showFieldError('login-pwd', 'Email ou mot de passe incorrect.');
+    } else if (err.code === 'NETWORK_ERROR') {
+      showToast('⚠️', 'Impossible de joindre le serveur. Vérifiez votre connexion.');
+    } else {
+      showToast('⚠️', err.message || 'Erreur lors de la connexion.');
+    }
+  }
+}
+
+// ─────────────────────────────────────────────
+// SIGNUP — Vraie API
+// ─────────────────────────────────────────────
+async function handleSignup() {
+  const prenom  = document.getElementById('su-prenom').value.trim();
+  const nom     = document.getElementById('su-nom').value.trim();
+  const email   = document.getElementById('su-email').value.trim();
+  const company = document.getElementById('su-company').value.trim();
+  const pwd     = document.getElementById('su-pwd').value;
+  const cgu     = document.getElementById('chk-cgu').checked;
+
+  // Validation locale
+  if (!prenom || !nom) { showToast('⚠️', 'Prénom et nom requis.'); return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showFieldError('su-email', 'Email invalide.'); return; }
+  if (pwd.length < 8) { showFieldError('su-pwd', '8 caractères minimum.'); return; }
+  if (!cgu) { showToast('⚠️', 'Veuillez accepter les CGU pour continuer.'); return; }
+
+  const btn = document.getElementById('btn-signup');
+  setButtonLoading(btn, true, '⏳ Création du compte…');
+  clearFieldError('su-email');
+  clearFieldError('su-pwd');
+
+  try {
+    // Vérifier si un code parrainage est dans l'URL
+    const referralCode = Referral.getCodeFromURL();
+
+    await Auth.register({
+      firstName:    prenom,
+      lastName:     nom,
+      email,
+      password:     pwd,
+      company,
+      plan:         selectedPlan,
+      billing:      localStorage.getItem('mailone_billing') || 'monthly',
+      marketing:    document.getElementById('chk-marketing').checked,
+      referralCode,
+      sector:       selectedActivity,
+      mailVolume:   selectedMailCount,
+      timeOnMails:  selectedTimeSpent,
+    });
+
+    // Rediriger vers la page succès
+    window.location.href = 'success.html';
+
+  } catch (err) {
+    setButtonLoading(btn, false);
+    if (err.status === 409) {
+      showFieldError('su-email', 'Un compte existe déjà avec cet email.');
+    } else if (err.code === 'NETWORK_ERROR') {
+      showToast('⚠️', 'Impossible de joindre le serveur. Vérifiez votre connexion.');
+    } else {
+      showToast('⚠️', err.message || 'Erreur lors de la création du compte.');
+    }
+  }
+}
+
+// Enter key support
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    if (document.getElementById('form-login').style.display !== 'none') handleLogin();
+    else handleSignup();
+  }
+});
+</script>
+</body>
+</html>
