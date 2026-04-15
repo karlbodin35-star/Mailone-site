@@ -202,17 +202,17 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   </div>
   <div class="sb-sec">
     <div class="sb-lbl">Boîte mail</div>
-    <div class="sb-item active" onclick="setSb(this)"><span class="sb-ico">📬</span>Réception<span class="sb-badge r" id="sb-inbox">4</span></div>
+    <div class="sb-item active" onclick="setSb(this)"><span class="sb-ico">📬</span>Réception<span class="sb-badge r" id="sb-inbox">0</span></div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📤</span>Envoyés</div>
-    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📝</span>Brouillons<span class="sb-badge b">1</span></div>
+    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📝</span>Brouillons</div>
   </div>
   <div class="sb-div"></div>
   <div class="sb-sec">
     <div class="sb-lbl">Catégories IA</div>
-    <div class="sb-item" onclick="filterCat('urgent');setSb(this)"><span class="sb-ico">🚨</span>Urgences<span class="sb-badge r" id="sb-u">2</span></div>
-    <div class="sb-item" onclick="filterCat('quote');setSb(this)"><span class="sb-ico">📋</span>Devis<span class="sb-badge b" id="sb-d">3</span></div>
-    <div class="sb-item" onclick="filterCat('appt');setSb(this)"><span class="sb-ico">📅</span>Rendez-vous<span class="sb-badge g" id="sb-r">2</span></div>
-    <div class="sb-item" onclick="filterCat('invoice');setSb(this)"><span class="sb-ico">💰</span>Factures<span class="sb-badge a" id="sb-f">1</span></div>
+    <div class="sb-item" onclick="filterCat('urgent');setSb(this)"><span class="sb-ico">🚨</span>Urgences<span class="sb-badge r" id="sb-u">0</span></div>
+    <div class="sb-item" onclick="filterCat('quote');setSb(this)"><span class="sb-ico">📋</span>Devis<span class="sb-badge b" id="sb-d">0</span></div>
+    <div class="sb-item" onclick="filterCat('appt');setSb(this)"><span class="sb-ico">📅</span>Rendez-vous<span class="sb-badge g" id="sb-r">0</span></div>
+    <div class="sb-item" onclick="filterCat('invoice');setSb(this)"><span class="sb-ico">💰</span>Factures<span class="sb-badge a" id="sb-f">0</span></div>
   </div>
   <div class="sb-div"></div>
   <div class="sb-sec">
@@ -260,17 +260,17 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   </div>
 
   <div class="stats-bar">
-    <div class="stat" onclick="filterCat('urgent')"><div class="stat-ico" style="background:var(--urgent-bg)">🚨</div><div><div class="stat-num" id="stat-u">2</div><div class="stat-lbl">Urgences</div><div class="stat-trend t-dn">↑ +1 aujourd'hui</div></div></div>
-    <div class="stat" onclick="filterCat('quote')"><div class="stat-ico" style="background:var(--quote-bg)">📋</div><div><div class="stat-num" id="stat-d">3</div><div class="stat-lbl">Devis</div><div class="stat-trend t-up">↑ 2 nouvelles</div></div></div>
-    <div class="stat" onclick="filterCat('appt')"><div class="stat-ico" style="background:var(--appt-bg)">📅</div><div><div class="stat-num" id="stat-r">2</div><div class="stat-lbl">RDV</div><div class="stat-trend t-neu">→ Cette semaine</div></div></div>
-    <div class="stat" onclick="filterCat('invoice')"><div class="stat-ico" style="background:var(--invoice-bg)">💰</div><div><div class="stat-num" id="stat-f">1</div><div class="stat-lbl">Factures</div><div class="stat-trend t-dn">⚠️ 3 240 €</div></div></div>
+    <div class="stat" onclick="filterCat('urgent')"><div class="stat-ico" style="background:var(--urgent-bg)">🚨</div><div><div class="stat-num" id="stat-u">0</div><div class="stat-lbl">Urgences</div><div class="stat-trend t-neu">— En attente de mails</div></div></div>
+    <div class="stat" onclick="filterCat('quote')"><div class="stat-ico" style="background:var(--quote-bg)">📋</div><div><div class="stat-num" id="stat-d">0</div><div class="stat-lbl">Devis</div><div class="stat-trend t-neu">— En attente de mails</div></div></div>
+    <div class="stat" onclick="filterCat('appt')"><div class="stat-ico" style="background:var(--appt-bg)">📅</div><div><div class="stat-num" id="stat-r">0</div><div class="stat-lbl">RDV</div><div class="stat-trend t-neu">— En attente de mails</div></div></div>
+    <div class="stat" onclick="filterCat('invoice')"><div class="stat-ico" style="background:var(--invoice-bg)">💰</div><div><div class="stat-num" id="stat-f">0</div><div class="stat-lbl">Factures</div><div class="stat-trend t-neu">— En attente de mails</div></div></div>
   </div>
 
   <div class="content">
     <div class="mail-panel">
       <div class="mp-head">
         <div class="mp-title" id="mp-title">Boîte de réception</div>
-        <div class="mp-count" id="mp-count">8 messages</div>
+        <div class="mp-count" id="mp-count">0 message</div>
       </div>
       <div class="ftabs">
         <button class="ftab all" onclick="setFilter('all',this)">Tous</button>
@@ -380,17 +380,10 @@ document.getElementById('sb-plan-pill').textContent = planPillTxts[plan] || plan
 
 // ════════════════════════════════════════════════════════════════
 // MAILS DATA
+// La liste est vide au démarrage — les emails seront chargés
+// depuis la vraie boîte mail de l'utilisateur (IMAP / OAuth).
 // ════════════════════════════════════════════════════════════════
-const MAILS = [
-  {id:1,cat:'urgent',unread:true,follow:false,sender:'Bernard Talon',email:'b.talon@sfr.fr',company:'Particulier',subject:'URGENT — Chaudière en panne, pas de chauffage',time:'07h48',date:'Aujourd\'hui',summary:'Chaudière tombée en panne cette nuit. Famille avec jeunes enfants, 12°C. Code E3.',body:`Bonjour M. ${_ln},\n\nJe vous contacte en urgence. Notre chaudière est tombée en panne cette nuit et il fait 12°C dans la maison. Nous avons deux jeunes enfants.\n\nVotre entreprise a installé la chaudière il y a 3 ans. Le display affiche le code E3.\n\nPouvez-vous envoyer quelqu'un aujourd'hui ?\n\nBernard Talon\n07 82 45 63 21`,ai:{prio:'🔴 Critique',col:'red',delay:'Immédiat',action:'Appel + intervention J0',tone:'Rassurant & réactif',analyse:'Client fidèle (installation + révision). Famille avec enfants en bas âge à 12°C = urgence absolue. Code E3 = défaut allumage. Intervention J0 impérative.'}},
-  {id:2,cat:'quote',unread:true,follow:true,sender:'Sophie Leclerc',email:'sophie.leclerc@orange.fr',company:'Particulier',subject:'Re : Devis — Rénovation salle de bain 12m²',time:'09h15',date:'Aujourd\'hui',summary:'Relance devis SDB envoyé il y a 5 jours. Budget 8–10k€. Prête à signer.',body:`Bonjour,\n\nJe me permets de vous relancer concernant ma demande de devis pour la rénovation de ma salle de bain.\n\nMon budget est de 8 000 à 10 000 €. J'ai contacté un autre artisan mais je préfère travailler avec vous.\n\nSophie Leclerc\n06 78 34 12 90`,ai:{prio:'🔥 Commercial',col:'blue',delay:'Aujourd\'hui',action:'Proposer visite cette semaine',tone:'Commercial & réactif',analyse:'Lead chaud : budget confirmé, relance spontanée, concurrent contacté. Fenêtre max 24-48h. Réponse rapide avec visite = conversion probable.'}},
-  {id:3,cat:'urgent',unread:false,follow:false,sender:'Syndic Les Acacias',email:'syndic@acacias-immo.fr',company:'Syndic',subject:'URGENT — Dégât des eaux cave N°12',time:'Hier',date:'Hier',summary:'Dégât des eaux cave. 3 copropriétaires affectés. Rapport assurance requis sous 48h.',body:`Monsieur ${_ln},\n\nDégât des eaux important en cave N°12. Notre assurance attend un rapport d'intervention sous 48h.\n\nMarie Fontaine — Gestionnaire`,ai:{prio:'🔴 Critique',col:'red',delay:'< 48h',action:'Intervention + rapport technique',tone:'Professionnel & précis',analyse:'Client pro avec contrat de maintenance. Double urgence : technique + administrative (délai assurance 48h). Rapport = document légal.'}},
-  {id:4,cat:'appt',unread:true,follow:true,sender:'Agence Bellevue Immobilier',email:'contact@bellevue-immo.fr',company:'Agence immo',subject:'RDV diagnostic — 14 rue des Lilas — Avant vente',time:'Hier',date:'Hier',summary:'3 créneaux proposés pour diagnostic avant vente. Acheteur pressé, pas de confirmation.',body:`Bonjour M. ${_ln},\n\nCréneaux disponibles :\n— Mardi 28 mars, 9h–12h\n— Jeudi 30 mars, toute la journée\n— Vendredi 31 mars, après-midi\n\nMarie-Claire Fontaine`,ai:{prio:'🟢 Planification',col:'green',delay:'< 24h',action:'Confirmer un créneau',tone:'Organisé & pro',analyse:'Pas de confirmation depuis 2 jours. Diagnostic avant vente = prestation facturée. Relation agence = projets futurs.'}},
-  {id:5,cat:'invoice',unread:true,follow:false,sender:'Bertrand SARL',email:'compta@bertrand-sarl.fr',company:'Entreprise',subject:'Facture N°2024-089 — RIB manquant',time:'Lun.',date:'Lundi',summary:'Paiement 3 240€ TTC bloqué. Compta attend IBAN.',body:`Bonjour,\n\nNotre comptabilité a besoin de votre RIB mis à jour (IBAN + BIC) pour le virement de 3 240,00 €.\n\nService Comptabilité — Bertrand SARL`,ai:{prio:'🟡 Administratif',col:'amber',delay:'Aujourd\'hui',action:'Envoyer IBAN + BIC',tone:'Efficace & précis',analyse:'Blocage simple. Paiement 3 240€ prêt → envoyer IBAN aujourd\'hui = encaissement en 5 jours.'}},
-  {id:6,cat:'quote',unread:false,follow:false,sender:'Jean-Paul Bernard',email:'jpbernard@free.fr',company:'Particulier',subject:'Devis remplacement chauffe-eau — Thermodynamique',time:'Dim.',date:'Dimanche',summary:'Remplacement chauffe-eau 200L par thermodynamique. Budget 1 500€. Week-ends.',body:`Bonjour,\n\nMon chauffe-eau électrique 200L a rendu l'âme. Je souhaite passer au thermodynamique.\n\nBudget : 1 500€. Disponible les week-ends.\n\nJean-Paul Bernard`,ai:{prio:'🔵 Normal',col:'blue',delay:'< 48h',action:'Proposer visite week-end',tone:'Commercial & précis',analyse:'Devis technique classique. Budget réaliste. Thermodynamique = marge élevée.'}},
-  {id:7,cat:'appt',unread:false,follow:false,sender:'Nathalie Rousseau',email:'n.rousseau@wanadoo.fr',company:'Particulier',subject:'Rappel RDV cuisine — Jeudi 28 mars 10h',time:'Sam.',date:'Samedi',summary:'Rappel RDV jeudi 28 mars 10h. Confirmer présence.',body:`Bonjour M. ${_ln},\n\nJe vous rappelle notre rendez-vous jeudi 28 mars à 10h pour la prise de mesures cuisine.\n\nPouvez-vous confirmer ?\n\nNathalie Rousseau`,ai:{prio:'🟢 Planification',col:'green',delay:'Aujourd\'hui',action:'Confirmer présence jeudi',tone:'Ponctuel & fiable',analyse:'RDV dans 2 jours. Confirmation attendue. Ne pas répondre = no-show perçu.'}},
-  {id:8,cat:'quote',unread:false,follow:false,sender:'Mairie de Saint-Cyr',email:'travaux@mairie-stcyr.fr',company:'Collectivité',subject:'Consultation — Plomberie école Jules Ferry',time:'Ven.',date:'Vendredi',summary:'Marché public plomberie école. 40–50k€ HT. Offres avant 15 avril.',body:`La commune lance une consultation pour la réfection plomberie de l'école Jules Ferry.\n\nEstimation : 40 000–50 000 € HT. Offres avant le 15 avril.\n\nService Travaux`,ai:{prio:'🔵 Commercial',col:'blue',delay:'Avant 15 avril',action:'Demander le cahier des charges',tone:'Formel & stratégique',analyse:'Marché public 40-50k€. Opportunité significative. Délai confortable mais dossier technique à préparer sérieusement.'}},
-];
+const MAILS = [];
 
 // ════════════════════════════════════════════════════════════════
 // LOCAL AI AGENT
@@ -439,6 +432,13 @@ function catLabel(c){return{urgent:'🚨 Urgent',quote:'📋 Devis',appt:'📅 R
 function renderList(){
   const data=filter==='all'?MAILS:MAILS.filter(m=>m.cat===filter);
   document.getElementById('mp-count').textContent=data.length+' message'+(data.length>1?'s':'');
+  if(data.length===0){
+    const emptyMsg=filter==='all'
+      ?'<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:40px 20px;text-align:center"><div style="font-size:36px;opacity:.18">📭</div><div style="font-size:13px;font-weight:600;color:var(--ink3)">Aucun email pour l\'instant</div><div style="font-size:11px;color:var(--ink4);line-height:1.6;max-width:200px">Votre boîte mail s\'affichera ici une fois votre compte connecté.</div></div>'
+      :'<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:40px 20px;text-align:center"><div style="font-size:32px;opacity:.18">🔍</div><div style="font-size:12px;color:var(--ink3)">Aucun email dans cette catégorie</div></div>';
+    document.getElementById('mail-list').innerHTML=emptyMsg;
+    return;
+  }
   document.getElementById('mail-list').innerHTML=data.map((m,i)=>`
     <div class="mcard ${m.unread?'unread':''} ${current?.id===m.id?'sel':''}" id="mc-${m.id}" onclick="openMail(${m.id})" style="animation-delay:${i*.04}s">
       <div class="mc-row"><div class="mc-dot" style="background:${m.unread?catColor(m.cat):'transparent'};border:${m.unread?'none':'1.5px solid var(--bdr2)'}"></div><div class="mc-sender">${m.sender}</div><div class="mc-time">${m.time}</div></div>
@@ -654,7 +654,6 @@ loadQuota();
 
 renderList();
 updateStats();
-if(MAILS[0]) selectMail(MAILS[0]);
 </script>
 <div class="toast" id="toast" style="position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9998;max-width:320px;border:1px solid rgba(255,255,255,.08)"><span id="t-ico"></span><span id="t-msg"></span></div>
 </body>

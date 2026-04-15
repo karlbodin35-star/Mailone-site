@@ -106,6 +106,19 @@ input.error{border-color:var(--red)}
 .mail-count-btn:hover{border-color:var(--bdr2)}
 .mail-count-btn.selected{border-color:var(--green);background:var(--green-l);color:var(--green)}
 
+/* ── ÉTAPE MAIL — CONNECT MAILBOX ── */
+#step-mail{display:none}
+.mail-provider-btn{display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;border:1.5px solid var(--bdr);border-radius:10px;background:var(--sur);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--ink);transition:all .15s;margin-bottom:9px;text-align:left}
+.mail-provider-btn:hover{border-color:var(--bdr2);background:var(--bg);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.mail-provider-btn .prov-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mail-provider-btn .prov-name{flex:1}
+.mail-provider-btn .prov-badge{font-size:9px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--green-l);color:var(--green);border:1px solid #bbf7d0}
+.imap-form{background:var(--bg);border:1.5px solid var(--bdr);border-radius:10px;padding:14px;margin-top:4px;display:none}
+.imap-form.open{display:block}
+.imap-form .form-group{margin-bottom:9px}
+.skip-link{display:block;text-align:center;font-size:12px;color:var(--ink4);margin-top:14px;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.skip-link:hover{color:var(--ink3)}
+
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta property="og:type" content="website">
@@ -386,6 +399,89 @@ input.error{border-color:var(--red)}
           <div style="font-size:11px;color:var(--ink4);text-align:center;margin-top:10px">Sans carte bancaire · 14 jours gratuits · Annulation à tout moment</div>
         </div>
 
+        <!-- ── ÉTAPE MAIL — Connecter la boîte mail ── -->
+        <div id="step-mail">
+          <div class="auth-title">Connectez votre boîte mail 📬</div>
+          <div class="auth-sub" id="step-mail-sub">Choisissez comment synchroniser vos emails avec MailOne.</div>
+
+          <!-- Indicateur étapes -->
+          <div style="display:flex;gap:6px;margin-bottom:20px">
+            <div style="flex:1;height:3px;border-radius:3px;background:var(--green)"></div>
+            <div style="flex:1;height:3px;border-radius:3px;background:var(--green)"></div>
+            <div style="flex:1;height:3px;border-radius:3px;background:var(--green)" id="step-mail-bar"></div>
+          </div>
+          <div style="font-size:11px;color:var(--ink3);margin-bottom:20px" id="step-mail-label">Étape — Connexion boîte mail</div>
+
+          <!-- Gmail -->
+          <button class="mail-provider-btn" onclick="connectProvider('gmail')">
+            <div class="prov-ico" style="background:#fef2f2">
+              <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M44 24c0-1.2-.1-2.4-.3-3.5H24v6.6h11.3c-.5 2.6-2 4.8-4.2 6.2v5.1h6.8C41.8 35.1 44 29.9 44 24z" fill="#4285F4"/><path d="M24 44c5.6 0 10.4-1.9 13.8-5.1l-6.8-5.1c-1.9 1.3-4.3 2-7 2-5.4 0-9.9-3.6-11.5-8.4H5.5v5.3C8.9 39.6 16 44 24 44z" fill="#34A853"/><path d="M12.5 27.4A12.2 12.2 0 0112.5 20.6V15.3H5.5a20 20 0 000 17.4l7-5.3z" fill="#FBBC05"/><path d="M24 11.8c3 0 5.7 1 7.8 3l5.8-5.8C34.4 5.8 29.5 4 24 4 16 4 8.9 8.4 5.5 15.3l7 5.3c1.6-4.8 6.1-8.8 11.5-8.8z" fill="#EA4335"/></svg>
+            </div>
+            <span class="prov-name">Connecter Gmail</span>
+            <span class="prov-badge">OAuth sécurisé</span>
+          </button>
+
+          <!-- Outlook -->
+          <button class="mail-provider-btn" onclick="connectProvider('outlook')">
+            <div class="prov-ico" style="background:#eff6ff">
+              <svg width="18" height="18" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="48" height="48" rx="6" fill="#0078D4"/><text x="8" y="34" font-size="28" font-family="Arial" fill="white" font-weight="bold">O</text></svg>
+            </div>
+            <span class="prov-name">Connecter Outlook / Microsoft 365</span>
+            <span class="prov-badge">OAuth sécurisé</span>
+          </button>
+
+          <!-- IMAP manuel -->
+          <button class="mail-provider-btn" onclick="toggleImapForm()" id="btn-imap">
+            <div class="prov-ico" style="background:var(--bg2)">⚙️</div>
+            <span class="prov-name">Configuration manuelle IMAP / SMTP</span>
+          </button>
+
+          <!-- Formulaire IMAP -->
+          <div class="imap-form" id="imap-form">
+            <div class="form-group">
+              <label>Serveur IMAP</label>
+              <input type="text" id="imap-server" placeholder="imap.exemple.fr" autocomplete="off">
+            </div>
+            <div class="input-row">
+              <div class="form-group">
+                <label>Port IMAP</label>
+                <input type="number" id="imap-port" placeholder="993">
+              </div>
+              <div class="form-group">
+                <label>Sécurité</label>
+                <input type="text" id="imap-ssl" placeholder="SSL/TLS">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Serveur SMTP</label>
+              <input type="text" id="smtp-server" placeholder="smtp.exemple.fr" autocomplete="off">
+            </div>
+            <div class="input-row">
+              <div class="form-group">
+                <label>Port SMTP</label>
+                <input type="number" id="smtp-port" placeholder="587">
+              </div>
+              <div class="form-group">
+                <label>Sécurité</label>
+                <input type="text" id="smtp-ssl" placeholder="STARTTLS">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email de connexion</label>
+              <input type="email" id="imap-email" placeholder="vous@exemple.fr" autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label>Mot de passe (application)</label>
+              <input type="password" id="imap-pwd" placeholder="••••••••" autocomplete="new-password">
+            </div>
+            <button class="submit-btn" onclick="connectImap()" style="margin-top:4px">
+              Tester & connecter →
+            </button>
+          </div>
+
+          <span class="skip-link" onclick="skipMailConnect()">Passer cette étape pour l'instant →</span>
+        </div>
+
       </div>
 
     </div>
@@ -581,7 +677,7 @@ async function handleLogin() {
 
   try {
     await Auth.login({ email, password: pwd });
-    window.location.href = redirect;
+    showMailConnectStep('login');
   } catch (err) {
     setButtonLoading(btn, false);
     if (err.status === 401) {
@@ -635,8 +731,8 @@ async function handleSignup() {
       timeOnMails:  selectedTimeSpent,
     });
 
-    // Rediriger vers la page succès
-    window.location.href = 'success.html';
+    // Afficher l'étape connexion boîte mail
+    showMailConnectStep('signup');
 
   } catch (err) {
     setButtonLoading(btn, false);
@@ -657,6 +753,77 @@ document.addEventListener('keydown', e => {
     else handleSignup();
   }
 });
+
+// ─────────────────────────────────────────────
+// ÉTAPE CONNEXION BOÎTE MAIL
+// ─────────────────────────────────────────────
+let _mailConnectOrigin = 'login'; // 'login' | 'signup'
+
+function showMailConnectStep(origin) {
+  _mailConnectOrigin = origin || 'login';
+
+  if (origin === 'signup') {
+    // Masquer les étapes 1 et 2 du signup
+    document.getElementById('step-1').style.display = 'none';
+    document.getElementById('step-2').style.display = 'none';
+    document.getElementById('form-signup').style.display = 'block';
+    document.getElementById('form-login').style.display = 'none';
+    document.getElementById('step-mail-label').textContent = 'Dernière étape — Connexion boîte mail';
+    document.getElementById('step-mail-sub').textContent = 'Connectez votre boîte mail existante pour recevoir et analyser vos emails dans MailOne.';
+  } else {
+    // Pour le login : masquer le formulaire login, afficher le conteneur signup (qui héberge step-mail)
+    document.getElementById('form-login').style.display = 'none';
+    document.getElementById('form-signup').style.display = 'block';
+    document.getElementById('step-1').style.display = 'none';
+    document.getElementById('step-2').style.display = 'none';
+    document.getElementById('step-mail-label').textContent = 'Connectez votre boîte mail';
+    document.getElementById('step-mail-sub').textContent = 'Pour commencer à utiliser MailOne, connectez votre boîte mail.';
+  }
+
+  document.getElementById('step-mail').style.display = 'block';
+  // Masquer les tabs pour ne pas perturber l'UX
+  document.querySelector('.auth-tabs').style.display = 'none';
+}
+
+function connectProvider(provider) {
+  const labels = { gmail: 'Gmail', outlook: 'Outlook / Microsoft 365' };
+  showToast('🔗', `Connexion ${labels[provider] || provider} en cours… (fonctionnalité disponible en production)`);
+  // En production : déclencher le flux OAuth ici
+  // window.location.href = CONFIG.API_URL + '/auth/' + provider + '?redirect=app.html';
+  setTimeout(() => {
+    // Simulation : rediriger après le toast
+    finalizeMailConnect();
+  }, 1800);
+}
+
+function toggleImapForm() {
+  const form = document.getElementById('imap-form');
+  form.classList.toggle('open');
+}
+
+function connectImap() {
+  const server = document.getElementById('imap-server').value.trim();
+  const email  = document.getElementById('imap-email').value.trim();
+  const pwd    = document.getElementById('imap-pwd').value;
+  if (!server || !email || !pwd) {
+    showToast('⚠️', 'Veuillez remplir le serveur IMAP, l\'email et le mot de passe.');
+    return;
+  }
+  showToast('🔗', 'Test de la connexion IMAP… (fonctionnalité disponible en production)');
+  setTimeout(() => finalizeMailConnect(), 1800);
+}
+
+function skipMailConnect() {
+  finalizeMailConnect();
+}
+
+function finalizeMailConnect() {
+  if (_mailConnectOrigin === 'signup') {
+    window.location.href = 'success.html';
+  } else {
+    window.location.href = redirect;
+  }
+}
 </script>
 </body>
 </html>
