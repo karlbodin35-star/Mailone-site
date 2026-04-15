@@ -612,5 +612,21 @@ function setBilling(cycle){
   ['solo','team','ent'].forEach((id,i)=>{const btn=document.getElementById('btn-'+id);if(btn)btn.textContent=labels[cycle][i]});
 }
 
-function toggleFaq(el){const item=el.parentElement;const wasOpen=item.classList.contains('open');d</body>
+function toggleFaq(el){const item=el.parentElement;const wasOpen=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!wasOpen)item.classList.add('open');}
+
+// Mobile menu
+document.addEventListener('click',function(e){const mm=document.getElementById('mobile-menu');if(mm&&mm.classList.contains('open')&&!mm.contains(e.target)&&!e.target.closest('.menu-toggle'))mm.classList.remove('open');});
+</script>
+
+<div id="mobile-menu" class="mobile-menu">
+  <button class="mm-close" onclick="document.getElementById('mobile-menu').classList.remove('open')">✕</button>
+  <a href="#pourquoi" onclick="document.getElementById('mobile-menu').classList.remove('open')">Pourquoi MailOne ?</a>
+  <a href="#features" onclick="document.getElementById('mobile-menu').classList.remove('open')">Fonctionnalités</a>
+  <a href="#pricing" onclick="document.getElementById('mobile-menu').classList.remove('open')">Tarifs</a>
+  <a href="#faq" onclick="document.getElementById('mobile-menu').classList.remove('open')">FAQ</a>
+  <a href="demo.html" onclick="document.getElementById('mobile-menu').classList.remove('open')">Démo</a>
+  <a href="login.html" class="btn btn-s">Se connecter</a>
+  <a href="#pricing" class="btn btn-p" onclick="document.getElementById('mobile-menu').classList.remove('open')">Démarrer</a>
+</div>
+</body>
 </html>

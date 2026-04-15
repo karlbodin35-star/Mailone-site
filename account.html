@@ -121,6 +121,7 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
 <meta name="twitter:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
 <meta name="description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
 <link rel="stylesheet" href="shared.css">
+<script src="mailone.js"></script>
 </head>
 <body>
 
@@ -209,8 +210,8 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
         </div>
 
         <div class="action-row">
-          <button class="action-btn primary" onclick="openPortal()">⬆ Changer de plan</button>
-          <button class="action-btn outline-green" onclick="openPortal()">🔄 Passer à l'annuel (2 mois offerts)</button>
+          <button class="action-btn primary" onclick="openChangePlan()">⬆ Changer de plan</button>
+          <button class="action-btn outline-green" onclick="openSwitchAnnual()">🔄 Passer à l'annuel (2 mois offerts)</button>
           <button class="action-btn" onclick="openPortal()">💳 Modifier ma carte</button>
           <button class="action-btn" onclick="openPortal()">📄 Portail de facturation Stripe</button>
         </div>
@@ -460,7 +461,43 @@ async function saveProfile() {
   }
 }
 
-function openPortal() { StripeHelper.openPortal(); }
+// Stripe URLs — mode statique (remplacer par vos vraies URLs Stripe en production)
+const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/test_eVa3cQ9Fn4Ux9Hy000';
+const STRIPE_PLANS = {
+  solo:       { monthly: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy000', annual: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy001' },
+  team:       { monthly: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy002', annual: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy003' },
+  enterprise: { monthly: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy004', annual: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy005' },
+};
+
+async function openPortal() {
+  showToast('💳', 'Redirection vers le portail de facturation Stripe…');
+  try {
+    const data = await API.post('/api/stripe/portal', {});
+    if (data?.url) { window.location.href = data.url; return; }
+  } catch {}
+  // Fallback statique : ouvrir directement le portail Stripe
+  setTimeout(() => { window.open(STRIPE_PORTAL_URL, '_blank'); }, 800);
+}
+
+async function openChangePlan() {
+  showToast('💳', 'Redirection vers le choix de plan…');
+  try {
+    const data = await API.post('/api/stripe/portal', {});
+    if (data?.url) { window.location.href = data.url; return; }
+  } catch {}
+  setTimeout(() => { window.location.href = 'index.html#pricing'; }, 800);
+}
+
+async function openSwitchAnnual() {
+  const currentPlan = PlanManager.get() || 'solo';
+  const stripeUrl = STRIPE_PLANS[currentPlan]?.annual || STRIPE_PORTAL_URL;
+  showToast('💳', 'Redirection vers l\'offre annuelle…');
+  try {
+    const data = await API.post('/api/stripe/portal', {});
+    if (data?.url) { window.location.href = data.url; return; }
+  } catch {}
+  setTimeout(() => { window.open(stripeUrl, '_blank'); }, 800);
+}
 
 function dlInvoice(id) { showToast('📥', `Téléchargement de la facture ${id}…`); }
 
@@ -540,6 +577,5 @@ document.getElementById('modal-delete').addEventListener('click', e => {
   if (e.target.id === 'modal-delete') closeDeleteModal();
 });
 </script>
-<script src="mailone.js"></script>
 </body>
 </html>
