@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>try{if(localStorage.getItem("mailone_theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MailOne — Copilote IA pour votre boîte mail</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -230,6 +231,10 @@ footer{background:var(--g950);padding:48px clamp(20px,5vw,60px) 28px}
 .mm-close{position:absolute;top:16px;right:20px;background:none;border:none;cursor:pointer;font-size:24px;color:var(--g500)}
 @media(max-width:768px){.menu-toggle{display:block}.nav-links{display:none}}
 @media(min-width:769px){.mobile-menu{display:none!important}}
+
+[data-theme="dark"]{--white:#111113;--g50:#18181b;--g100:#27272a;--g200:#3f3f46;--g300:#52525b;--g400:#71717a;--g500:#a1a1aa;--g600:#d4d4d8;--g700:#e4e4e7;--g800:#f4f4f5;--g900:#fafafa;--g950:#ffffff;--bg:#111113;--bg2:#18181b;--sur:#1e1e22;--bdr:#2e2e34;--bdr2:#3f3f46;--ink:#f4f4f5;--ink2:#d4d4d8;--ink3:#a1a1aa;--ink4:#71717a;--green-l:rgba(22,163,74,.15);--amber-l:rgba(217,119,6,.15);--red-l:rgba(220,38,38,.15);--teal-l:rgba(13,148,136,.15);--purple-l:rgba(147,51,234,.15);--blue-l:rgba(37,99,235,.15)}
+[data-theme="dark"] body{background:var(--white);color:var(--g900)}
+[data-theme="dark"] nav{background:rgba(17,17,19,.92);border-bottom-color:var(--g200)}
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta property="og:type" content="website">
@@ -269,6 +274,7 @@ footer{background:var(--g950);padding:48px clamp(20px,5vw,60px) 28px}
 </button>
 
   <div class="nav-right" id="nav-right">
+    <button class="theme-toggle" data-theme-toggle onclick="ThemeManager.toggle()" title="Passer en mode sombre" aria-label="Basculer le thème">🌙</button>
     <a href="login.html" class="btn btn-s">Se connecter</a>
     <a href="#pricing" class="btn btn-p">Démarrer</a>
   </div>

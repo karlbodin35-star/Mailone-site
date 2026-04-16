@@ -2,6 +2,48 @@
 // mailone.js — Shared utilities + Real API client
 // ════════════════════════════════════════════════════════════
 
+// ── THEME MANAGER ────────────────────────────────────────────
+const ThemeManager = {
+  STORAGE_KEY: 'mailone_theme',
+
+  /** Apply saved theme on page load (also called by inline anti-flash script) */
+  init() {
+    try {
+      const saved = localStorage.getItem(this.STORAGE_KEY);
+      const theme = saved === 'dark' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+      this._updateButtons(theme);
+    } catch (e) {}
+  },
+
+  /** Toggle between light and dark, persist to localStorage */
+  toggle() {
+    try {
+      const current = this.get();
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem(this.STORAGE_KEY, next);
+      this._updateButtons(next);
+    } catch (e) {}
+  },
+
+  /** Return current theme ('light' | 'dark') */
+  get() {
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  },
+
+  /** Update all toggle button icons on the page */
+  _updateButtons(theme) {
+    document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
+      btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+      btn.title = theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre';
+    });
+  },
+};
+
+// Apply theme immediately at script load
+ThemeManager.init();
+
 const CONFIG = {
   API_URL: (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
     ? 'http://localhost:3000'

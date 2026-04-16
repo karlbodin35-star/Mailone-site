@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>try{var _t=localStorage.getItem("mailone_theme");document.documentElement.setAttribute("data-theme",_t==="light"?"light":"dark")}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Administration — MailOne</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -99,6 +100,23 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .toast.on{transform:translateY(0);opacity:1}
 
 @media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}.two-cols{grid-template-columns:1fr}.sidebar{width:180px}.main{margin-left:180px}}
+
+/* admin is natively dark — light mode override */
+[data-theme="light"]{--bg:#f4f4f5;--bg2:#fff;--bg3:#e4e4e7;--sur:#fff;--bdr:#e4e4e7;--bdr2:#d4d4d8;--ink:#18181b;--ink2:#3f3f46;--ink3:#71717a;--ink4:#a1a1aa;--green-l:rgba(22,163,74,.12);--amber-l:rgba(217,119,6,.12);--red-l:rgba(220,38,38,.12);--blue-l:rgba(37,99,235,.12)}
+[data-theme="light"] body{background:var(--bg);color:var(--ink)}
+[data-theme="light"] .sidebar{background:var(--bg2);border-right-color:var(--bdr)}
+[data-theme="light"] .sb-logo,[data-theme="light"] .sb-item,[data-theme="light"] .sb-lbl,[data-theme="light"] .sb-logout{color:var(--ink3)}
+[data-theme="light"] .sb-item:hover{background:var(--bg3);color:var(--ink)}
+[data-theme="light"] .sb-item.active{background:var(--bdr);color:var(--ink)}
+[data-theme="light"] .sb-div{background:var(--bdr)}
+[data-theme="light"] .sb-bottom{border-top-color:var(--bdr)}
+[data-theme="light"] .topbar{background:var(--sur);border-color:var(--bdr)}
+[data-theme="light"] .tb-title{color:var(--ink)}
+[data-theme="light"] .tb-btn{border-color:var(--bdr);color:var(--ink2)}
+[data-theme="light"] .tb-btn:hover{background:var(--bg3)}
+[data-theme="light"] .kpi,[data-theme="light"] .card{background:var(--sur);border-color:var(--bdr)}
+[data-theme="light"] th,[data-theme="light"] td{border-color:var(--bdr)}
+[data-theme="light"] td{color:var(--ink2)}
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta property="og:type" content="website">
@@ -152,6 +170,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tb-title">Dashboard Admin</div>
     <div style="font-size:11px;color:var(--ink4)" id="tb-date"></div>
     <div class="tb-right">
+      <button class="theme-toggle-dark" data-theme-toggle onclick="ThemeManager.toggle()" title="Passer en mode sombre" aria-label="Basculer le thème">🌙</button>
       <button class="tb-btn" onclick="exportData()">📥 Export CSV</button>
       <button class="tb-btn green" onclick="showToastMsg('📤','Rapport mensuel envoyé par email')">📊 Rapport mensuel</button>
     </div>
@@ -366,6 +385,35 @@ function showToastMsg(ico, msg) {
   t.classList.add('on');
   setTimeout(()=>t.classList.remove('on'), 3200);
 }
+
+// ── THEME MANAGER (admin: dark by default) ───────────────────
+const ThemeManager = {
+  STORAGE_KEY: 'mailone_theme',
+  init() {
+    try {
+      const saved = localStorage.getItem(this.STORAGE_KEY);
+      const theme = saved === 'light' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+      this._updateButtons(theme);
+    } catch(e) {}
+  },
+  toggle() {
+    try {
+      const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      const next = current === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem(this.STORAGE_KEY, next);
+      this._updateButtons(next);
+    } catch(e) {}
+  },
+  _updateButtons(theme) {
+    document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
+      btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+      btn.title = theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre';
+    });
+  },
+};
+ThemeManager.init();
 </script>
 </body>
 </html>

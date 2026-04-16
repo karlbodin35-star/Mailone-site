@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script>try{if(localStorage.getItem("mailone_theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mentions légales — MailOne</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -60,6 +61,10 @@ nav{position:sticky;top:0;z-index:100;height:58px;background:rgba(255,255,255,.9
 .mm-close{position:absolute;top:16px;right:20px;background:none;border:none;cursor:pointer;font-size:24px;color:var(--g500)}
 @media(max-width:768px){.menu-toggle{display:block}.nav-links{display:none}}
 @media(min-width:769px){.mobile-menu{display:none!important}}
+
+[data-theme="dark"]{--bg:#111113;--bg2:#18181b;--sur:#1e1e22;--bdr:#2e2e34;--bdr2:#3f3f46;--ink:#f4f4f5;--ink2:#d4d4d8;--ink3:#a1a1aa;--ink4:#71717a;--green-l:rgba(22,163,74,.15);--amber-l:rgba(217,119,6,.15);--red-l:rgba(220,38,38,.15);--teal-l:rgba(13,148,136,.15);--purple-l:rgba(147,51,234,.15);--blue-l:rgba(37,99,235,.15)}
+[data-theme="dark"] body{background:var(--bg);color:var(--ink)}
+[data-theme="dark"] nav,[data-theme="dark"] .topbar{background:rgba(17,17,19,.95);border-color:var(--bdr)}
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta property="og:type" content="website">
@@ -73,6 +78,7 @@ nav{position:sticky;top:0;z-index:100;height:58px;background:rgba(255,255,255,.9
 <meta name="description" content="CGU, politique de confidentialité et mentions légales.">
 <link rel="canonical" href="https://mailone.app/legal">
 <link rel="stylesheet" href="shared.css">
+<script src="mailone.js"></script>
 </head>
 <body>
 
@@ -84,6 +90,7 @@ nav{position:sticky;top:0;z-index:100;height:58px;background:rgba(255,255,255,.9
 </button>
 
   <div class="nav-right">
+    <button class="theme-toggle" data-theme-toggle onclick="ThemeManager.toggle()" title="Passer en mode sombre" aria-label="Basculer le thème">🌙</button>
     <a href="index.html" class="nb">Accueil</a>
     <a href="contact.html" class="nb">Contact</a>
   </div>

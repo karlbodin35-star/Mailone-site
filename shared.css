@@ -1,6 +1,62 @@
 /* ═══════════════════════════════════════════════════════
    MAILONE DESIGN SYSTEM — shared.css
    ═══════════════════════════════════════════════════════ */
+
+/* ── DARK MODE VARIABLES ─────────────────────────────── */
+[data-theme="dark"]{
+  --white:#1a1a1d;
+  --g50:#18181b;
+  --g100:#27272a;
+  --g200:#3f3f46;
+  --g300:#52525b;
+  --g400:#71717a;
+  --g500:#a1a1aa;
+  --g600:#d4d4d8;
+  --g700:#e4e4e7;
+  --g800:#f4f4f5;
+  --g900:#fafafa;
+  --g950:#ffffff;
+  /* semantic aliases used in sub-pages */
+  --bg:#111113;
+  --bg2:#18181b;
+  --sur:#1e1e22;
+  --bdr:#2e2e34;
+  --bdr2:#3f3f46;
+  --ink:#f4f4f5;
+  --ink2:#d4d4d8;
+  --ink3:#a1a1aa;
+  --ink4:#71717a;
+  /* keep accent colors */
+  --green-l:rgba(22,163,74,.15);
+  --amber-l:rgba(217,119,6,.15);
+  --red-l:rgba(220,38,38,.15);
+  --teal-l:rgba(13,148,136,.15);
+  --purple-l:rgba(147,51,234,.15);
+  --blue-l:rgba(37,99,235,.15);
+}
+
+[data-theme="dark"] body{background:var(--bg);color:var(--ink)}
+[data-theme="dark"] nav{background:rgba(17,17,19,.9);border-bottom-color:var(--bdr)}
+[data-theme="dark"] .nav-logo{color:var(--ink)}
+[data-theme="dark"] .nav-links a{color:var(--ink3)}
+[data-theme="dark"] .nav-links a:hover{color:var(--ink)}
+[data-theme="dark"] .btn-s{background:var(--sur);color:var(--ink2);border-color:var(--bdr)}
+[data-theme="dark"] .btn-s:hover{background:var(--bg2);border-color:var(--bdr2)}
+[data-theme="dark"] .btn-p{background:var(--g900);color:var(--bg)}
+[data-theme="dark"] input,[data-theme="dark"] select,[data-theme="dark"] textarea{background:var(--bg2);border-color:var(--bdr);color:var(--ink)}
+[data-theme="dark"] input:focus,[data-theme="dark"] select:focus,[data-theme="dark"] textarea:focus{background:var(--sur)}
+[data-theme="dark"] .modal{background:var(--sur);border-color:var(--bdr)}
+[data-theme="dark"] .simple-footer{border-top-color:var(--bdr)}
+[data-theme="dark"] .skeleton{background:linear-gradient(90deg,var(--g100) 25%,var(--g200) 50%,var(--g100) 75%)}
+
+/* ── THEME TOGGLE BUTTON ─────────────────────────────── */
+.theme-toggle{width:32px;height:32px;border-radius:8px;border:1px solid var(--g200);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;transition:background .15s,border-color .15s;flex-shrink:0;line-height:1}
+.theme-toggle:hover{background:var(--g50);border-color:var(--g300)}
+[data-theme="dark"] .theme-toggle{border-color:var(--bdr);color:var(--ink3)}
+[data-theme="dark"] .theme-toggle:hover{background:var(--bg2);border-color:var(--bdr2)}
+/* variant for dark sidebars / topbars */
+.theme-toggle-dark{width:30px;height:30px;border-radius:7px;border:1px solid rgba(255,255,255,.1);background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .15s;flex-shrink:0;line-height:1}
+.theme-toggle-dark:hover{background:rgba(255,255,255,.08)}
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
