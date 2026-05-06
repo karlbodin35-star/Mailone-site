@@ -158,6 +158,53 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 /* Empty state */
 .empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--ink4)}
 
+/* ── ASSISTANTE IA CHAT ── */
+.assistante-wrap{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--bg)}
+.assistante-wrap.on{display:flex}
+.ast-topbar{height:52px;background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
+.ast-avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--teal),#0ea5e9);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.ast-info{flex:1}
+.ast-name{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:800;color:var(--ink)}
+.ast-status{font-size:10px;color:var(--teal);display:flex;align-items:center;gap:4px;font-weight:600}
+.ast-dot{width:5px;height:5px;border-radius:50%;background:var(--teal);animation:pulse 2s ease-in-out infinite}
+.ast-ctx{margin-left:auto;font-size:10px;color:var(--ink4);background:var(--bg2);border:1px solid var(--bdr);border-radius:20px;padding:3px 10px}
+.ast-clear{padding:5px 10px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-size:11px;color:var(--ink3);transition:all .15s}
+.ast-clear:hover{background:var(--bg2);color:var(--ink)}
+.ast-chips{padding:10px 16px;display:flex;gap:6px;flex-wrap:wrap;background:var(--sur);border-bottom:1px solid var(--bdr);flex-shrink:0}
+.ast-chip{padding:5px 12px;border-radius:20px;border:1px solid var(--bdr);background:var(--bg);font-size:11px;font-weight:600;color:var(--ink2);cursor:pointer;white-space:nowrap;transition:all .15s}
+.ast-chip:hover{border-color:var(--teal);color:var(--teal);background:var(--teal-l)}
+.ast-messages{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px}
+.ast-messages::-webkit-scrollbar{width:3px}
+.ast-messages::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}
+.ast-msg{display:flex;gap:10px;max-width:86%;animation:msgIn .2s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.ast-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ast-msg-av{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:13px}
+.ast-msg.ai .ast-msg-av{background:linear-gradient(135deg,var(--teal),#0ea5e9)}
+.ast-msg.user .ast-msg-av{background:linear-gradient(135deg,#f97316,#dc2626);font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#fff}
+.ast-bubble{padding:11px 14px;border-radius:14px;font-size:13px;line-height:1.65;color:var(--ink)}
+.ast-msg.ai .ast-bubble{background:var(--sur);border:1px solid var(--bdr);border-radius:4px 14px 14px 14px}
+.ast-msg.user .ast-bubble{background:var(--teal);color:#fff;border-radius:14px 4px 14px 14px}
+.ast-bubble strong{font-weight:700}
+.ast-bubble em{font-style:italic;opacity:.8}
+.ast-typing{display:flex;gap:4px;align-items:center;padding:4px 2px}
+.ast-typing span{width:6px;height:6px;border-radius:50%;background:var(--ink4);animation:bounce .9s ease infinite}
+.ast-typing span:nth-child(2){animation-delay:.15s}
+.ast-typing span:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.ast-welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;gap:12px;text-align:center;padding:40px 20px}
+.ast-welcome-ico{font-size:44px;opacity:.7}
+.ast-welcome-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:800;color:var(--ink)}
+.ast-welcome-sub{font-size:13px;color:var(--ink3);line-height:1.65;max-width:380px}
+.ast-inputbar{padding:12px 16px;background:var(--sur);border-top:1px solid var(--bdr);display:flex;gap:8px;align-items:flex-end;flex-shrink:0}
+.ast-input{flex:1;min-height:40px;max-height:120px;padding:10px 14px;border:1px solid var(--bdr);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none;resize:none;line-height:1.5;transition:border-color .2s}
+.ast-input:focus{border-color:var(--teal);box-shadow:0 0 0 2px rgba(13,147,115,.1)}
+.ast-send{width:40px;height:40px;border-radius:10px;border:none;background:var(--teal);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:opacity .15s}
+.ast-send:hover{opacity:.85}
+.ast-send:disabled{opacity:.4;cursor:not-allowed}
+[data-theme="dark"] .ast-msg.ai .ast-bubble{background:var(--sur);border-color:var(--bdr)}
+[data-theme="dark"] .ast-welcome-title{color:var(--ink)}
+
 /* ── CALENDRIER 24H ── */
 .cal-wrap{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--bg)}
 .cal-wrap.on{display:flex}
@@ -270,9 +317,9 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   </div>
   <div class="sb-sec">
     <div class="sb-lbl">Boîte mail</div>
-    <div class="sb-item active" onclick="setSb(this)"><span class="sb-ico">📬</span>Réception<span class="sb-badge r" id="sb-inbox">0</span></div>
-    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📤</span>Envoyés</div>
-    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📝</span>Brouillons</div>
+    <div class="sb-item active" onclick="showView('mail');setSb(this)"><span class="sb-ico">📬</span>Réception<span class="sb-badge r" id="sb-inbox">0</span></div>
+    <div class="sb-item" onclick="showView('mail');setSb(this)"><span class="sb-ico">📤</span>Envoyés</div>
+    <div class="sb-item" onclick="showView('mail');setSb(this)"><span class="sb-ico">📝</span>Brouillons</div>
   </div>
   <div class="sb-div"></div>
   <div class="sb-sec">
@@ -286,6 +333,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <div class="sb-sec">
     <div class="sb-lbl">Outils Pro</div>
     <div class="sb-item" onclick="window.location.href='assistant.html'" style="cursor:pointer"><span class="sb-ico">✨</span>Assistant IA<span style="margin-left:auto;font-size:9px;background:rgba(109,40,217,.3);color:#a78bfa;padding:2px 6px;border-radius:20px;font-weight:700">NEW</span></div>
+    <div class="sb-item" id="sb-assistante" onclick="showView('assistante');setSb(this)"><span class="sb-ico">🤖</span>Assistante IA<span style="margin-left:auto;font-size:9px;background:rgba(13,147,115,.25);color:#5eead4;padding:2px 6px;border-radius:20px;font-weight:700">PRO</span></div>
     <div class="sb-item" id="sb-cal" onclick="showView('cal');setSb(this)"><span class="sb-ico">📅</span>Calendrier</div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔔</span>Relances<span class="sb-badge p">2</span></div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔍</span>Recherche IA</div>
@@ -379,6 +427,40 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     </div>
   </div>
 </div>
+</div>
+
+<!-- VUE ASSISTANTE IA -->
+<div class="assistante-wrap" id="assistante-wrap">
+  <div class="ast-topbar">
+    <div class="ast-avatar">🤖</div>
+    <div class="ast-info">
+      <div class="ast-name">Assistante MailOne Pro</div>
+      <div class="ast-status"><div class="ast-dot"></div>En ligne — accès à votre boîte mail</div>
+    </div>
+    <div class="ast-ctx" id="ast-ctx">0 email en mémoire</div>
+    <button class="ast-clear" onclick="ASSISTANTE.clear()">Effacer la conversation</button>
+  </div>
+  <div class="ast-chips" id="ast-chips">
+    <span class="ast-chip" onclick="ASSISTANTE.ask('Résume-moi les 5 derniers échanges importants')">📋 Résumer les échanges</span>
+    <span class="ast-chip" onclick="ASSISTANTE.ask('Qui attend une réponse de ma part en ce moment ?')">⏳ Qui attend une réponse ?</span>
+    <span class="ast-chip" onclick="ASSISTANTE.ask('Quels sont les devis non traités ?')">📄 Devis en attente</span>
+    <span class="ast-chip" onclick="ASSISTANTE.ask('Y a-t-il des urgences dans ma boîte ?')">🚨 Voir les urgences</span>
+    <span class="ast-chip" onclick="ASSISTANTE.ask('Donne-moi mes priorités pour aujourd\'hui')">🎯 Mes priorités du jour</span>
+    <span class="ast-chip" onclick="ASSISTANTE.ask('Quelles factures sont en attente de paiement ?')">💰 Factures en attente</span>
+  </div>
+  <div class="ast-messages" id="ast-messages">
+    <div class="ast-welcome" id="ast-welcome">
+      <div class="ast-welcome-ico">🤖</div>
+      <div class="ast-welcome-title">Bonjour, je suis votre Assistante MailOne Pro</div>
+      <div class="ast-welcome-sub">Je connais toute votre boîte mail. Posez-moi n'importe quelle question : "Est-ce que j'ai envoyé la facture à M. Dupont ?", "Qui n'a pas répondu depuis 3 jours ?", "Résume mes échanges avec la société Martin."</div>
+    </div>
+  </div>
+  <div class="ast-inputbar">
+    <textarea class="ast-input" id="ast-input" placeholder="Posez une question sur votre boîte mail…" rows="1"
+      onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();ASSISTANTE.send()}"
+      oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,120)+'px'"></textarea>
+    <button class="ast-send" id="ast-send" onclick="ASSISTANTE.send()">➤</button>
+  </div>
 </div>
 
 <!-- VUE CALENDRIER 24H -->
@@ -947,19 +1029,189 @@ function dismissCalSuggest(mailId) {
 }
 
 // ════════════════════════════════════════════════════════════════
+// ASSISTANTE IA
+// ════════════════════════════════════════════════════════════════
+const ASSISTANTE = (() => {
+  let history = [];
+  let isThinking = false;
+
+  function getMailsContext() {
+    return MAILS.map(m => ({
+      sender: m.sender, email: m.email || '', subject: m.subject,
+      cat: m.cat, summary: m.summary, date: m.date || '', time: m.time || '',
+      follow: !!m.follow, body: (m.body || '').slice(0, 300),
+    }));
+  }
+
+  function updateCtx() {
+    const el = document.getElementById('ast-ctx');
+    if (el) el.textContent = MAILS.length + ' email' + (MAILS.length > 1 ? 's' : '') + ' en mémoire';
+  }
+
+  function addMsg(role, content, streaming = false) {
+    const welcome = document.getElementById('ast-welcome');
+    if (welcome) welcome.remove();
+    const msgs = document.getElementById('ast-messages');
+    const id = 'msg-' + Date.now();
+    const initials = (user.name || 'U').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+    const av = role === 'user'
+      ? `<div class="ast-msg-av">${initials}</div>`
+      : `<div class="ast-msg-av">🤖</div>`;
+    const bubble = streaming
+      ? `<div class="ast-bubble" id="${id}-bubble"><div class="ast-typing"><span></span><span></span><span></span></div></div>`
+      : `<div class="ast-bubble" id="${id}-bubble">${formatMsg(content)}</div>`;
+    const div = document.createElement('div');
+    div.className = `ast-msg ${role}`;
+    div.id = id;
+    div.innerHTML = av + bubble;
+    msgs.appendChild(div);
+    msgs.scrollTop = msgs.scrollHeight;
+    return id;
+  }
+
+  function formatMsg(text) {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      .replace(/\n/g, '<br>');
+  }
+
+  async function send() {
+    const input = document.getElementById('ast-input');
+    const btn   = document.getElementById('ast-send');
+    const msg   = input.value.trim();
+    if (!msg || isThinking) return;
+    isThinking = true;
+    input.value = ''; input.style.height = 'auto';
+    btn.disabled = true;
+
+    addMsg('user', msg);
+    const aiId = addMsg('ai', '', true);
+    const bubble = document.getElementById(aiId + '-bubble');
+
+    const token = localStorage.getItem('mailone_token');
+    let fullText = '';
+
+    try {
+      const res = await fetch(CONFIG.API_URL + '/api/ai/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({
+          message: msg,
+          history: history.slice(-10), // 5 derniers échanges
+          mailsContext: getMailsContext(),
+          userName: user.name || user.firstName || '',
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        if (bubble) bubble.innerHTML = `<span style="color:var(--urgent)">⚠️ ${err.message || err.error || 'Erreur'}</span>`;
+        isThinking = false; btn.disabled = false; return;
+      }
+
+      // Streaming SSE
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+      if (bubble) bubble.innerHTML = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buffer += decoder.decode(value, { stream: true });
+        const lines = buffer.split('\n');
+        buffer = lines.pop();
+        for (const line of lines) {
+          if (!line.startsWith('data:')) continue;
+          const data = line.slice(5).trim();
+          if (data === '[DONE]') break;
+          try {
+            const parsed = JSON.parse(data);
+            const delta = parsed.delta?.text || '';
+            if (delta) {
+              fullText += delta;
+              if (bubble) bubble.innerHTML = formatMsg(fullText);
+              document.getElementById('ast-messages').scrollTop = 999999;
+            }
+          } catch {}
+        }
+      }
+
+      history.push({ role: 'user', content: msg });
+      history.push({ role: 'assistant', content: fullText });
+
+    } catch (err) {
+      // Fallback agent local si pas de connexion
+      const localReply = localFallback(msg);
+      fullText = localReply;
+      if (bubble) bubble.innerHTML = formatMsg(localReply);
+      history.push({ role: 'user', content: msg });
+      history.push({ role: 'assistant', content: localReply });
+    }
+
+    isThinking = false; btn.disabled = false;
+    document.getElementById('ast-messages').scrollTop = 999999;
+  }
+
+  function localFallback(question) {
+    const q = question.toLowerCase();
+    if (MAILS.length === 0) return "Votre boîte mail est vide pour l'instant. Connectez votre compte Gmail ou Outlook pour que je puisse analyser vos échanges.";
+
+    if (q.includes('factur')) {
+      const inv = MAILS.filter(m => m.cat === 'invoice');
+      return inv.length ? `J'ai trouvé **${inv.length} email(s) liés à des factures** :\n${inv.map(m => `• ${m.sender} — "${m.subject}"`).join('\n')}` : "Aucune facture dans votre boîte actuellement.";
+    }
+    if (q.includes('urgent')) {
+      const urg = MAILS.filter(m => m.cat === 'urgent' && m.unread);
+      return urg.length ? `**${urg.length} urgence(s) non lue(s)** :\n${urg.map(m => `• 🚨 ${m.sender} — "${m.subject}"`).join('\n')}` : "Aucune urgence non lue.";
+    }
+    if (q.includes('devis') || q.includes('quote')) {
+      const quo = MAILS.filter(m => m.cat === 'quote');
+      return quo.length ? `**${quo.length} demande(s) de devis** :\n${quo.map(m => `• ${m.sender} — "${m.subject}"`).join('\n')}` : "Aucun devis en attente.";
+    }
+    if (q.includes('relance') || q.includes('attente') || q.includes('répons')) {
+      const fol = MAILS.filter(m => m.follow);
+      return fol.length ? `**${fol.length} contact(s) attendent une réponse** :\n${fol.map(m => `• 🔔 ${m.sender}`).join('\n')}` : "Aucune relance en attente.";
+    }
+    if (q.includes('résumé') || q.includes('résume') || q.includes('dernier')) {
+      return `**Résumé de votre boîte** (${MAILS.length} emails) :\n` +
+        MAILS.slice(0, 5).map(m => `• [${m.cat.toUpperCase()}] ${m.sender} — ${m.summary}`).join('\n');
+    }
+    return `J'ai **${MAILS.length} email(s)** dans votre boîte. Posez-moi une question plus précise ou connectez-vous à Internet pour que j'utilise mon IA complète.`;
+  }
+
+  function ask(text) {
+    const input = document.getElementById('ast-input');
+    if (input) { input.value = text; send(); }
+  }
+
+  function clear() {
+    history = [];
+    const msgs = document.getElementById('ast-messages');
+    msgs.innerHTML = `<div class="ast-welcome" id="ast-welcome">
+      <div class="ast-welcome-ico">🤖</div>
+      <div class="ast-welcome-title">Conversation effacée</div>
+      <div class="ast-welcome-sub">Posez une nouvelle question sur votre boîte mail.</div>
+    </div>`;
+  }
+
+  return { send, ask, clear, updateCtx };
+})();
+
+// ════════════════════════════════════════════════════════════════
 // VUE SWITCHER
 // ════════════════════════════════════════════════════════════════
 function showView(v) {
   const mail = document.getElementById('content-mail');
   const cal  = document.getElementById('cal-wrap');
-  if (v === 'cal') {
-    mail.style.display = 'none';
-    cal.classList.add('on');
-    CAL.render();
-  } else {
-    mail.style.display = '';
-    cal.classList.remove('on');
-  }
+  const ast  = document.getElementById('assistante-wrap');
+  mail.style.display = 'none';
+  cal.classList.remove('on');
+  ast.classList.remove('on');
+  if (v === 'mail')       { mail.style.display = ''; }
+  else if (v === 'cal')   { cal.classList.add('on'); CAL.render(); }
+  else if (v === 'assistante') { ast.classList.add('on'); ASSISTANTE.updateCtx(); }
 }
 
 // ════════════════════════════════════════════════════════════════
