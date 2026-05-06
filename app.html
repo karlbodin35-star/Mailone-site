@@ -285,6 +285,27 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 [data-theme="dark"] .cal-wrap{background:var(--bg)}
 [data-theme="dark"] .cal-topbar{background:var(--sur);border-color:var(--bdr)}
 
+/* Team view */
+.team-wrap{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--bg)}
+.team-wrap.on{display:flex}
+.team-header{padding:16px 20px;border-bottom:1px solid var(--bdr);background:var(--sur);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.team-body{display:flex;flex:1;overflow:hidden;min-height:0}
+.team-members-panel{width:260px;flex-shrink:0;padding:16px;border-right:1px solid var(--bdr);background:var(--sur);overflow-y:auto}
+.team-chat-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--bg)}
+.team-chat-msgs{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.team-chat-input-row{padding:12px 16px;border-top:1px solid var(--bdr);background:var(--sur);display:flex;gap:8px;flex-shrink:0}
+.team-cal-panel{padding:14px 20px;border-top:1px solid var(--bdr);background:var(--sur);flex-shrink:0;max-height:160px;overflow-y:auto}
+.team-msg{display:flex;flex-direction:column;gap:2px;max-width:72%}
+.team-msg.mine{align-self:flex-end;align-items:flex-end}
+.team-msg.other{align-self:flex-start;align-items:flex-start}
+.team-msg-bubble{padding:8px 12px;border-radius:12px;font-size:13px;line-height:1.5}
+.team-msg.mine .team-msg-bubble{background:var(--teal);color:#fff;border-bottom-right-radius:3px}
+.team-msg.other .team-msg-bubble{background:var(--sur);border:1px solid var(--bdr);color:var(--ink);border-bottom-left-radius:3px}
+.team-msg-meta{font-size:10px;color:var(--ink4)}
+.team-member-row{display:flex;align-items:center;gap:9px;padding:7px 8px;border-radius:8px;background:var(--bg);border:1px solid var(--bdr)}
+.team-av{width:30px;height:30px;border-radius:50%;background:var(--teal);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.team-ev-chip{padding:6px 10px;border-radius:8px;background:var(--bg);border:1px solid var(--bdr);font-size:11px;display:flex;flex-direction:column;gap:2px;min-width:140px}
+
 /* Modal */
 .overlay{position:fixed;inset:0;background:rgba(28,26,22,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:300}
 .overlay.open{display:flex}
@@ -362,6 +383,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <div class="sb-item" onclick="window.location.href='assistant.html'" style="cursor:pointer"><span class="sb-ico">✨</span>Assistant IA<span style="margin-left:auto;font-size:9px;background:rgba(109,40,217,.3);color:#a78bfa;padding:2px 6px;border-radius:20px;font-weight:700">NEW</span></div>
     <div class="sb-item" id="sb-assistante" onclick="showView('assistante');setSb(this)"><span class="sb-ico">🤖</span>Assistante IA<span style="margin-left:auto;font-size:9px;background:rgba(13,147,115,.25);color:#5eead4;padding:2px 6px;border-radius:20px;font-weight:700">PRO</span></div>
     <div class="sb-item" id="sb-cal" onclick="showView('cal');setSb(this)"><span class="sb-ico">📅</span>Calendrier</div>
+    <div class="sb-item" id="sb-team" onclick="showView('team');setSb(this)" style="display:none"><span class="sb-ico">👥</span>Mon Équipe<span class="sb-badge" id="sb-team-badge" style="background:rgba(109,40,217,.7);display:none">0</span></div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔔</span>Relances<span class="sb-badge p">2</span></div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔍</span>Recherche IA</div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📊</span>Statistiques</div>
@@ -576,6 +598,102 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
       <button onclick="CAL.closeAdd()" style="padding:9px 16px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)">Annuler</button>
       <button onclick="CAL.saveEvent()" style="padding:9px 18px;border-radius:8px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- VUE ÉQUIPE -->
+<div class="team-wrap" id="team-wrap">
+  <!-- Header -->
+  <div class="team-header">
+    <div style="display:flex;flex-direction:column;gap:2px">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;color:var(--ink)" id="team-title">Mon Équipe</div>
+      <div style="font-size:12px;color:var(--ink3)" id="team-seats-label">Chargement…</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div id="team-seat-bar" style="display:none;align-items:center;gap:6px">
+        <div style="width:100px;height:6px;background:var(--bg2);border-radius:3px;overflow:hidden">
+          <div id="team-seat-fill" style="height:100%;background:var(--teal);border-radius:3px;transition:width .3s"></div>
+        </div>
+        <span id="team-seat-count" style="font-size:11px;font-weight:700;color:var(--ink2)">0/0</span>
+      </div>
+      <button id="team-invite-btn" onclick="TEAM.showInviteModal()" style="display:none;padding:8px 16px;border-radius:8px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">+ Inviter</button>
+    </div>
+  </div>
+
+  <!-- Body : membres + chat -->
+  <div class="team-body">
+    <!-- Membres -->
+    <div class="team-members-panel">
+      <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.5px;margin-bottom:10px">MEMBRES</div>
+      <div id="team-members-list" style="display:flex;flex-direction:column;gap:6px"></div>
+    </div>
+
+    <!-- Chat interne -->
+    <div class="team-chat-panel">
+      <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.5px;margin-bottom:10px">MESSAGERIE INTERNE</div>
+      <div id="team-chat-msgs" class="team-chat-msgs"></div>
+      <div class="team-chat-input-row">
+        <input id="team-chat-inp" type="text" placeholder="Message à l'équipe…" onkeydown="if(event.key==='Enter')TEAM.sendMessage()" style="flex:1;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+        <button onclick="TEAM.sendMessage()" style="padding:9px 16px;border-radius:8px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;white-space:nowrap">Envoyer</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Agenda partagé -->
+  <div class="team-cal-panel">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+      <div style="font-size:11px;font-weight:700;color:var(--ink3);letter-spacing:.5px">AGENDA PARTAGÉ</div>
+      <button onclick="TEAM.showShareEvent()" style="padding:5px 12px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--ink2)">+ Partager un RDV</button>
+    </div>
+    <div id="team-cal-events" style="display:flex;flex-wrap:wrap;gap:8px"></div>
+  </div>
+</div>
+
+<!-- MODAL INVITATION -->
+<div class="overlay" id="modal-invite" style="display:none" onclick="if(event.target===this)TEAM.hideInviteModal()">
+  <div class="modal" style="max-width:420px;text-align:left;padding:28px">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;margin-bottom:6px">👥 Inviter un membre</div>
+    <div style="font-size:12px;color:var(--ink3);margin-bottom:20px" id="modal-invite-seats">Sièges disponibles : …</div>
+    <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:20px">
+      <label style="font-size:11px;font-weight:600;color:var(--ink2)">Email du collègue</label>
+      <input id="invite-email-inp" type="email" placeholder="collegue@entreprise.fr" style="padding:10px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onkeydown="if(event.key==='Enter')TEAM.sendInvite()" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+    </div>
+    <div id="invite-link-result" style="display:none;padding:10px;background:var(--bg2);border-radius:8px;font-size:11px;word-break:break-all;color:var(--ink2);margin-bottom:16px"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button onclick="TEAM.hideInviteModal()" style="padding:9px 16px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)">Fermer</button>
+      <button onclick="TEAM.sendInvite()" style="padding:9px 18px;border-radius:8px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">Envoyer l'invitation</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL PARTAGE RDV -->
+<div class="overlay" id="modal-share-event" style="display:none" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal" style="max-width:380px;text-align:left;padding:28px">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800;margin-bottom:20px">📅 Partager un rendez-vous</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:11px;font-weight:600;color:var(--ink2)">Titre</label>
+        <input id="share-ev-title" type="text" placeholder="Ex: Réunion client, Chantier Dupont…" style="padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:11px;font-weight:600;color:var(--ink2)">Date</label>
+          <input id="share-ev-date" type="date" style="padding:9px 8px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);background:var(--bg);outline:none">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:11px;font-weight:600;color:var(--ink2)">Début</label>
+          <input id="share-ev-start" type="time" style="padding:9px 8px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);background:var(--bg);outline:none">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:11px;font-weight:600;color:var(--ink2)">Fin</label>
+          <input id="share-ev-end" type="time" style="padding:9px 8px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;color:var(--ink);background:var(--bg);outline:none">
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button onclick="document.getElementById('modal-share-event').style.display='none'" style="padding:9px 16px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)">Annuler</button>
+      <button onclick="TEAM.shareEvent()" style="padding:9px 18px;border-radius:8px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">Partager</button>
     </div>
   </div>
 </div>
@@ -1533,12 +1651,15 @@ function showView(v) {
   const mail = document.getElementById('content-mail');
   const cal  = document.getElementById('cal-wrap');
   const ast  = document.getElementById('assistante-wrap');
+  const team = document.getElementById('team-wrap');
   mail.style.display = 'none';
   cal.classList.remove('on');
   ast.classList.remove('on');
-  if (v === 'mail')       { mail.style.display = ''; }
-  else if (v === 'cal')   { cal.classList.add('on'); CAL.render(); }
+  team.classList.remove('on');
+  if (v === 'mail')            { mail.style.display = ''; }
+  else if (v === 'cal')        { cal.classList.add('on'); CAL.render(); }
   else if (v === 'assistante') { ast.classList.add('on'); ASSISTANTE.updateCtx(); }
+  else if (v === 'team')       { team.classList.add('on'); TEAM.load(); }
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -1701,8 +1822,245 @@ document.getElementById('modal-rdv').addEventListener('click', e => {
 });
 
 // ════════════════════════════════════════════════════════════════
+// ÉQUIPE — gestion des sièges, chat interne, calendrier partagé
+// ════════════════════════════════════════════════════════════════
+const TEAM = (() => {
+  let teamData = null;
+  let chatPollTimer = null;
+  let lastMsgTs = null;
+  const myId = () => Auth.getUser()?.id;
+  const BASE = (typeof CONFIG !== 'undefined' ? CONFIG.API_URL : 'https://mailone-backend.vercel.app');
+
+  // Helper fetch avec auth
+  async function tfetch(path, opts = {}) {
+    const token = localStorage.getItem('mailone_token');
+    const headers = { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}), ...(opts.headers || {}) };
+    const r = await fetch(BASE + path, { ...opts, headers });
+    const json = await r.json().catch(() => ({}));
+    return { ok: r.ok, status: r.status, data: json };
+  }
+
+  // ── Charger l'équipe ──────────────────────────────────────
+  async function load() {
+    try {
+      const { ok, data } = await tfetch('/api/team');
+      if (!ok || !data.team) { renderNoTeam(); return; }
+      teamData = data;
+
+      document.getElementById('team-title').textContent = data.team.name || 'Mon Équipe';
+      document.getElementById('team-seats-label').textContent =
+        `${data.team.activeSeats} / ${data.team.maxSeats} siège${data.team.maxSeats > 1 ? 's' : ''} utilisé${data.team.activeSeats > 1 ? 's' : ''}`;
+
+      document.getElementById('team-seat-bar').style.display = 'flex';
+      document.getElementById('team-seat-fill').style.width = `${Math.round(data.team.activeSeats / data.team.maxSeats * 100)}%`;
+      document.getElementById('team-seat-count').textContent = `${data.team.activeSeats}/${data.team.maxSeats}`;
+
+      const btn = document.getElementById('team-invite-btn');
+      btn.style.display = (data.team.isOwner && data.team.activeSeats < data.team.maxSeats) ? 'block' : 'none';
+
+      renderMembers(data.members);
+      loadChat();
+      loadCalendar();
+      startChatPoll();
+    } catch (err) {
+      console.error('TEAM.load:', err);
+      renderNoTeam();
+    }
+  }
+
+  function renderNoTeam() {
+    document.getElementById('team-seats-label').textContent = 'Équipe non disponible sur le plan Solo';
+    document.getElementById('team-members-list').innerHTML = `
+      <div style="padding:20px;text-align:center;color:var(--ink3);font-size:12px;line-height:1.7">
+        Disponible avec les plans <strong>Team</strong> et <strong>Enterprise</strong>.<br>
+        <a href="account.html" style="color:var(--teal);text-decoration:none;font-weight:600">Passer au plan Team →</a>
+      </div>`;
+    document.getElementById('team-chat-msgs').innerHTML = '';
+  }
+
+  // ── Membres ───────────────────────────────────────────────
+  function renderMembers(members) {
+    const el = document.getElementById('team-members-list');
+    if (!members?.length) { el.innerHTML = '<div style="font-size:12px;color:var(--ink4)">Aucun membre pour l\'instant.</div>'; return; }
+    el.innerHTML = members.map(m => {
+      const name = m.users ? `${m.users.first_name || ''} ${m.users.last_name || ''}`.trim() : m.invited_email;
+      const initials = (name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2)) || '?';
+      const isMe = m.user_id === myId();
+      const badge = m.role === 'owner'
+        ? '<span style="font-size:9px;background:rgba(13,147,115,.15);color:var(--teal);padding:1px 6px;border-radius:10px;font-weight:700">Propriétaire</span>'
+        : m.status === 'invited'
+        ? '<span style="font-size:9px;background:rgba(245,158,11,.15);color:#f59e0b;padding:1px 6px;border-radius:10px;font-weight:700">En attente</span>'
+        : '<span style="font-size:9px;background:rgba(13,147,115,.1);color:var(--teal);padding:1px 6px;border-radius:10px;font-weight:700">Actif</span>';
+      const removeBtn = teamData?.team?.isOwner && !isMe && m.role !== 'owner'
+        ? `<button onclick="TEAM.removeMember('${m.id}')" style="margin-left:auto;padding:3px 8px;border-radius:6px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-size:10px;color:var(--ink3)">✕</button>`
+        : '';
+      return `<div class="team-member-row">
+        <div class="team-av">${initials}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:12px;font-weight:600;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${name}${isMe ? ' <span style="color:var(--ink4);font-weight:400">(vous)</span>' : ''}</div>
+          <div style="font-size:10px;color:var(--ink4);margin:1px 0">${m.users?.email || m.invited_email || ''}</div>
+          ${badge}
+        </div>
+        ${removeBtn}
+      </div>`;
+    }).join('');
+  }
+
+  async function removeMember(memberId) {
+    if (!confirm('Retirer ce membre ? Il perdra l\'accès immédiatement.')) return;
+    const { ok } = await tfetch(`/api/team/members/${memberId}`, { method: 'DELETE' });
+    if (ok) { showToast('success', 'Membre retiré.'); load(); }
+    else showToast('error', 'Erreur lors du retrait.');
+  }
+
+  // ── Chat ──────────────────────────────────────────────────
+  async function loadChat() {
+    const { ok, data } = await tfetch('/api/team/chat');
+    if (!ok || !data.messages?.length) return;
+    renderMessages(data.messages);
+    lastMsgTs = data.messages[data.messages.length - 1].created_at;
+  }
+
+  function renderMessages(messages) {
+    const el = document.getElementById('team-chat-msgs');
+    el.innerHTML = messages.map(buildBubble).join('');
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function appendMessage(msg) {
+    const el = document.getElementById('team-chat-msgs');
+    el.insertAdjacentHTML('beforeend', buildBubble(msg));
+    el.scrollTop = el.scrollHeight;
+  }
+
+  function buildBubble(msg) {
+    const mine = msg.sender_id === myId();
+    const name = mine ? 'Vous' : `${msg.users?.first_name || '?'} ${(msg.users?.last_name || '').slice(0,1)}.`.trim();
+    const time = new Date(msg.created_at).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    return `<div class="team-msg ${mine ? 'mine' : 'other'}">
+      <div class="team-msg-meta">${name} · ${time}</div>
+      <div class="team-msg-bubble">${msg.content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+    </div>`;
+  }
+
+  async function sendMessage() {
+    const inp = document.getElementById('team-chat-inp');
+    const content = inp.value.trim();
+    if (!content) return;
+    inp.value = '';
+    const { ok, data } = await tfetch('/api/team/chat', { method: 'POST', body: JSON.stringify({ content }) });
+    if (ok) {
+      appendMessage(data.message);
+      lastMsgTs = data.message.created_at;
+    } else showToast('error', 'Erreur envoi message.');
+  }
+
+  function startChatPoll() {
+    if (chatPollTimer) clearInterval(chatPollTimer);
+    chatPollTimer = setInterval(async () => {
+      if (!lastMsgTs) return;
+      const { ok, data } = await tfetch(`/api/team/chat?since=${encodeURIComponent(lastMsgTs)}`);
+      if (!ok || !data.messages?.length) return;
+      data.messages.forEach(appendMessage);
+      lastMsgTs = data.messages[data.messages.length - 1].created_at;
+    }, 4000);
+  }
+
+  // ── Calendrier partagé ────────────────────────────────────
+  async function loadCalendar() {
+    const { ok, data } = await tfetch('/api/team/calendar');
+    if (ok) renderCalendar(data.events);
+  }
+
+  function renderCalendar(events) {
+    const el = document.getElementById('team-cal-events');
+    if (!events?.length) {
+      el.innerHTML = '<div style="font-size:12px;color:var(--ink4)">Aucun RDV partagé. Cliquez sur "+ Partager un RDV".</div>';
+      return;
+    }
+    el.innerHTML = events.map(ev => {
+      const d = new Date(ev.date + 'T00:00:00').toLocaleDateString('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
+      const creator = ev.users ? `${ev.users.first_name} ${(ev.users.last_name || '').slice(0,1)}.`.trim() : '';
+      const canDel = ev.creator_id === myId() || teamData?.team?.isOwner;
+      return `<div class="team-ev-chip">
+        <div style="font-weight:700;color:var(--ink);font-size:12px">${ev.title.replace(/&/g,'&amp;').replace(/</g,'&lt;')}</div>
+        <div style="color:var(--ink3);font-size:11px">${d} · ${ev.start_time}–${ev.end_time}</div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:2px">
+          <div style="color:var(--ink4);font-size:10px">${creator}</div>
+          ${canDel ? `<button onclick="TEAM.deleteEvent('${ev.id}')" style="font-size:10px;color:var(--ink4);background:none;border:none;cursor:pointer;padding:0">✕</button>` : ''}
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  async function deleteEvent(eventId) {
+    const { ok } = await tfetch(`/api/team/calendar/${eventId}`, { method: 'DELETE' });
+    if (ok) loadCalendar();
+    else showToast('error', 'Erreur suppression.');
+  }
+
+  // ── Invitation ────────────────────────────────────────────
+  function showInviteModal() {
+    document.getElementById('modal-invite').style.display = 'flex';
+    document.getElementById('invite-link-result').style.display = 'none';
+    document.getElementById('invite-email-inp').value = '';
+    const remaining = (teamData?.team?.maxSeats || 0) - (teamData?.team?.activeSeats || 0);
+    document.getElementById('modal-invite-seats').textContent = `Sièges disponibles : ${remaining} sur ${teamData?.team?.maxSeats || 0}`;
+  }
+
+  function hideInviteModal() { document.getElementById('modal-invite').style.display = 'none'; }
+
+  async function sendInvite() {
+    const email = document.getElementById('invite-email-inp').value.trim();
+    if (!email) return;
+    const { ok, data } = await tfetch('/api/team/invite', { method: 'POST', body: JSON.stringify({ email }) });
+    if (ok) {
+      const linkEl = document.getElementById('invite-link-result');
+      linkEl.style.display = 'block';
+      linkEl.innerHTML = `✅ Invitation envoyée à <strong>${email}</strong>`;
+      document.getElementById('invite-email-inp').value = '';
+      load();
+    } else {
+      showToast('error', data.error || 'Erreur invitation.');
+    }
+  }
+
+  // ── Partage RDV ───────────────────────────────────────────
+  function showShareEvent() {
+    document.getElementById('share-ev-date').value = new Date().toISOString().split('T')[0];
+    document.getElementById('share-ev-title').value = '';
+    document.getElementById('share-ev-start').value = '09:00';
+    document.getElementById('share-ev-end').value = '10:00';
+    document.getElementById('modal-share-event').style.display = 'flex';
+  }
+
+  async function shareEvent() {
+    const title     = document.getElementById('share-ev-title').value.trim();
+    const date      = document.getElementById('share-ev-date').value;
+    const startTime = document.getElementById('share-ev-start').value;
+    const endTime   = document.getElementById('share-ev-end').value;
+    if (!title || !date || !startTime || !endTime) { showToast('error', 'Remplissez tous les champs.'); return; }
+    const { ok } = await tfetch('/api/team/calendar', { method: 'POST', body: JSON.stringify({ title, date, startTime, endTime }) });
+    if (ok) {
+      document.getElementById('modal-share-event').style.display = 'none';
+      showToast('success', 'RDV partagé avec l\'équipe.');
+      loadCalendar();
+    } else showToast('error', 'Erreur lors du partage.');
+  }
+
+  return { load, sendMessage, showInviteModal, hideInviteModal, sendInvite, removeMember, deleteEvent, showShareEvent, shareEvent };
+})();
+
+// ════════════════════════════════════════════════════════════════
 // INIT
 // ════════════════
+
+// Afficher le menu équipe si plan team/enterprise
+const _initPlan = (Auth.getUser()?.plan || localStorage.getItem('mailone_plan') || 'solo');
+if (_initPlan === 'team' || _initPlan === 'enterprise') {
+  const sbTeam = document.getElementById('sb-team');
+  if (sbTeam) sbTeam.style.display = 'flex';
+}
 
 renderList();
 updateStats();
