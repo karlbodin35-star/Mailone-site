@@ -191,6 +191,23 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .cal-event-title{font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cal-event-sub{font-size:9px;font-weight:500;opacity:.75;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 [data-theme="dark"] .cal-slot:hover{background:rgba(13,147,115,.08)}
+
+/* ── SUGGESTION CALENDRIER ── */
+.cal-suggest{background:#edf8f2;border:1px solid #bbf7d0;border-radius:10px;padding:11px;margin-bottom:7px}
+.cal-suggest-title{font-size:9px;font-weight:800;color:var(--appt);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:5px}
+.cal-suggest-preview{background:#fff;border:1px solid #bbf7d0;border-radius:7px;padding:8px 10px;margin-bottom:9px}
+.cal-suggest-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:11px;color:var(--ink2)}
+.cal-suggest-row:last-child{margin-bottom:0}
+.cal-suggest-row input{border:1px solid #bbf7d0;border-radius:5px;padding:3px 7px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--ink);background:#fff;outline:none;width:100%}
+.cal-suggest-row input:focus{border-color:var(--appt)}
+.cal-suggest-btns{display:flex;gap:6px}
+.cal-suggest-ok{flex:1;padding:7px;border:none;background:var(--appt);color:#fff;border-radius:7px;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.cal-suggest-ok:hover{opacity:.85}
+.cal-suggest-no{padding:7px 10px;border:1px solid #bbf7d0;background:transparent;color:var(--appt);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:background .15s}
+.cal-suggest-no:hover{background:#d1fae5}
+[data-theme="dark"] .cal-suggest{background:rgba(22,163,74,.08);border-color:rgba(22,163,74,.2)}
+[data-theme="dark"] .cal-suggest-preview{background:var(--bg2);border-color:rgba(22,163,74,.2)}
+[data-theme="dark"] .cal-suggest-row input{background:var(--bg2);border-color:rgba(22,163,74,.2);color:var(--ink)}
 [data-theme="dark"] .cal-wrap{background:var(--bg)}
 [data-theme="dark"] .cal-topbar{background:var(--sur);border-color:var(--bdr)}
 
@@ -613,6 +630,7 @@ function renderAI(){
       <div class="ap-kv"><span class="ap-kv-k">Ton</span><span class="ap-kv-v">${d.tone}</span></div>
     </div>
     ${m.follow?`<div class="ap-block" style="border-color:#ddd6fe;background:var(--purple-l)"><div class="ap-btitle" style="color:var(--purple)">🔔 Relance</div><div style="font-size:11px;color:var(--purple);line-height:1.5">Ce contact attend depuis plusieurs jours. Agir maintenant pour maintenir la relation.</div></div>`:''}
+    ${(m.cat==='appt'||ctx.dates.length>0)?buildCalSuggest(m,ctx):''}
     <div class="ap-block">
       <div class="ap-btitle">✨ Réponse IA MailOne Pro <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink4)">— modifiable</span></div>
       <div class="gen-ind on" id="gen-ind"><div class="gen-spin"></div>Agent en cours…</div>
@@ -760,6 +778,173 @@ async function loadQuota() {
 
 let premiumModeForced = false;
 loadQuota();
+
+// ════════════════════════════════════════════════════════════════
+// SUGGESTION CALENDRIER
+// ════════════════════════════════════════════════════════════════
+// Analyse les événements existants pour trouver les créneaux préférés (habitudes)
+function getPreferredHours() {
+  const evts = JSON.parse(localStorage.getItem('mailone_events') || '[]');
+  const counts = {};
+  evts.forEach(e => { const h = parseInt(e.start); counts[h] = (counts[h] || 0) + 1; });
+  // Heures par défaut si pas assez de données, triées par fréquence d'utilisation
+  const defaults = [9, 10, 11, 14, 15, 16, 17];
+  return defaults.sort((a, b) => (counts[b] || 0) - (counts[a] || 0));
+}
+
+// Trouve les 3 prochains créneaux libres à partir d'une date
+function findFreeSlots(fromDate, excludeStart, excludeEnd) {
+  const evts = JSON.parse(localStorage.getItem('mailone_events') || '[]');
+  const preferred = getPreferredHours();
+  const slots = [];
+  const base = new Date(fromDate);
+
+  for (let day = 0; day <= 14 && slots.length < 3; day++) {
+    const d = new Date(base);
+    d.setDate(d.getDate() + day);
+    if (d.getDay() === 0 || d.getDay() === 6) continue; // pas le weekend
+
+    const dk = d.toISOString().slice(0, 10);
+    const dayEvts = evts.filter(e => e.date === dk);
+    const DAYS = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    const MONTHS = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+
+    for (const h of preferred) {
+      // Ne pas proposer le même créneau que le conflit détecté si c'est aujourd'hui
+      if (day === 0 && h === parseInt(excludeStart)) continue;
+      const sMin = h * 60, eMin = sMin + 60;
+      const busy = dayEvts.some(e => {
+        const [sh, sm] = e.start.split(':').map(Number);
+        const [eh, em] = e.end.split(':').map(Number);
+        return sMin < (eh * 60 + em) && eMin > (sh * 60 + sm);
+      });
+      if (!busy && slots.length < 3) {
+        slots.push({
+          date: dk,
+          start: String(h).padStart(2,'0') + ':00',
+          end:   String(h + 1).padStart(2,'0') + ':00',
+          label: DAYS[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[d.getMonth()] + ' à ' + String(h).padStart(2,'0') + 'h',
+        });
+        break;
+      }
+    }
+  }
+  return slots;
+}
+
+// Vérifie s'il y a un conflit sur un créneau donné
+function hasConflict(date, start, end) {
+  const evts = JSON.parse(localStorage.getItem('mailone_events') || '[]');
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+  const sMin = sh * 60 + sm, eMin = eh * 60 + em;
+  return evts.filter(e => e.date === date).some(e => {
+    const [a, b] = e.start.split(':').map(Number);
+    const [c, d2] = e.end.split(':').map(Number);
+    return sMin < (c * 60 + d2) && eMin > (a * 60 + b);
+  });
+}
+
+function buildCalSuggest(m, ctx) {
+  const timeMatch = (m.subject + ' ' + m.body).match(/\b(\d{1,2})[h:](\d{2})?\b/i);
+  let startH = '09', startM = '00', endH = '10';
+  if (timeMatch) {
+    startH = String(parseInt(timeMatch[1])).padStart(2,'0');
+    startM = timeMatch[2] ? timeMatch[2].padStart(2,'0') : '00';
+    endH   = String(Math.min(parseInt(startH) + 1, 23)).padStart(2,'0');
+  }
+  const today = new Date().toISOString().slice(0,10);
+  const title = (m.sender + (ctx.dates[0] ? ' — ' + ctx.dates[0] : '')).slice(0,50);
+  const id = m.id;
+  const conflict = hasConflict(today, `${startH}:${startM}`, `${endH}:00`);
+  const alts = conflict ? findFreeSlots(today, `${startH}:${startM}`, `${endH}:00`) : [];
+
+  const conflictBlock = conflict ? `
+    <div style="background:#fef1ee;border:1px solid #fca99b;border-radius:7px;padding:7px 10px;margin-bottom:8px;font-size:11px;color:var(--urgent);display:flex;gap:6px;align-items:flex-start">
+      <span style="flex-shrink:0">⚠️</span>
+      <div><strong>Créneau déjà occupé</strong> — ${startH}h est pris. Créneaux libres suggérés :<br>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
+        ${alts.map(s => `<button onclick="selectAlt(${id},'${s.date}','${s.start}','${s.end}')"
+          style="padding:3px 9px;border-radius:20px;border:1px solid #fca99b;background:#fff;color:var(--urgent);font-size:10px;font-weight:700;cursor:pointer"
+          >${s.label}</button>`).join('')}
+      </div>
+      ${alts.length ? `<button onclick="proposeAlts(${id})" style="margin-top:7px;padding:4px 10px;border-radius:6px;border:1px solid var(--urgent);background:transparent;color:var(--urgent);font-size:10px;font-weight:700;cursor:pointer;display:block">
+        📤 Insérer ces créneaux dans la réponse au client
+      </button>` : ''}
+      </div>
+    </div>` : '';
+
+  return `<div class="cal-suggest" id="cal-suggest-${id}">
+    <div class="cal-suggest-title">📅 RDV détecté — À confirmer</div>
+    ${conflictBlock}
+    <div class="cal-suggest-preview">
+      <div class="cal-suggest-row">
+        <span style="flex-shrink:0;color:var(--appt)">✏️</span>
+        <input id="cs-title-${id}" type="text" value="${title.replace(/"/g,'&quot;')}" placeholder="Titre du RDV">
+      </div>
+      <div class="cal-suggest-row" style="gap:6px">
+        <span style="flex-shrink:0;color:var(--appt)">📆</span>
+        <input id="cs-date-${id}"  type="date" value="${today}" style="flex:1.2">
+        <input id="cs-start-${id}" type="time" value="${startH}:${startM}" style="flex:1">
+        <span style="color:var(--ink4);font-size:10px">→</span>
+        <input id="cs-end-${id}"   type="time" value="${endH}:00" style="flex:1">
+      </div>
+    </div>
+    <div class="cal-suggest-btns">
+      <button class="cal-suggest-no" onclick="dismissCalSuggest(${id})">✕ Ignorer</button>
+      <button class="cal-suggest-ok" onclick="confirmCalSuggest(${id})">📅 Ajouter au calendrier</button>
+    </div>
+  </div>`;
+}
+
+// Sélectionner un créneau alternatif proposé
+function selectAlt(mailId, date, start, end) {
+  const di = document.getElementById('cs-date-'  + mailId);
+  const si = document.getElementById('cs-start-' + mailId);
+  const ei = document.getElementById('cs-end-'   + mailId);
+  if (di) di.value = date;
+  if (si) si.value = start;
+  if (ei) ei.value = end;
+  // Retirer le highlight du bloc conflit
+  const blk = document.querySelector(`#cal-suggest-${mailId} [style*="fef1ee"]`);
+  if (blk) blk.style.borderColor = '#bbf7d0';
+  showToast('📅', 'Créneau sélectionné — cliquez "Ajouter" pour confirmer');
+}
+
+// Insérer les créneaux alternatifs dans le textarea de réponse
+function proposeAlts(mailId) {
+  const alts = findFreeSlots(new Date().toISOString().slice(0,10));
+  if (!alts.length) return;
+  const rb = document.getElementById('ap-reply');
+  if (!rb) return;
+  const lines = alts.map((s, i) => `  ${i+1}. ${s.label}`).join('\n');
+  const insert = `\n\nJe vous propose les créneaux suivants :\n${lines}\n\nMerci de me confirmer votre disponibilité.`;
+  rb.value = rb.value.replace(/\n\nCordialement/, insert + '\n\nCordialement') || rb.value + insert;
+  rb.style.height = 'auto';
+  rb.style.height = Math.min(rb.scrollHeight, 280) + 'px';
+  showToast('📋', 'Créneaux insérés dans la réponse');
+}
+
+function confirmCalSuggest(mailId) {
+  const title = document.getElementById('cs-title-' + mailId)?.value.trim();
+  const date  = document.getElementById('cs-date-'  + mailId)?.value;
+  const start = document.getElementById('cs-start-' + mailId)?.value;
+  const end   = document.getElementById('cs-end-'   + mailId)?.value;
+  if (!title) return;
+  const evts = JSON.parse(localStorage.getItem('mailone_events') || '[]');
+  evts.push({ id: 'mail_confirm_' + mailId + '_' + Date.now(), date, title, start, end, lieu: '', color: 'appt' });
+  localStorage.setItem('mailone_events', JSON.stringify(evts));
+  const block = document.getElementById('cal-suggest-' + mailId);
+  if (block) block.innerHTML = `<div style="display:flex;align-items:center;gap:7px;font-size:12px;color:var(--appt);font-weight:600;padding:2px 0">
+    <span style="font-size:16px">✅</span> RDV ajouté — <span style="font-weight:400;font-size:11px">${start} · ${new Date(date).toLocaleDateString('fr-FR',{day:'numeric',month:'long'})}</span>
+  </div>`;
+  showToast('📅', 'RDV ajouté au calendrier');
+}
+
+function dismissCalSuggest(mailId) {
+  const block = document.getElementById('cal-suggest-' + mailId);
+  if (block) block.style.display = 'none';
+}
 
 // ════════════════════════════════════════════════════════════════
 // VUE SWITCHER
