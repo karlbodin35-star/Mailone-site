@@ -170,7 +170,6 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="tb-title">Dashboard Admin</div>
     <div style="font-size:11px;color:var(--ink4)" id="tb-date"></div>
     <div class="tb-right">
-      <button class="theme-toggle-dark" data-theme-toggle onclick="ThemeManager.toggle()" title="Passer en mode sombre" aria-label="Basculer le thème">🌙</button>
       <button class="tb-btn" onclick="exportData()">📥 Export CSV</button>
       <button class="tb-btn green" onclick="showToastMsg('📤','Rapport mensuel envoyé par email')">📊 Rapport mensuel</button>
     </div>
@@ -380,34 +379,6 @@ function exportData() {
   showToastMsg('📥', 'Export disponible depuis Stripe Dashboard');
 }
 
-// ── THEME MANAGER ────────────────────────────────────────────
-const ThemeManager = {
-  STORAGE_KEY: 'mailone_theme',
-  init() {
-    try {
-      const saved = localStorage.getItem(this.STORAGE_KEY);
-      const theme = saved === 'light' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', theme);
-      this._updateButtons(theme);
-    } catch(e) {}
-  },
-  toggle() {
-    try {
-      const current = document.documentElement.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      document.documentElement.setAttribute('data-theme', next);
-      localStorage.setItem(this.STORAGE_KEY, next);
-      this._updateButtons(next);
-    } catch(e) {}
-  },
-  _updateButtons(theme) {
-    document.querySelectorAll('[data-theme-toggle]').forEach(btn => {
-      btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-      btn.title = theme === 'dark' ? 'Passer en mode clair' : 'Passer en mode sombre';
-    });
-  },
-};
-ThemeManager.init();
 loadStats();
 </script>
 </body>
