@@ -91,7 +91,10 @@ const Auth = {
   },
 
   logout() {
-    ['mailone_token','mailone_user','mailone_plan','mailone_billing'].forEach(k => localStorage.removeItem(k));
+    // Effacer toutes les données MailOne (RGPD — aucune donnée résiduelle)
+    Object.keys(localStorage)
+      .filter(k => k.startsWith('mailone_'))
+      .forEach(k => localStorage.removeItem(k));
     window.location.href = 'index.html';
   },
 
