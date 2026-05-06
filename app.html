@@ -158,6 +158,33 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 /* Empty state */
 .empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--ink4)}
 
+/* ── ONBOARDING MÉTIER ── */
+.onb-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:600;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.onb-modal{background:var(--sur);border:1px solid var(--bdr);border-radius:22px;padding:36px 32px;max-width:580px;width:94%;max-height:88vh;overflow-y:auto;animation:popIn .35s cubic-bezier(.34,1.56,.64,1)}
+.onb-modal::-webkit-scrollbar{width:3px}
+.onb-modal::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}
+.onb-head{text-align:center;margin-bottom:24px}
+.onb-logo{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;margin-bottom:12px}
+.onb-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--ink);margin-bottom:6px;line-height:1.3}
+.onb-sub{font-size:13px;color:var(--ink3);line-height:1.6}
+.onb-detected{display:inline-flex;align-items:center;gap:7px;background:var(--teal-l);border:1px solid rgba(13,147,115,.25);border-radius:10px;padding:8px 14px;margin:10px 0;font-size:13px;font-weight:600;color:var(--teal)}
+.onb-professions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px}
+.onb-prof{padding:11px 10px;border:2px solid var(--bdr);border-radius:12px;cursor:pointer;text-align:center;transition:all .15s;background:var(--bg)}
+.onb-prof:hover{border-color:var(--teal);background:var(--teal-l)}
+.onb-prof.sel{border-color:var(--teal);background:var(--teal-l)}
+.onb-prof-ico{font-size:22px;margin-bottom:5px}
+.onb-prof-name{font-size:11px;font-weight:700;color:var(--ink);line-height:1.3}
+.onb-cats-title{font-size:11px;font-weight:800;color:var(--ink4);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.onb-cats{display:flex;flex-direction:column;gap:6px;margin-bottom:24px}
+.onb-cat{display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--bg);border:1px solid var(--bdr);border-radius:10px}
+.onb-cat-label{font-size:13px;font-weight:700;color:var(--ink);flex:1}
+.onb-cat-desc{font-size:11px;color:var(--ink3)}
+.onb-btn{width:100%;padding:14px;border:none;background:var(--teal);color:#fff;border-radius:12px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:opacity .15s;letter-spacing:.02em}
+.onb-btn:hover{opacity:.88}
+.onb-change{background:none;border:none;font-size:11px;color:var(--ink4);cursor:pointer;margin-top:8px;display:block;width:100%;text-align:center;padding:4px}
+.onb-change:hover{color:var(--ink2)}
+
 /* ── ASSISTANTE IA CHAT ── */
 .assistante-wrap{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--bg)}
 .assistante-wrap.on{display:flex}
@@ -477,6 +504,29 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <div class="cal-grid">
     <div class="cal-hours" id="cal-hours"></div>
     <div class="cal-slots" id="cal-slots"></div>
+  </div>
+</div>
+
+<!-- ONBOARDING MÉTIER -->
+<div id="onb-overlay" class="onb-overlay" style="display:none">
+  <div class="onb-modal">
+    <div class="onb-head">
+      <div class="onb-logo">MailOne<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-left:3px;vertical-align:middle"></span></div>
+      <div class="onb-title" id="onb-title">Bienvenue ! Quel est votre métier ?</div>
+      <div class="onb-sub" id="onb-sub">MailOne va configurer les catégories de tri adaptées à votre activité pour vous faire gagner un maximum de temps.</div>
+      <div class="onb-detected" id="onb-detected" style="display:none"></div>
+    </div>
+    <!-- Grille des professions -->
+    <div id="onb-professions-view">
+      <div class="onb-professions" id="onb-professions"></div>
+    </div>
+    <!-- Aperçu des catégories -->
+    <div id="onb-cats-view" style="display:none">
+      <div class="onb-cats-title">Catégories configurées pour vous</div>
+      <div class="onb-cats" id="onb-cats-list"></div>
+    </div>
+    <button class="onb-btn" id="onb-btn" onclick="ONB.confirm()">Confirmer et démarrer →</button>
+    <button class="onb-change" id="onb-change" onclick="ONB.showPicker()" style="display:none">Changer de métier</button>
   </div>
 </div>
 
@@ -860,6 +910,276 @@ async function loadQuota() {
 
 let premiumModeForced = false;
 loadQuota();
+
+// ════════════════════════════════════════════════════════════════
+// CONFIGURATION MÉTIERS
+// ════════════════════════════════════════════════════════════════
+const PROFESSIONS = {
+  plombier: {
+    label:'Plombier / Chauffagiste', icon:'🔧',
+    keywords:['plomb','chauffag','sanitaire','thermique','chaudière','tuyau','robinet'],
+    categories:[
+      {id:'urgent', label:'🚨 Urgences',      color:'urgent', desc:'Fuites, pannes, no-heat 24h/24'},
+      {id:'quote',  label:'📋 Devis',          color:'quote',  desc:'Demandes de devis et estimations'},
+      {id:'appt',   label:'📅 Interventions',  color:'appt',   desc:'RDV et planification chantiers'},
+      {id:'invoice',label:'💰 Facturation',    color:'invoice',desc:'Règlements et relances clients'},
+      {id:'custom1',label:'🔩 Fournisseurs',   color:'',       desc:'Commandes matériaux et livraisons'},
+    ]
+  },
+  electricien: {
+    label:'Électricien', icon:'⚡',
+    keywords:['électr','electr','câbl','tableau','courant','disjonct'],
+    categories:[
+      {id:'urgent', label:'🚨 Pannes urgentes',  color:'urgent', desc:'Coupures, courts-circuits'},
+      {id:'quote',  label:'📋 Devis',             color:'quote',  desc:'Projets et installations'},
+      {id:'appt',   label:'📅 Chantiers',         color:'appt',   desc:'Interventions planifiées'},
+      {id:'invoice',label:'💰 Facturation',       color:'invoice',desc:'Règlements et relances'},
+      {id:'custom1',label:'📜 Consuel / Normes',  color:'',       desc:'Certifications et conformité'},
+    ]
+  },
+  artisan_btp: {
+    label:'Artisan BTP', icon:'🏗️',
+    keywords:['maçon','maçonnerie','charpent','couvreur','carreleur','peintre','menuisier','btp','bâtiment','travaux','construction','rénovation'],
+    categories:[
+      {id:'urgent', label:'🚨 Urgences chantier', color:'urgent', desc:'Problèmes bloquants sur site'},
+      {id:'quote',  label:'📋 Devis',              color:'quote',  desc:'Demandes et appels d\'offres'},
+      {id:'appt',   label:'📅 Chantiers',          color:'appt',   desc:'Planning interventions'},
+      {id:'invoice',label:'💰 Facturation',        color:'invoice',desc:'Factures et acomptes'},
+      {id:'custom1',label:'🏗️ Fournisseurs',       color:'',       desc:'Matériaux, location engins'},
+      {id:'custom2',label:'📜 Assurances',         color:'',       desc:'RC Pro, décennale, sinistres'},
+    ]
+  },
+  avocat: {
+    label:'Avocat', icon:'⚖️',
+    keywords:['avocat','barreau','juridique','cabinet juridique','droit','juriste','notaire'],
+    categories:[
+      {id:'urgent', label:'🚨 Délais urgents',      color:'urgent', desc:'Procédures, délais légaux'},
+      {id:'quote',  label:'📁 Dossiers clients',     color:'quote',  desc:'Suivi et gestion des affaires'},
+      {id:'appt',   label:'📅 Audiences / RDV',      color:'appt',   desc:'Tribunaux et consultations'},
+      {id:'invoice',label:'💰 Honoraires',           color:'invoice',desc:'Facturation et règlements'},
+      {id:'custom1',label:'🔒 Confidentiel',         color:'',       desc:'Secret professionnel renforcé'},
+      {id:'custom2',label:'⚖️ Confrères / Tribunaux',color:'',       desc:'Correspondances professionnelles'},
+    ]
+  },
+  medecin: {
+    label:'Médecin / Paramédical', icon:'🩺',
+    keywords:['médecin','docteur','dr ','cabinet médical','clinique','santé','infirmier','kiné','pharmacien','dentiste'],
+    categories:[
+      {id:'urgent', label:'🚨 Urgences médicales',  color:'urgent', desc:'Cas prioritaires'},
+      {id:'appt',   label:'📅 RDV Patients',         color:'appt',   desc:'Consultations et suivis'},
+      {id:'invoice',label:'💰 Honoraires / CPAM',   color:'invoice',desc:'Facturation et remboursements'},
+      {id:'quote',  label:'📋 Courriers médicaux',   color:'quote',  desc:'Ordonnances, comptes-rendus'},
+      {id:'custom1',label:'🏥 Confrères / Hôpitaux', color:'',       desc:'Correspondances professionnelles'},
+    ]
+  },
+  comptable: {
+    label:'Expert-comptable', icon:'📊',
+    keywords:['compta','expert-compt','cabinet compt','audit','fiscal','bilan','comptabilité','urssaf'],
+    categories:[
+      {id:'urgent', label:'🚨 Délais fiscaux',       color:'urgent', desc:'Déclarations, clôtures urgentes'},
+      {id:'quote',  label:'📁 Dossiers clients',     color:'quote',  desc:'Missions en cours'},
+      {id:'appt',   label:'📅 RDV Bilan',             color:'appt',   desc:'Réunions et présentations'},
+      {id:'invoice',label:'💰 Honoraires',           color:'invoice',desc:'Facturation missions'},
+      {id:'custom1',label:'🏛️ Impôts / URSSAF',      color:'',       desc:'Administrations fiscales'},
+    ]
+  },
+  agent_immo: {
+    label:'Agent immobilier', icon:'🏠',
+    keywords:['immo','agence','immobilier','transaction','bien','logement','location','vente'],
+    categories:[
+      {id:'urgent', label:'🚨 Offres / Compromis',  color:'urgent', desc:'Délais et négociations'},
+      {id:'appt',   label:'📅 Visites',              color:'appt',   desc:'Planification des visites'},
+      {id:'quote',  label:'📋 Mandats',              color:'quote',  desc:'Signatures et renouvellements'},
+      {id:'invoice',label:'💰 Commissions',          color:'invoice',desc:'Honoraires et règlements'},
+      {id:'custom1',label:'🔑 Propriétaires',        color:'',       desc:'Gestion bailleur/vendeur'},
+    ]
+  },
+  restaurateur: {
+    label:'Restaurateur / Food', icon:'🍽️',
+    keywords:['restaurant','traiteur','boulanger','pâtissier','cuisinier','food','brasserie','café','bar'],
+    categories:[
+      {id:'urgent', label:'🚨 Urgences',             color:'urgent', desc:'Pannes frigo, approvisionnement'},
+      {id:'appt',   label:'📅 Réservations / Events',color:'appt',   desc:'Groupes, privatisations'},
+      {id:'invoice',label:'💰 Fournisseurs',         color:'invoice',desc:'Commandes et livraisons'},
+      {id:'quote',  label:'📋 Devis Traiteur',       color:'quote',  desc:'Événements et prestations'},
+      {id:'custom1',label:'📜 Hygiène / Contrôles',  color:'',       desc:'HACCP, inspections sanitaires'},
+    ]
+  },
+  consultant: {
+    label:'Consultant / Coach', icon:'💼',
+    keywords:['consultant','conseil','consulting','coach','formateur','freelance','prestation'],
+    categories:[
+      {id:'quote',  label:'📋 Propositions',         color:'quote',  desc:'Offres et réponses appels offres'},
+      {id:'appt',   label:'📅 Missions / RDV',       color:'appt',   desc:'Interventions et ateliers'},
+      {id:'invoice',label:'💰 Facturation',          color:'invoice',desc:'Honoraires et relances'},
+      {id:'urgent', label:'🚨 Urgences client',      color:'urgent', desc:'Demandes prioritaires'},
+      {id:'custom1',label:'🔔 Suivi prospects',      color:'',       desc:'Pipeline commercial'},
+    ]
+  },
+  garage: {
+    label:'Garagiste / Auto', icon:'🚗',
+    keywords:['garage','auto','mécanic','carrossier','véhicule','voiture','pneumatique'],
+    categories:[
+      {id:'urgent', label:'🚨 Dépannages',           color:'urgent', desc:'Interventions immédiates'},
+      {id:'quote',  label:'📋 Devis réparations',    color:'quote',  desc:'Estimations et diagnostics'},
+      {id:'appt',   label:'📅 Rendez-vous atelier',  color:'appt',   desc:'Entretiens et révisions'},
+      {id:'invoice',label:'💰 Facturation',          color:'invoice',desc:'Règlements clients'},
+      {id:'custom1',label:'🔩 Pièces / Fournisseurs',color:'',       desc:'Commandes et livraisons'},
+    ]
+  },
+  autre: {
+    label:'Autre activité', icon:'💼',
+    keywords:[],
+    categories:[
+      {id:'urgent', label:'🚨 Urgent',    color:'urgent', desc:'Emails prioritaires'},
+      {id:'quote',  label:'📋 Commercial',color:'quote',  desc:'Devis et propositions'},
+      {id:'appt',   label:'📅 RDV',       color:'appt',   desc:'Rendez-vous et réunions'},
+      {id:'invoice',label:'💰 Factures',  color:'invoice',desc:'Facturation et paiements'},
+    ]
+  },
+};
+
+// ── DÉTECTION AUTOMATIQUE DU MÉTIER ──────────────────────────
+function detectProfession(company = '', sector = '') {
+  const text = (company + ' ' + sector).toLowerCase();
+  for (const [key, prof] of Object.entries(PROFESSIONS)) {
+    if (key === 'autre') continue;
+    if (prof.keywords.some(kw => text.includes(kw))) return key;
+  }
+  return null;
+}
+
+// ── ONBOARDING ────────────────────────────────────────────────
+const ONB = (() => {
+  let selectedKey = null;
+
+  function renderProfGrid() {
+    const grid = document.getElementById('onb-professions');
+    grid.innerHTML = Object.entries(PROFESSIONS).map(([key, p]) =>
+      `<div class="onb-prof${selectedKey===key?' sel':''}" onclick="ONB.select('${key}')">
+        <div class="onb-prof-ico">${p.icon}</div>
+        <div class="onb-prof-name">${p.label}</div>
+      </div>`
+    ).join('');
+  }
+
+  function renderCats(key) {
+    const prof = PROFESSIONS[key];
+    const list = document.getElementById('onb-cats-list');
+    list.innerHTML = prof.categories.map(c =>
+      `<div class="onb-cat">
+        <div style="font-size:18px;width:24px;flex-shrink:0">${c.label.split(' ')[0]}</div>
+        <div style="flex:1">
+          <div class="onb-cat-label">${c.label.slice(c.label.indexOf(' ')+1)}</div>
+          ${c.desc ? `<div class="onb-cat-desc">${c.desc}</div>` : ''}
+        </div>
+      </div>`
+    ).join('');
+  }
+
+  function select(key) {
+    selectedKey = key;
+    const prof = PROFESSIONS[key];
+    document.getElementById('onb-title').textContent = `Parfait ! Configuration pour ${prof.label}`;
+    document.getElementById('onb-sub').textContent = `Voici les ${prof.categories.length} catégories qu'on a préparées pour vous. Modifiables à tout moment.`;
+    document.getElementById('onb-professions-view').style.display = 'none';
+    document.getElementById('onb-cats-view').style.display = '';
+    document.getElementById('onb-change').style.display = '';
+    renderCats(key);
+  }
+
+  function showPicker() {
+    document.getElementById('onb-professions-view').style.display = '';
+    document.getElementById('onb-cats-view').style.display = 'none';
+    document.getElementById('onb-change').style.display = 'none';
+    document.getElementById('onb-title').textContent = 'Quel est votre métier ?';
+    renderProfGrid();
+  }
+
+  function confirm() {
+    if (!selectedKey) { showToast('⚠️', 'Choisissez votre métier d\'abord'); return; }
+    const prof = PROFESSIONS[selectedKey];
+    localStorage.setItem('mailone_profession', selectedKey);
+    localStorage.setItem('mailone_categories', JSON.stringify(prof.categories));
+    document.getElementById('onb-overlay').style.display = 'none';
+    applyProfessionCategories(selectedKey);
+    showToast('✅', `MailOne configuré pour ${prof.label}`);
+  }
+
+  function init() {
+    const saved = localStorage.getItem('mailone_profession');
+    if (saved) { applyProfessionCategories(saved); return; }
+
+    // Tenter la détection auto
+    const detected = detectProfession(user.company || '', user.sector || '');
+    renderProfGrid();
+
+    if (detected) {
+      selectedKey = detected;
+      const prof = PROFESSIONS[detected];
+      document.getElementById('onb-detected').style.display = 'inline-flex';
+      document.getElementById('onb-detected').textContent = `✨ Détecté : ${prof.icon} ${prof.label}`;
+      document.getElementById('onb-title').textContent = `Bienvenue, ${user.name?.split(' ')[0] || ''} !`;
+      document.getElementById('onb-sub').textContent = `On a détecté que vous êtes ${prof.label}. Voici les catégories préparées pour votre activité :`;
+      document.getElementById('onb-professions-view').style.display = 'none';
+      document.getElementById('onb-cats-view').style.display = '';
+      document.getElementById('onb-change').style.display = '';
+      renderCats(detected);
+    } else {
+      document.getElementById('onb-title').textContent = `Bienvenue, ${user.name?.split(' ')[0] || ''} !`;
+    }
+
+    document.getElementById('onb-overlay').style.display = 'flex';
+  }
+
+  return { init, select, showPicker, confirm };
+})();
+
+// ── APPLIQUER LES CATÉGORIES DU MÉTIER ───────────────────────
+function applyProfessionCategories(profKey) {
+  const prof = PROFESSIONS[profKey];
+  if (!prof) return;
+
+  // Mettre à jour les onglets de filtre
+  const ftabs = document.querySelector('.ftabs');
+  if (ftabs) {
+    const colorMap = { urgent:'urg', quote:'quo', appt:'apt', invoice:'inv' };
+    ftabs.innerHTML = `<button class="ftab all" onclick="setFilter('all',this)">Tous</button>` +
+      prof.categories.map(c => {
+        const cls = colorMap[c.id] || '';
+        const activeClick = c.id.startsWith('custom') ? `setFilter('${c.id}',this)` : `setFilter('${c.id}',this)`;
+        return `<button class="ftab${cls?' '+cls:''}" onclick="${activeClick}">${c.label}</button>`;
+      }).join('');
+  }
+
+  // Mettre à jour les labels de la sidebar
+  const sbItems = {
+    urgent: document.getElementById('sb-u'),
+    quote: document.getElementById('sb-d'),
+    appt: document.getElementById('sb-r'),
+    invoice: document.getElementById('sb-f'),
+  };
+
+  // Mettre à jour le label dans la section sidebar "Catégories IA"
+  const sbSec = document.querySelector('.sb-sec:nth-child(4)');
+  if (sbSec) {
+    const items = sbSec.querySelectorAll('.sb-item');
+    prof.categories.slice(0, 4).forEach((cat, i) => {
+      if (items[i]) {
+        const ico = items[i].querySelector('.sb-ico');
+        if (ico) ico.textContent = cat.label.split(' ')[0];
+        const txt = [...items[i].childNodes].find(n => n.nodeType === 3);
+        if (txt) txt.textContent = cat.label.slice(cat.label.indexOf(' ')+1);
+      }
+    });
+  }
+
+  // Mettre à jour les stats bar
+  const statLabels = document.querySelectorAll('.stat-lbl');
+  prof.categories.slice(0, 4).forEach((cat, i) => {
+    if (statLabels[i]) statLabels[i].textContent = cat.label.slice(cat.label.indexOf(' ')+1);
+  });
+}
 
 // ════════════════════════════════════════════════════════════════
 // SUGGESTION CALENDRIER
@@ -1379,6 +1699,7 @@ document.getElementById('modal-rdv').addEventListener('click', e => {
 
 renderList();
 updateStats();
+ONB.init();
 </script>
 <div class="toast" id="toast" style="position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9998;max-width:320px;border:1px solid rgba(255,255,255,.08)"><span id="t-ico"></span><span id="t-msg"></span></div>
 </body>
