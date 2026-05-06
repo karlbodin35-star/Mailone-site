@@ -158,6 +158,42 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 /* Empty state */
 .empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--ink4)}
 
+/* ── CALENDRIER 24H ── */
+.cal-wrap{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--bg)}
+.cal-wrap.on{display:flex}
+.cal-topbar{height:52px;background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
+.cal-nav{display:flex;align-items:center;gap:6px}
+.cal-nav-btn{width:30px;height:30px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;color:var(--ink2);transition:background .15s}
+.cal-nav-btn:hover{background:var(--bg2)}
+.cal-today-btn{padding:5px 12px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;color:var(--ink2);transition:all .15s}
+.cal-today-btn:hover{background:var(--bg2)}
+.cal-date-label{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--ink);min-width:200px}
+.cal-add-btn{margin-left:auto;padding:6px 14px;border-radius:7px;border:none;background:var(--teal);color:#fff;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;transition:opacity .15s}
+.cal-add-btn:hover{opacity:.85}
+.cal-grid{flex:1;display:flex;overflow:hidden}
+.cal-hours{width:58px;flex-shrink:0;overflow-y:auto;border-right:1px solid var(--bdr);background:var(--sur)}
+.cal-hours::-webkit-scrollbar{display:none}
+.cal-hour-lbl{height:60px;display:flex;align-items:flex-start;justify-content:flex-end;padding:4px 10px 0 0;font-size:10px;color:var(--ink4);font-weight:600;flex-shrink:0}
+.cal-slots{flex:1;overflow-y:auto;position:relative}
+.cal-slots::-webkit-scrollbar{width:3px}
+.cal-slots::-webkit-scrollbar-thumb{background:var(--bdr2);border-radius:4px}
+.cal-slot{height:60px;border-bottom:1px solid var(--bdr);position:relative;cursor:pointer;transition:background .1s;flex-shrink:0}
+.cal-slot:hover{background:rgba(13,147,115,.04)}
+.cal-slot.half-line::after{content:'';position:absolute;top:50%;left:0;right:0;height:1px;background:var(--bdr);opacity:.5}
+.cal-now-line{position:absolute;left:0;right:0;height:2px;background:var(--urgent);z-index:10;pointer-events:none}
+.cal-now-line::before{content:'';position:absolute;left:-4px;top:-4px;width:10px;height:10px;border-radius:50%;background:var(--urgent)}
+.cal-event{position:absolute;left:6px;right:6px;border-radius:8px;padding:5px 8px;font-size:11px;font-weight:600;cursor:pointer;z-index:5;overflow:hidden;transition:opacity .15s;border-left:3px solid currentColor}
+.cal-event:hover{opacity:.85}
+.cal-event.appt{background:var(--appt-bg);color:var(--appt);border-color:var(--appt)}
+.cal-event.urgent{background:var(--urgent-bg);color:var(--urgent);border-color:var(--urgent)}
+.cal-event.custom{background:var(--teal-l);color:var(--teal);border-color:var(--teal)}
+.cal-event.quote{background:var(--quote-bg);color:var(--quote);border-color:var(--quote)}
+.cal-event-title{font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cal-event-sub{font-size:9px;font-weight:500;opacity:.75;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+[data-theme="dark"] .cal-slot:hover{background:rgba(13,147,115,.08)}
+[data-theme="dark"] .cal-wrap{background:var(--bg)}
+[data-theme="dark"] .cal-topbar{background:var(--sur);border-color:var(--bdr)}
+
 /* Modal */
 .overlay{position:fixed;inset:0;background:rgba(28,26,22,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:300}
 .overlay.open{display:flex}
@@ -233,6 +269,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <div class="sb-sec">
     <div class="sb-lbl">Outils Pro</div>
     <div class="sb-item" onclick="window.location.href='assistant.html'" style="cursor:pointer"><span class="sb-ico">✨</span>Assistant IA<span style="margin-left:auto;font-size:9px;background:rgba(109,40,217,.3);color:#a78bfa;padding:2px 6px;border-radius:20px;font-weight:700">NEW</span></div>
+    <div class="sb-item" id="sb-cal" onclick="showView('cal');setSb(this)"><span class="sb-ico">📅</span>Calendrier</div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔔</span>Relances<span class="sb-badge p">2</span></div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔍</span>Recherche IA</div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📊</span>Statistiques</div>
@@ -282,7 +319,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <div class="stat" onclick="filterCat('invoice')"><div class="stat-ico" style="background:var(--invoice-bg)">💰</div><div><div class="stat-num" id="stat-f">0</div><div class="stat-lbl">Factures</div><div class="stat-trend t-neu">— En attente de mails</div></div></div>
   </div>
 
-  <div class="content">
+  <div class="content" id="content-mail">
     <div class="mail-panel">
       <div class="mp-head">
         <div class="mp-title" id="mp-title">Boîte de réception</div>
@@ -325,6 +362,66 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     </div>
   </div>
 </div>
+</div>
+
+<!-- VUE CALENDRIER 24H -->
+<div class="cal-wrap" id="cal-wrap">
+  <div class="cal-topbar">
+    <div class="cal-nav">
+      <button class="cal-nav-btn" onclick="CAL.prev()">‹</button>
+      <button class="cal-today-btn" onclick="CAL.goToday()">Aujourd'hui</button>
+      <button class="cal-nav-btn" onclick="CAL.next()">›</button>
+    </div>
+    <div class="cal-date-label" id="cal-date-label"></div>
+    <button class="cal-add-btn" onclick="CAL.openAdd()">+ Ajouter un RDV</button>
+  </div>
+  <div class="cal-grid">
+    <div class="cal-hours" id="cal-hours"></div>
+    <div class="cal-slots" id="cal-slots"></div>
+  </div>
+</div>
+
+<!-- MODAL AJOUT RDV -->
+<div class="overlay" id="modal-rdv">
+  <div class="modal" style="max-width:400px;text-align:left;padding:28px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800">📅 Nouveau rendez-vous</div>
+      <button onclick="CAL.closeAdd()" style="width:30px;height:30px;border-radius:7px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;color:var(--ink3)">✕</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:11px">
+      <div>
+        <label style="font-size:11px;font-weight:600;color:var(--ink2);display:block;margin-bottom:4px">Titre</label>
+        <input id="rdv-title" type="text" placeholder="Ex : Visite client Dupont" style="width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none;box-sizing:border-box" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+      </div>
+      <div style="display:flex;gap:10px">
+        <div style="flex:1">
+          <label style="font-size:11px;font-weight:600;color:var(--ink2);display:block;margin-bottom:4px">Début</label>
+          <input id="rdv-start" type="time" value="09:00" style="width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+        </div>
+        <div style="flex:1">
+          <label style="font-size:11px;font-weight:600;color:var(--ink2);display:block;margin-bottom:4px">Fin</label>
+          <input id="rdv-end" type="time" value="10:00" style="width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:600;color:var(--ink2);display:block;margin-bottom:4px">Lieu (optionnel)</label>
+        <input id="rdv-lieu" type="text" placeholder="Adresse ou lien visio" style="width:100%;padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none;box-sizing:border-box" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:600;color:var(--ink2);display:block;margin-bottom:6px">Couleur</label>
+        <div style="display:flex;gap:8px">
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px"><input type="radio" name="rdv-color" value="custom" checked style="accent-color:var(--teal)"><span style="width:12px;height:12px;border-radius:3px;background:var(--teal);display:inline-block"></span>RDV</label>
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px"><input type="radio" name="rdv-color" value="appt" style="accent-color:var(--appt)"><span style="width:12px;height:12px;border-radius:3px;background:var(--appt);display:inline-block"></span>Chantier</label>
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px"><input type="radio" name="rdv-color" value="urgent" style="accent-color:var(--urgent)"><span style="width:12px;height:12px;border-radius:3px;background:var(--urgent);display:inline-block"></span>Urgent</label>
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;font-size:12px"><input type="radio" name="rdv-color" value="quote" style="accent-color:var(--quote)"><span style="width:12px;height:12px;border-radius:3px;background:var(--quote);display:inline-block"></span>Devis</label>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:20px">
+      <button onclick="CAL.closeAdd()" style="padding:9px 16px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)">Annuler</button>
+      <button onclick="CAL.saveEvent()" style="padding:9px 18px;border-radius:8px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">Enregistrer</button>
+    </div>
+  </div>
 </div>
 
 <!-- MODAL -->
@@ -663,6 +760,181 @@ async function loadQuota() {
 
 let premiumModeForced = false;
 loadQuota();
+
+// ════════════════════════════════════════════════════════════════
+// VUE SWITCHER
+// ════════════════════════════════════════════════════════════════
+function showView(v) {
+  const mail = document.getElementById('content-mail');
+  const cal  = document.getElementById('cal-wrap');
+  if (v === 'cal') {
+    mail.style.display = 'none';
+    cal.classList.add('on');
+    CAL.render();
+  } else {
+    mail.style.display = '';
+    cal.classList.remove('on');
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+// CALENDRIER 24H
+// ════════════════════════════════════════════════════════════════
+const CAL = (() => {
+  const STORE_KEY = 'mailone_events';
+  let currentDate = new Date();
+  currentDate.setHours(0,0,0,0);
+
+  function loadEvents() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch { return []; }
+  }
+  function saveEvents(evts) {
+    localStorage.setItem(STORE_KEY, JSON.stringify(evts));
+  }
+  function dateKey(d) {
+    return d.toISOString().slice(0,10);
+  }
+  function fmtDate(d) {
+    const days = ['Dimanche','Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi'];
+    const months = ['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    const today = new Date(); today.setHours(0,0,0,0);
+    const isToday = d.getTime() === today.getTime();
+    return (isToday ? '📅 Aujourd\'hui — ' : '') + days[d.getDay()] + ' ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+  }
+
+  function render() {
+    document.getElementById('cal-date-label').textContent = fmtDate(currentDate);
+    renderHours();
+    renderSlots();
+  }
+
+  function renderHours() {
+    const el = document.getElementById('cal-hours');
+    let html = '<div style="height:60px"></div>';
+    for (let h = 0; h < 24; h++) {
+      html += `<div class="cal-hour-lbl">${String(h).padStart(2,'0')}:00</div>`;
+    }
+    el.innerHTML = html;
+  }
+
+  function renderSlots() {
+    const el = document.getElementById('cal-slots');
+    const key = dateKey(currentDate);
+    const evts = loadEvents().filter(e => e.date === key);
+
+    // Auto-importer les mails RDV du jour courant
+    const autoEvts = MAILS.filter(m => m.cat === 'appt').map(m => ({
+      id: 'mail_' + m.id,
+      date: key,
+      title: m.sender + ' — ' + m.subject.slice(0,30),
+      start: '09:00',
+      end: '10:00',
+      lieu: '',
+      color: 'appt',
+      fromMail: true,
+    }));
+    // Fusionner sans doublons
+    const allAutoIds = evts.map(e => e.id);
+    const newAuto = autoEvts.filter(a => !allAutoIds.includes(a.id));
+    const allEvts = [...evts, ...newAuto];
+    if (newAuto.length) saveEvents([...loadEvents(), ...newAuto]);
+
+    // Build 24 slots
+    let html = '';
+    for (let h = 0; h < 24; h++) {
+      html += `<div class="cal-slot half-line" data-hour="${h}" onclick="CAL.clickSlot(${h})"></div>`;
+    }
+    el.innerHTML = html;
+
+    // Now-line
+    const now = new Date();
+    const today = new Date(); today.setHours(0,0,0,0);
+    if (currentDate.getTime() === today.getTime()) {
+      const pct = (now.getHours() * 60 + now.getMinutes()) / (24 * 60) * 100;
+      const line = document.createElement('div');
+      line.className = 'cal-now-line';
+      line.style.top = pct + '%';
+      el.style.position = 'relative';
+      el.appendChild(line);
+    }
+
+    // Render events
+    allEvts.forEach(evt => {
+      const [sh, sm] = evt.start.split(':').map(Number);
+      const [eh, em] = evt.end.split(':').map(Number);
+      const startMin = sh * 60 + sm;
+      const endMin   = eh * 60 + em;
+      const duration = Math.max(endMin - startMin, 30);
+      const top    = (startMin / (24 * 60)) * 100;
+      const height = (duration / (24 * 60)) * 100;
+      const div = document.createElement('div');
+      div.className = `cal-event ${evt.color || 'custom'}`;
+      div.style.top    = `calc(${top}% + 2px)`;
+      div.style.height = `calc(${height}% - 4px)`;
+      div.innerHTML = `<div class="cal-event-title">${evt.title}</div><div class="cal-event-sub">${evt.start}–${evt.end}${evt.lieu ? ' · ' + evt.lieu : ''}</div>`;
+      div.onclick = (e) => { e.stopPropagation(); deleteEvent(evt.id); };
+      div.title = 'Cliquer pour supprimer';
+      el.appendChild(div);
+    });
+
+    // Scroll to 7h
+    const today2 = new Date(); today2.setHours(0,0,0,0);
+    if (currentDate.getTime() === today2.getTime()) {
+      setTimeout(() => { el.scrollTop = (7 * 60 / (24 * 60)) * el.scrollHeight; }, 50);
+    }
+  }
+
+  function deleteEvent(id) {
+    if (!confirm('Supprimer ce rendez-vous ?')) return;
+    saveEvents(loadEvents().filter(e => e.id !== id));
+    render();
+  }
+
+  function clickSlot(h) {
+    document.getElementById('rdv-start').value = String(h).padStart(2,'0') + ':00';
+    document.getElementById('rdv-end').value   = String(h + 1 > 23 ? 23 : h + 1).padStart(2,'0') + ':00';
+    openAdd();
+  }
+
+  function openAdd() {
+    document.getElementById('modal-rdv').classList.add('open');
+    setTimeout(() => document.getElementById('rdv-title').focus(), 100);
+  }
+  function closeAdd() {
+    document.getElementById('modal-rdv').classList.remove('open');
+    document.getElementById('rdv-title').value = '';
+    document.getElementById('rdv-lieu').value  = '';
+  }
+
+  function saveEvent() {
+    const title = document.getElementById('rdv-title').value.trim();
+    if (!title) { document.getElementById('rdv-title').style.borderColor = 'var(--urgent)'; return; }
+    const color = document.querySelector('input[name="rdv-color"]:checked')?.value || 'custom';
+    const evt = {
+      id:    'evt_' + Date.now(),
+      date:  dateKey(currentDate),
+      title,
+      start: document.getElementById('rdv-start').value,
+      end:   document.getElementById('rdv-end').value,
+      lieu:  document.getElementById('rdv-lieu').value.trim(),
+      color,
+    };
+    saveEvents([...loadEvents(), evt]);
+    closeAdd();
+    render();
+    showToast('📅', 'RDV ajouté au calendrier');
+  }
+
+  function prev()    { currentDate.setDate(currentDate.getDate() - 1); render(); }
+  function next()    { currentDate.setDate(currentDate.getDate() + 1); render(); }
+  function goToday() { currentDate = new Date(); currentDate.setHours(0,0,0,0); render(); }
+
+  return { render, prev, next, goToday, clickSlot, openAdd, closeAdd, saveEvent };
+})();
+
+document.getElementById('modal-rdv').addEventListener('click', e => {
+  if (e.target.id === 'modal-rdv') CAL.closeAdd();
+});
 
 // ════════════════════════════════════════════════════════════════
 // INIT
