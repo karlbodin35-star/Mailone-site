@@ -255,128 +255,15 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
 <div class="toast" id="toast"><span id="t-ico">✅</span><span id="t-msg"></span></div>
 
+<script src="mailone.js"></script>
 <script>
-// ════════════════════════════════════════════════════════════════
-// SIMULATED DATA (en prod: appels API)
-// ════════════════════════════════════════════════════════════════
-const CLIENTS = [
-  {name:'Jean-Michel Pérez',email:'jm.perez@plomberie-perez.fr',plan:'solo',status:'active',mrr:99,joined:'15/01/2025',billing:'monthly'},
-  {name:'Sophie Bertrand',email:'sophie.b@electricite-bordeaux.fr',plan:'team',status:'active',mrr:900,joined:'22/01/2025',billing:'annual'},
-  {name:'Rémi Lacombe',email:'remi@lacombe-renov.fr',plan:'enterprise',status:'active',mrr:1780,joined:'03/02/2025',billing:'monthly'},
-  {name:'Marie Fontaine',email:'marie.fontaine@menuiserie-fontaine.fr',plan:'solo',status:'trial',mrr:0,joined:'14/03/2025',billing:'trial'},
-  {name:'Karim Benali',email:'k.benali@elec-pro-lyon.fr',plan:'solo',status:'active',mrr:99,joined:'28/02/2025',billing:'monthly'},
-  {name:'Céline Morin',email:'celine@morin-peinture.fr',plan:'team',status:'active',mrr:900,joined:'01/03/2025',billing:'annual'},
-  {name:'Patrick Dumas',email:'pdumas@plomberie-dumas.fr',plan:'solo',status:'trial',mrr:0,joined:'20/03/2025',billing:'trial'},
-  {name:'Agence Immo Sud',email:'contact@immo-sud.fr',plan:'enterprise',status:'active',mrr:1780,joined:'10/02/2025',billing:'monthly'},
-];
+const API_URL = 'https://mailone-backend.vercel.app';
 
-const MRR_HISTORY = [
-  {month:'Oct', mrr:0},{month:'Nov', mrr:0},{month:'Déc', mrr:99},
-  {month:'Jan', mrr:1098},{month:'Fév', mrr:3676},{month:'Mar', mrr:5558},
-];
+// ── Auth check + admin guard ─────────────────────────────────
+const token = localStorage.getItem('mailone_token');
+if (!token) { window.location.href = 'login.html'; }
 
-const ACTIVITIES = [
-  {ico:'🆕',bg:'var(--green-l)',text:'<strong>Patrick Dumas</strong> a commencé son essai gratuit — Plan Solo',time:'Il y a 2h'},
-  {ico:'⭐',bg:'var(--amber-l)',text:'<strong>Marie Fontaine</strong> a activé son essai gratuit',time:'Il y a 5h'},
-  {ico:'💳',bg:'var(--blue-l)',text:'Paiement reçu — <strong>Céline Morin</strong> — Plan Équipe annuel — 9 000€',time:'Il y a 1j'},
-  {ico:'🔔',bg:'var(--red-l)',text:'Essai expirant dans 3j — <strong>Marie Fontaine</strong> — Envoyer un email de relance',time:'Il y a 1j'},
-  {ico:'💳',bg:'var(--blue-l)',text:'Paiement reçu — <strong>Karim Benali</strong> — Plan Solo — 99€',time:'Il y a 2j'},
-  {ico:'🆕',bg:'var(--green-l)',text:'<strong>Agence Immo Sud</strong> a upgradé : Solo → Entreprise',time:'Il y a 5j'},
-];
-
-// ════════════════════════════════════════════════════════════════
-// COMPUTE STATS
-// ════════════════════════════════════════════════════════════════
-const active = CLIENTS.filter(c=>c.status==='active');
-const trials = CLIENTS.filter(c=>c.status==='trial');
-const mrr = active.reduce((s,c)=>s+c.mrr,0);
-const arpu = active.length ? Math.round(mrr/active.length) : 0;
-
-// Update KPIs
-document.getElementById('kpi-mrr').textContent = mrr.toLocaleString('fr-FR')+'€';
-document.getElementById('kpi-mrr-trend').textContent = '↑ +'+mrr.toLocaleString('fr-FR')+'€ vs mois dernier (démarrage)';
-document.getElementById('kpi-arr').textContent = 'ARR : '+(mrr*12).toLocaleString('fr-FR')+'€';
-document.getElementById('kpi-clients').textContent = active.length;
-document.getElementById('kpi-clients-trend').textContent = '↑ +'+active.length+' ce mois (démarrage)';
-document.getElementById('kpi-trial-count').textContent = trials.length+' en essai gratuit';
-document.getElementById('kpi-churn').textContent = '0%';
-document.getElementById('kpi-arpu').textContent = arpu.toLocaleString('fr-FR')+'€';
-document.getElementById('kpi-arpu-trend').textContent = '↑ ARPU solide';
-
-// Sidebar counts
-document.getElementById('sb-total').textContent = CLIENTS.length;
-document.getElementById('sb-trial').textContent = trials.length;
-document.getElementById('sb-active').textContent = active.length;
-
-// Date
 document.getElementById('tb-date').textContent = new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
-
-// ════════════════════════════════════════════════════════════════
-// REVENUE CHART
-// ════════════════════════════════════════════════════════════════
-const maxMrr = Math.max(...MRR_HISTORY.map(m=>m.mrr), 1);
-document.getElementById('revenue-chart').innerHTML = MRR_HISTORY.map(m => `
-  <div class="chart-bar-wrap">
-    <div style="font-size:9px;color:var(--green);font-weight:700;height:16px;display:flex;align-items:flex-end">${m.mrr>0?m.mrr.toLocaleString('fr-FR')+'€':''}</div>
-    <div class="chart-bar" style="height:${Math.max(m.mrr/maxMrr*80,2)}px"></div>
-    <div class="chart-label">${m.month}</div>
-  </div>`).join('');
-
-// ════════════════════════════════════════════════════════════════
-// CLIENTS TABLE
-// ════════════════════════════════════════════════════════════════
-const planLabels = {solo:'Solo',team:'Équipe',enterprise:'Entreprise'};
-const planClasses = {solo:'pb-solo',team:'pb-team',enterprise:'pb-ent'};
-const statusLabels = {active:'<span class="status-dot dot-active"></span>Actif',trial:'<span class="status-dot dot-trial"></span>Essai',churned:'<span class="status-dot dot-churned"></span>Churn'};
-document.getElementById('clients-table').innerHTML = CLIENTS.slice(0,6).map(c=>`
-  <tr>
-    <td>
-      <div style="font-weight:600;color:var(--ink)">${c.name}</div>
-      <div style="font-size:10px;color:var(--ink4)">${c.email}</div>
-    </td>
-    <td><span class="plan-badge ${planClasses[c.plan]}">${planLabels[c.plan]}</span></td>
-    <td style="font-size:11px">${statusLabels[c.status]||c.status}</td>
-    <td style="font-weight:700;color:${c.mrr>0?'var(--ink)':'var(--ink4)'}">${c.mrr>0?c.mrr.toLocaleString('fr-FR')+'€':'Essai'}</td>
-  </tr>`).join('');
-
-// ════════════════════════════════════════════════════════════════
-// ACTIVITY FEED
-// ════════════════════════════════════════════════════════════════
-document.getElementById('activity-feed').innerHTML = ACTIVITIES.map(a=>`
-  <div class="activity-item">
-    <div class="act-ico" style="background:${a.bg}">${a.ico}</div>
-    <div><div class="act-text">${a.text}</div><div class="act-time">${a.time}</div></div>
-  </div>`).join('');
-
-// ════════════════════════════════════════════════════════════════
-// PLAN BREAKDOWN
-// ════════════════════════════════════════════════════════════════
-const planBreakdown = [
-  {label:'Solo ✨',count:CLIENTS.filter(c=>c.plan==='solo'&&c.status==='active').length,mrr:CLIENTS.filter(c=>c.plan==='solo'&&c.status==='active').reduce((s,c)=>s+c.mrr,0),color:'var(--green)',pct:0},
-  {label:'Équipe ⭐',count:CLIENTS.filter(c=>c.plan==='team'&&c.status==='active').length,mrr:CLIENTS.filter(c=>c.plan==='team'&&c.status==='active').reduce((s,c)=>s+c.mrr,0),color:'var(--amber)',pct:0},
-  {label:'Entreprise 🏢',count:CLIENTS.filter(c=>c.plan==='enterprise'&&c.status==='active').length,mrr:CLIENTS.filter(c=>c.plan==='enterprise'&&c.status==='active').reduce((s,c)=>s+c.mrr,0),color:'#1a66cc',pct:0},
-];
-document.getElementById('plan-breakdown').innerHTML = planBreakdown.map(p=>`
-  <div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;padding:16px">
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:var(--ink);margin-bottom:10px">${p.label}</div>
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:4px">${p.count}</div>
-    <div style="font-size:11px;color:var(--ink4);margin-bottom:10px">clients actifs</div>
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:700;color:var(--green)">${p.mrr.toLocaleString('fr-FR')}€<span style="font-size:10px;font-weight:400;color:var(--ink4)">/mois</span></div>
-    <div style="height:3px;background:var(--bdr);border-radius:3px;margin-top:10px;overflow:hidden">
-      <div style="height:100%;background:var(--green);border-radius:3px;width:${mrr>0?Math.round(p.mrr/mrr*100):0}%;transition:width .8s"></div>
-    </div>
-    <div style="font-size:10px;color:var(--ink4);margin-top:4px">${mrr>0?Math.round(p.mrr/mrr*100):0}% du MRR total</div>
-  </div>`).join('');
-
-function exportData() {
-  const csv = ['Nom,Email,Plan,Statut,MRR,Date inscription',
-    ...CLIENTS.map(c=>`"${c.name}","${c.email}","${c.plan}","${c.status}","${c.mrr}","${c.joined}"`)
-  ].join('\n');
-  const blob = new Blob([csv],{type:'text/csv'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download='mailone-clients.csv'; a.click();
-  showToastMsg('📥', 'Export CSV téléchargé');
-}
 
 function showToastMsg(ico, msg) {
   document.getElementById('t-ico').textContent = ico;
@@ -386,7 +273,114 @@ function showToastMsg(ico, msg) {
   setTimeout(()=>t.classList.remove('on'), 3200);
 }
 
-// ── THEME MANAGER (admin: dark by default) ───────────────────
+// ── Charger les stats réelles ────────────────────────────────
+async function loadStats() {
+  try {
+    const res = await fetch(API_URL + '/api/admin/stats', {
+      headers: { Authorization: 'Bearer ' + token }
+    });
+
+    if (res.status === 403) {
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;flex-direction:column;gap:12px"><div style="font-size:48px">🔒</div><div style="font-size:18px;font-weight:700">Accès réservé aux administrateurs</div><a href="app.html" style="color:#0d9373">← Retour à l\'app</a></div>';
+      return;
+    }
+
+    if (!res.ok) throw new Error('Erreur API');
+    const d = await res.json();
+    render(d);
+  } catch (err) {
+    console.error('Admin load error:', err);
+    showToastMsg('❌', 'Erreur chargement des statistiques');
+  }
+}
+
+function render(d) {
+  const { users, subscriptions, plans, revenue, usage } = d;
+
+  // ── KPIs ──
+  document.getElementById('kpi-mrr').textContent = revenue.mrr.toLocaleString('fr-FR') + '€';
+  const mrrDiff = revenue.mrr - revenue.mrrLastMonth;
+  document.getElementById('kpi-mrr-trend').className = 'kpi-trend ' + (mrrDiff >= 0 ? 'trend-up' : 'trend-dn');
+  document.getElementById('kpi-mrr-trend').textContent = (mrrDiff >= 0 ? '↑ +' : '↓ ') + Math.abs(mrrDiff).toLocaleString('fr-FR') + '€ vs mois dernier';
+  document.getElementById('kpi-arr').textContent = 'ARR : ' + revenue.arr.toLocaleString('fr-FR') + '€';
+
+  document.getElementById('kpi-clients').textContent = subscriptions.active;
+  document.getElementById('kpi-clients-trend').textContent = '↑ +' + users.newThisMonth + ' inscrits ce mois';
+  document.getElementById('kpi-trial-count').textContent = subscriptions.trialing + ' en essai gratuit';
+
+  document.getElementById('kpi-churn').textContent = revenue.churnRate + '%';
+  document.getElementById('kpi-churn-trend').textContent = revenue.churnRate <= 5 ? '✅ Objectif atteint' : '⚠️ Au-dessus de 5%';
+  document.getElementById('kpi-churn-trend').className = 'kpi-trend ' + (revenue.churnRate <= 5 ? 'trend-up' : 'trend-dn');
+
+  document.getElementById('kpi-arpu').textContent = revenue.arpu.toLocaleString('fr-FR') + '€';
+  document.getElementById('kpi-arpu-trend').textContent = usage.aiRequestsThisMonth.toLocaleString('fr-FR') + ' requêtes IA ce mois';
+
+  // Sidebar
+  document.getElementById('sb-total').textContent = users.total;
+  document.getElementById('sb-trial').textContent = subscriptions.trialing;
+  document.getElementById('sb-active').textContent = subscriptions.active;
+
+  // ── Graphique MRR ──
+  const hist = revenue.history || [];
+  const maxMrr = Math.max(...hist.map(m => m.mrr), 1);
+  document.getElementById('revenue-chart').innerHTML = hist.map(m => `
+    <div class="chart-bar-wrap">
+      <div style="font-size:9px;color:var(--green);font-weight:700;height:16px;display:flex;align-items:flex-end">${m.mrr > 0 ? m.mrr.toLocaleString('fr-FR') + '€' : ''}</div>
+      <div class="chart-bar" style="height:${Math.max(m.mrr / maxMrr * 80, 2)}px"></div>
+      <div class="chart-label">${m.month}</div>
+    </div>`).join('');
+
+  // ── Paiements récents (zéro PII) ──
+  document.getElementById('clients-table').innerHTML = (revenue.recentPayments || []).map(p => `
+    <tr>
+      <td><div style="font-weight:600;color:var(--ink)">${p.date}</div></td>
+      <td><span class="plan-badge pb-solo">Paiement</span></td>
+      <td style="font-size:11px"><span class="status-dot dot-active"></span>${p.status === 'succeeded' ? 'Réussi' : p.status}</td>
+      <td style="font-weight:700;color:var(--ink)">${p.amount.toLocaleString('fr-FR')}€</td>
+    </tr>`).join('') || '<tr><td colspan="4" style="text-align:center;color:var(--ink4);padding:20px">Aucun paiement encore</td></tr>';
+
+  // ── Activité récente (agrégée) ──
+  const activities = [
+    { ico: '👥', bg: 'var(--green-l)',  text: `<strong>${users.total}</strong> utilisateurs inscrits au total` },
+    { ico: '⭐', bg: 'var(--amber-l)',  text: `<strong>${subscriptions.trialing}</strong> essais gratuits en cours` },
+    { ico: '✅', bg: 'var(--blue-l)',   text: `<strong>${subscriptions.active}</strong> abonnements actifs` },
+    { ico: '💳', bg: 'var(--green-l)',  text: `MRR actuel : <strong>${revenue.mrr.toLocaleString('fr-FR')}€</strong>` },
+    { ico: '🤖', bg: 'var(--amber-l)',  text: `<strong>${usage.aiRequestsThisMonth.toLocaleString('fr-FR')}</strong> requêtes IA ce mois` },
+    { ico: '⚠️', bg: 'var(--red-l)',    text: `<strong>${subscriptions.pastDue}</strong> paiement${subscriptions.pastDue > 1 ? 's' : ''} en retard` },
+  ];
+  document.getElementById('activity-feed').innerHTML = activities.map(a => `
+    <div class="activity-item">
+      <div class="act-ico" style="background:${a.bg}">${a.ico}</div>
+      <div><div class="act-text">${a.text}</div></div>
+    </div>`).join('');
+
+  // ── Répartition par plan ──
+  const totalActive = subscriptions.active || 1;
+  const planBreakdown = [
+    { label: 'Solo ✨',      key: 'solo',       color: 'var(--green)' },
+    { label: 'Équipe ⭐',    key: 'team',       color: 'var(--amber)' },
+    { label: 'Entreprise 🏢', key: 'enterprise', color: 'var(--blue)'  },
+  ];
+  document.getElementById('plan-breakdown').innerHTML = planBreakdown.map(p => {
+    const count = plans[p.key] || 0;
+    const pct = Math.round(count / totalActive * 100);
+    return `<div style="background:var(--bg3);border:1px solid var(--bdr);border-radius:10px;padding:16px">
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:var(--ink);margin-bottom:10px">${p.label}</div>
+      <div style="font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:800;color:var(--ink);line-height:1;margin-bottom:4px">${count}</div>
+      <div style="font-size:11px;color:var(--ink4);margin-bottom:10px">clients actifs</div>
+      <div style="height:3px;background:var(--bdr);border-radius:3px;margin-top:10px;overflow:hidden">
+        <div style="height:100%;background:${p.color};border-radius:3px;width:${pct}%;transition:width .8s"></div>
+      </div>
+      <div style="font-size:10px;color:var(--ink4);margin-top:4px">${pct}% des abonnés actifs</div>
+    </div>`;
+  }).join('');
+}
+
+function exportData() {
+  showToastMsg('📥', 'Export disponible depuis Stripe Dashboard');
+}
+
+// ── THEME MANAGER ────────────────────────────────────────────
 const ThemeManager = {
   STORAGE_KEY: 'mailone_theme',
   init() {
@@ -399,7 +393,7 @@ const ThemeManager = {
   },
   toggle() {
     try {
-      const current = document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+      const current = document.documentElement.getAttribute('data-theme');
       const next = current === 'dark' ? 'light' : 'dark';
       document.documentElement.setAttribute('data-theme', next);
       localStorage.setItem(this.STORAGE_KEY, next);
@@ -414,6 +408,7 @@ const ThemeManager = {
   },
 };
 ThemeManager.init();
+loadStats();
 </script>
 </body>
 </html>
