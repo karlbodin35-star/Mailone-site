@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<script>try{if(localStorage.getItem("mailone_theme")==="dark")document.documentElement.setAttribute("data-theme","dark")}catch(e){}</script>
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Application — MailOne</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -229,8 +229,6 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .ast-send{width:40px;height:40px;border-radius:10px;border:none;background:var(--teal);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;transition:opacity .15s}
 .ast-send:hover{opacity:.85}
 .ast-send:disabled{opacity:.4;cursor:not-allowed}
-[data-theme="dark"] .ast-msg.ai .ast-bubble{background:var(--sur);border-color:var(--bdr)}
-[data-theme="dark"] .ast-welcome-title{color:var(--ink)}
 
 /* ── CALENDRIER 24H ── */
 .cal-wrap{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--bg)}
@@ -264,7 +262,6 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .cal-event.quote{background:var(--quote-bg);color:var(--quote);border-color:var(--quote)}
 .cal-event-title{font-size:11px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .cal-event-sub{font-size:9px;font-weight:500;opacity:.75;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-[data-theme="dark"] .cal-slot:hover{background:rgba(13,147,115,.08)}
 
 /* ── SUGGESTION CALENDRIER ── */
 .cal-suggest{background:#edf8f2;border:1px solid #bbf7d0;border-radius:10px;padding:11px;margin-bottom:7px}
@@ -279,11 +276,6 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .cal-suggest-ok:hover{opacity:.85}
 .cal-suggest-no{padding:7px 10px;border:1px solid #bbf7d0;background:transparent;color:var(--appt);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:background .15s}
 .cal-suggest-no:hover{background:#d1fae5}
-[data-theme="dark"] .cal-suggest{background:rgba(22,163,74,.08);border-color:rgba(22,163,74,.2)}
-[data-theme="dark"] .cal-suggest-preview{background:var(--bg2);border-color:rgba(22,163,74,.2)}
-[data-theme="dark"] .cal-suggest-row input{background:var(--bg2);border-color:rgba(22,163,74,.2);color:var(--ink)}
-[data-theme="dark"] .cal-wrap{background:var(--bg)}
-[data-theme="dark"] .cal-topbar{background:var(--sur);border-color:var(--bdr)}
 
 /* Team view */
 .team-wrap{display:none;flex:1;flex-direction:column;overflow:hidden;background:var(--bg)}
@@ -328,19 +320,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .skel-line.w80{width:80%}.skel-line.w60{width:60%}.skel-line.w40{width:40%}
 .skel-card{padding:14px;border-radius:10px;margin-bottom:6px}
 
-[data-theme="dark"]{--bg:#16161a;--bg2:#1e1e24;--sur:#23232b;--bdr:#2e2e38;--bdr2:#3a3a46;--ink:#f0f0f4;--ink2:#d0d0d8;--ink3:#9898a8;--ink4:#6868788}
-[data-theme="dark"] body{background:var(--bg);color:var(--ink)}
-[data-theme="dark"] .topbar{background:var(--sur);border-color:var(--bdr)}
 /* sidebar stays dark — override ink var effect */
-[data-theme="dark"] .sidebar{background:#1a1a20}
-[data-theme="dark"] .mail-panel{background:var(--bg)}
-[data-theme="dark"] .mail-panel,.mail-view{border-color:var(--bdr)}
-[data-theme="dark"] .mail-item{border-bottom-color:var(--bdr)}
-[data-theme="dark"] .mail-item:hover{background:var(--bg2)}
-[data-theme="dark"] .mail-item.active{background:var(--sur)}
-[data-theme="dark"] .search{background:var(--bg2);border-color:var(--bdr)}
-[data-theme="dark"] .stat{background:var(--sur)}
-[data-theme="dark"] .card-overlay,[data-theme="dark"] .modal{background:var(--sur);border-color:var(--bdr)}
 </style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="stylesheet" href="shared.css">
@@ -413,7 +393,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <div class="topbar-right">
       <div class="ai-pill" id="ai-pill"><div class="ai-dot"></div>IA MailOne Pro</div>
       <button class="tb-btn green" onclick="openCompose()">✏️ Composer</button>
-      <button class="theme-toggle" data-theme-toggle onclick="ThemeManager.toggle()" title="Passer en mode sombre" aria-label="Basculer le thème">🌙</button>
+      
       <button class="tb-notif" aria-label="Notifications"><div class="notif-dot"></div>🔔</button>
       <div style="width:32px;height:32px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;background:linear-gradient(135deg,#f97316,#dc2626)" id="top-av" onclick="window.location.href='index.html'">JP</div>
     </div>
