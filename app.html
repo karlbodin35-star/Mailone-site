@@ -360,11 +360,10 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
   <div class="sb-div"></div>
   <div class="sb-sec">
     <div class="sb-lbl">Outils Pro</div>
-    <div class="sb-item" onclick="window.location.href='assistant.html'" style="cursor:pointer"><span class="sb-ico">✨</span>Assistant IA<span style="margin-left:auto;font-size:9px;background:rgba(109,40,217,.3);color:#a78bfa;padding:2px 6px;border-radius:20px;font-weight:700">NEW</span></div>
-    <div class="sb-item" id="sb-assistante" onclick="showView('assistante');setSb(this)"><span class="sb-ico">🤖</span>Assistante IA<span style="margin-left:auto;font-size:9px;background:rgba(13,147,115,.25);color:#5eead4;padding:2px 6px;border-radius:20px;font-weight:700">PRO</span></div>
+    <div class="sb-item" id="sb-assistante" onclick="showView('assistante');setSb(this)"><span class="sb-ico">🤖</span>Agent IA Pro<span style="margin-left:auto;font-size:9px;background:rgba(13,147,115,.25);color:#5eead4;padding:2px 6px;border-radius:20px;font-weight:700">PRO</span></div>
     <div class="sb-item" id="sb-cal" onclick="showView('cal');setSb(this)"><span class="sb-ico">📅</span>Calendrier</div>
     <div class="sb-item" id="sb-team" onclick="showView('team');setSb(this)" style="display:none"><span class="sb-ico">👥</span>Mon Équipe<span class="sb-badge" id="sb-team-badge" style="background:rgba(109,40,217,.7);display:none">0</span></div>
-    <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔔</span>Relances<span class="sb-badge p">2</span></div>
+    <div class="sb-item" onclick="filterCat('follow');setSb(this)"><span class="sb-ico">🔔</span>Relances<span class="sb-badge p" id="sb-relances">0</span></div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔍</span>Recherche IA</div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📊</span>Statistiques</div>
   </div>
@@ -462,7 +461,6 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
       </div>
     </div>
   </div>
-</div>
 </div>
 
 <!-- VUE ASSISTANTE IA -->
@@ -629,6 +627,48 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <div id="team-cal-events" style="display:flex;flex-wrap:wrap;gap:8px"></div>
   </div>
 </div>
+</div>
+</div>
+
+<!-- MODAL CONNEXION EMAIL -->
+<div class="overlay" id="modal-email-connect" style="display:none">
+  <div class="modal" style="max-width:480px;text-align:left;padding:32px">
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;margin-bottom:6px">📬 Connectez votre boîte mail</div>
+    <div style="font-size:13px;color:var(--ink3);margin-bottom:22px;line-height:1.6">Pour analyser vos emails, MailOne a besoin d'accéder à votre boîte via IMAP. Vos identifiants sont chiffrés AES-256.</div>
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap">
+      <button onclick="setProvider('gmail')" id="prov-gmail" style="padding:7px 14px;border-radius:8px;border:2px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s">📧 Gmail</button>
+      <button onclick="setProvider('outlook')" id="prov-outlook" style="padding:7px 14px;border-radius:8px;border:2px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s">📨 Outlook</button>
+      <button onclick="setProvider('ovh')" id="prov-ovh" style="padding:7px 14px;border-radius:8px;border:2px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s">🌐 OVH</button>
+      <button onclick="setProvider('custom')" id="prov-custom" style="padding:7px 14px;border-radius:8px;border:2px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s">⚙️ Autre</button>
+    </div>
+    <div id="provider-note" style="display:none;padding:10px 12px;background:var(--amber-l);border:1px solid #fde68a;border-radius:8px;font-size:11px;color:var(--amber);margin-bottom:16px;line-height:1.6"></div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:20px">
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:8px">
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:11px;font-weight:600;color:var(--ink2)">Serveur IMAP</label>
+          <input id="imap-host" type="text" placeholder="imap.gmail.com" style="padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+        </div>
+        <div style="display:flex;flex-direction:column;gap:4px">
+          <label style="font-size:11px;font-weight:600;color:var(--ink2)">Port</label>
+          <input id="imap-port" type="number" value="993" style="padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:11px;font-weight:600;color:var(--ink2)">Adresse email</label>
+        <input id="imap-user" type="email" placeholder="vous@gmail.com" style="padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+      </div>
+      <div style="display:flex;flex-direction:column;gap:4px">
+        <label style="font-size:11px;font-weight:600;color:var(--ink2)" id="imap-pass-label">Mot de passe</label>
+        <input id="imap-pass" type="password" placeholder="••••••••" style="padding:9px 12px;border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none" onfocus="this.style.borderColor='var(--teal)'" onblur="this.style.borderColor='var(--bdr)'">
+      </div>
+    </div>
+    <div id="connect-error" style="display:none;padding:10px;background:var(--urgent-bg);border-radius:8px;font-size:12px;color:var(--urgent);margin-bottom:16px"></div>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button onclick="document.getElementById('modal-email-connect').style.display='none'" style="padding:9px 16px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)">Plus tard</button>
+      <button onclick="connectEmail()" id="connect-btn" style="padding:9px 20px;border-radius:8px;border:none;background:var(--teal);color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700">Connecter ma boîte →</button>
+    </div>
+  </div>
+</div>
 
 <!-- MODAL INVITATION -->
 <div class="overlay" id="modal-invite" style="display:none" onclick="if(event.target===this)TEAM.hideInviteModal()">
@@ -746,11 +786,89 @@ const planPillTxts = {solo:'✨ Solo', team:'⭐ Équipe', enterprise:'🏢 Entr
 document.getElementById('sb-plan-pill').textContent = planPillTxts[plan] || planPillTxts.solo;
 
 // ════════════════════════════════════════════════════════════════
-// MAILS DATA
-// La liste est vide au démarrage — les emails seront chargés
-// depuis la vraie boîte mail de l'utilisateur (IMAP / OAuth).
+// MAILS DATA — chargé depuis IMAP
 // ════════════════════════════════════════════════════════════════
-const MAILS = [];
+let MAILS = [];
+
+// ── Connexion email ──────────────────────────────────────────
+const PROVIDERS = {
+  gmail:   { host:'imap.gmail.com',   port:993, note:'Gmail : activez IMAP dans Paramètres → Voir tous les paramètres → Transfert et POP/IMAP. Utilisez un <strong>mot de passe d\'application</strong> (Compte Google → Sécurité → Validation en 2 étapes → Mots de passe des applications).', passLabel:'Mot de passe d\'application Google' },
+  outlook: { host:'outlook.office365.com', port:993, note:'Outlook/Office 365 : activez IMAP dans Paramètres → Courrier → Synchronisation. Utilisez votre mot de passe Microsoft habituel ou un mot de passe d\'application si la 2FA est activée.', passLabel:'Mot de passe Microsoft' },
+  ovh:     { host:'ssl0.ovh.net',     port:993, note:'OVH Mail : utilisez votre adresse email complète comme identifiant et votre mot de passe OVH habituel.', passLabel:'Mot de passe OVH' },
+  custom:  { host:'', port:993, note:'', passLabel:'Mot de passe' },
+};
+
+function setProvider(key) {
+  const p = PROVIDERS[key];
+  document.getElementById('imap-host').value = p.host;
+  document.getElementById('imap-port').value = p.port;
+  document.getElementById('imap-pass-label').textContent = p.passLabel;
+  const note = document.getElementById('provider-note');
+  if (p.note) { note.innerHTML = p.note; note.style.display = 'block'; }
+  else note.style.display = 'none';
+  ['gmail','outlook','ovh','custom'].forEach(k => {
+    const b = document.getElementById('prov-'+k);
+    b.style.borderColor = k === key ? 'var(--teal)' : 'var(--bdr)';
+    b.style.color       = k === key ? 'var(--teal)' : 'var(--ink2)';
+  });
+}
+
+async function connectEmail() {
+  const host = document.getElementById('imap-host').value.trim();
+  const port = parseInt(document.getElementById('imap-port').value) || 993;
+  const user = document.getElementById('imap-user').value.trim();
+  const pass = document.getElementById('imap-pass').value;
+  const err  = document.getElementById('connect-error');
+  const btn  = document.getElementById('connect-btn');
+  if (!host || !user || !pass) { err.textContent = 'Remplissez tous les champs.'; err.style.display = 'block'; return; }
+  err.style.display = 'none';
+  btn.textContent = 'Connexion en cours…'; btn.disabled = true;
+  try {
+    const { ok, data } = await tfetch('/api/emails/connect', { method:'POST', body: JSON.stringify({ host, port, user, password: pass, tls: true, name: user }) });
+    if (!ok) throw new Error(data.error || 'Erreur connexion');
+    document.getElementById('modal-email-connect').style.display = 'none';
+    showToast('✅', 'Boîte connectée — synchronisation en cours…');
+    await syncEmails();
+  } catch(e) {
+    err.textContent = e.message; err.style.display = 'block';
+  } finally { btn.textContent = 'Connecter ma boîte →'; btn.disabled = false; }
+}
+
+async function syncEmails() {
+  const list = document.getElementById('mail-list');
+  list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink4);font-size:12px">⏳ Synchronisation…</div>';
+  try {
+    const { ok, data } = await tfetch('/api/emails/sync');
+    if (!ok) throw new Error(data.error);
+    MAILS.length = 0;
+    data.emails.forEach((e, i) => {
+      const ctx = AGENT.extract(e);
+      let cat = 'quote';
+      if (AGENT.s.urgent.test(e.subject + ' ' + e.body)) cat = 'urgent';
+      else if (AGENT.s.followup.test(e.subject + ' ' + e.body)) cat = 'quote';
+      const apptWords = /rendez-vous|rdv|visite|passage|disponib/i;
+      if (apptWords.test(e.subject + ' ' + e.body)) cat = 'appt';
+      const invoiceWords = /facture|règlement|paiement|virement|iban/i;
+      if (invoiceWords.test(e.subject + ' ' + e.body)) cat = 'invoice';
+      MAILS.push({ ...e, id: i, cat, follow: ctx.hasFollow });
+    });
+    renderList(); updateStats(); updateBadges();
+    showToast('📬', `${MAILS.length} email(s) chargé(s)`);
+  } catch(e) {
+    list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--urgent);font-size:12px">❌ ${e.message}</div>`;
+  }
+}
+
+async function checkEmailAccount() {
+  try {
+    const { ok, data } = await tfetch('/api/emails/account');
+    if (ok && data.account) {
+      await syncEmails();
+    } else {
+      setTimeout(() => { document.getElementById('modal-email-connect').style.display = 'flex'; }, 1200);
+    }
+  } catch { /* silencieux */ }
+}
 
 // ════════════════════════════════════════════════════════════════
 // LOCAL AI AGENT
@@ -899,14 +1017,18 @@ function handleSearch(val){
   document.getElementById('mail-list').innerHTML=res.map(m=>`<div class="mcard" onclick="openMail(${m.id})"><div class="mc-row"><div class="mc-dot" style="background:${catColor(m.cat)}"></div><div class="mc-sender">${m.sender}</div><div class="mc-time">${m.time}</div></div><div class="mc-subj">${m.subject}</div><div class="mc-sum">✨ ${m.summary}</div><div class="mc-foot"><span class="mc-tag ${m.cat}">${catLabel(m.cat)}</span></div></div>`).join('');
 }
 function updateStats(){
-  document.getElementById('stat-u').textContent=MAILS.filter(m=>m.cat==='urgent'&&m.unread).length;
+  document.getElementById('stat-u').textContent=MAILS.filter(m=>m.cat==='urgent').length;
   document.getElementById('stat-d').textContent=MAILS.filter(m=>m.cat==='quote').length;
   document.getElementById('stat-r').textContent=MAILS.filter(m=>m.cat==='appt').length;
-  document.getElementById('stat-f').textContent=MAILS.filter(m=>m.cat==='invoice'&&m.unread).length;
-  ['sb-u','sb-d','sb-r','sb-f','sb-inbox'].forEach((id,i)=>{
-    const vals=[MAILS.filter(m=>m.cat==='urgent'&&m.unread).length,MAILS.filter(m=>m.cat==='quote').length,MAILS.filter(m=>m.cat==='appt').length,MAILS.filter(m=>m.cat==='invoice'&&m.unread).length,MAILS.filter(m=>m.unread).length];
+  document.getElementById('stat-f').textContent=MAILS.filter(m=>m.cat==='invoice').length;
+  ['sb-u','sb-d','sb-r','sb-f'].forEach((id,i)=>{
+    const vals=[MAILS.filter(m=>m.cat==='urgent').length,MAILS.filter(m=>m.cat==='quote').length,MAILS.filter(m=>m.cat==='appt').length,MAILS.filter(m=>m.cat==='invoice').length];
     const el=document.getElementById(id);if(el)el.textContent=vals[i]||0;
   });
+}
+function updateBadges(){
+  const rel=document.getElementById('sb-relances');
+  if(rel)rel.textContent=MAILS.filter(m=>m.follow).length||0;
 }
 
 // ════════════════════════════════════════════════════════════════
@@ -2044,7 +2166,9 @@ if (_initPlan === 'team' || _initPlan === 'enterprise') {
 
 renderList();
 updateStats();
+updateBadges();
 ONB.init();
+checkEmailAccount();
 </script>
 <div class="toast" id="toast" style="position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9998;max-width:320px;border:1px solid rgba(255,255,255,.08)"><span id="t-ico"></span><span id="t-msg"></span></div>
 <script src="support.js"></script>
