@@ -711,7 +711,7 @@ input.error { border-color: var(--red); }
               <svg width="18" height="18" viewBox="0 0 48 48" fill="none"><path d="M44 24c0-1.2-.1-2.4-.3-3.5H24v6.6h11.3c-.5 2.6-2 4.8-4.2 6.2v5.1h6.8C41.8 35.1 44 29.9 44 24z" fill="#4285F4"/><path d="M24 44c5.6 0 10.4-1.9 13.8-5.1l-6.8-5.1c-1.9 1.3-4.3 2-7 2-5.4 0-9.9-3.6-11.5-8.4H5.5v5.3C8.9 39.6 16 44 24 44z" fill="#34A853"/><path d="M12.5 27.4A12.2 12.2 0 0112.5 20.6V15.3H5.5a20 20 0 000 17.4l7-5.3z" fill="#FBBC05"/><path d="M24 11.8c3 0 5.7 1 7.8 3l5.8-5.8C34.4 5.8 29.5 4 24 4 16 4 8.9 8.4 5.5 15.3l7 5.3c1.6-4.8 6.1-8.8 11.5-8.8z" fill="#EA4335"/></svg>
             </div>
             <span class="prov-name">Connecter Gmail</span>
-            <span class="prov-badge">OAuth sécurisé</span>
+            <span class="prov-badge">IMAP sécurisé</span>
           </button>
 
           <button class="mail-provider-btn" type="button" onclick="connectProvider('outlook')">
@@ -719,15 +719,16 @@ input.error { border-color: var(--red); }
               <svg width="18" height="18" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="6" fill="#0078D4"/><text x="8" y="34" font-size="28" font-family="Arial" fill="white" font-weight="bold">O</text></svg>
             </div>
             <span class="prov-name">Connecter Outlook / Microsoft 365</span>
-            <span class="prov-badge">OAuth sécurisé</span>
+            <span class="prov-badge">IMAP sécurisé</span>
           </button>
 
-          <button class="mail-provider-btn" type="button" onclick="toggleImapForm()" id="btn-imap">
+          <button class="mail-provider-btn" type="button" onclick="connectProvider('other')" id="btn-imap">
             <div class="prov-ico" style="background:var(--bg2)">⚙️</div>
-            <span class="prov-name">Configuration manuelle IMAP / SMTP</span>
+            <span class="prov-name">Autre messagerie (OVH, Orange, SFR…)</span>
           </button>
 
           <div class="imap-form" id="imap-form">
+            <div id="imap-provider-note" style="display:none;padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.6;margin-bottom:10px"></div>
             <div class="form-group">
               <label>Serveur IMAP</label>
               <input type="text" id="imap-server" placeholder="imap.exemple.fr" autocomplete="off">
@@ -737,19 +738,11 @@ input.error { border-color: var(--red); }
               <div class="form-group"><label>Sécurité</label><input type="text" id="imap-ssl" placeholder="SSL/TLS"></div>
             </div>
             <div class="form-group">
-              <label>Serveur SMTP</label>
-              <input type="text" id="smtp-server" placeholder="smtp.exemple.fr" autocomplete="off">
-            </div>
-            <div class="input-row">
-              <div class="form-group"><label>Port SMTP</label><input type="number" id="smtp-port" placeholder="587"></div>
-              <div class="form-group"><label>Sécurité</label><input type="text" id="smtp-ssl" placeholder="STARTTLS"></div>
-            </div>
-            <div class="form-group">
               <label>Email de connexion</label>
               <input type="email" id="imap-email" placeholder="vous@exemple.fr" autocomplete="email">
             </div>
             <div class="form-group">
-              <label>Mot de passe (application)</label>
+              <label id="imap-pwd-label">Mot de passe (application)</label>
               <input type="password" id="imap-pwd" placeholder="••••••••" autocomplete="new-password">
             </div>
             <button class="submit-btn" type="button" onclick="connectImap()" style="margin-top:4px">
@@ -957,60 +950,66 @@ function showMailConnectStep(origin) {
   document.querySelector('.auth-tabs').style.display  = 'none';
 }
 
+// Presets IMAP par fournisseur
+const IMAP_PRESETS = {
+  gmail: {
+    host: 'imap.gmail.com', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe d\'application Google',
+    note: '<strong>Gmail :</strong> activez l\'accès IMAP dans Gmail → Paramètres → Voir tous les paramètres → Transfert et POP/IMAP → Activer IMAP.<br>Ensuite, créez un <strong>mot de passe d\'application</strong> sur <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener" style="color:var(--grn)">myaccount.google.com/apppasswords</a> (compte Google → Sécurité → Connexion → Mots de passe des applications).',
+    noteBg: '#FEF2F2', noteBdr: '#FECACA', noteColor: '#991B1B',
+  },
+  outlook: {
+    host: 'outlook.office365.com', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe Microsoft (ou mot de passe d\'application)',
+    note: '<strong>Outlook / Microsoft 365 :</strong> activez l\'accès IMAP dans Outlook → Paramètres → Courrier → Synchronisation du courrier → Activer IMAP.<br>Si vous avez la <strong>double authentification</strong> activée, créez un mot de passe d\'application dans votre compte Microsoft → Sécurité.',
+    noteBg: '#EFF6FF', noteBdr: '#BFDBFE', noteColor: '#1E3A5F',
+  },
+  other: {
+    host: '', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe (ou mot de passe d\'application)',
+    note: '<strong>OVH :</strong> ssl0.ovh.net · port 993<br><strong>Orange :</strong> imap.orange.fr · port 993<br><strong>SFR :</strong> imap.sfr.fr · port 993<br><strong>Free :</strong> imap.free.fr · port 993',
+    noteBg: '#F8F7F5', noteBdr: '#E3DFD7', noteColor: '#3C3C3A',
+  },
+};
+
 function connectProvider(provider) {
-  const labels = { gmail: 'Gmail', outlook: 'Outlook / Microsoft 365' };
-  showToast('🔗', `Connexion ${labels[provider] || provider} en cours…`);
-  const oauthUrls = {
-    gmail:   `https://accounts.google.com/o/oauth2/v2/auth?client_id=mailone-app&redirect_uri=${encodeURIComponent(window.location.origin+'/auth/gmail/callback')}&response_type=code&scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fgmail.readonly&access_type=offline&prompt=consent`,
-    outlook: `https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=mailone-app&response_type=code&redirect_uri=${encodeURIComponent(window.location.origin+'/auth/outlook/callback')}&response_mode=query&scope=https%3A%2F%2Fgraph.microsoft.com%2FMail.Read+offline_access&state=mailone`,
-  };
-  const oauthUrl = oauthUrls[provider];
-  if (oauthUrl) {
-    const popup = window.open(oauthUrl, 'oauth_popup', 'width=500,height=650,left=200,top=100,menubar=no,toolbar=no,location=yes');
-    showOAuthPendingState(provider, labels[provider]);
-    const pollTimer = setInterval(() => {
-      try { if (!popup || popup.closed) { clearInterval(pollTimer); finalizeOAuthConnect(provider); } } catch (e) { clearInterval(pollTimer); finalizeOAuthConnect(provider); }
-    }, 500);
-    setTimeout(() => { clearInterval(pollTimer); if (!popup || popup.closed) return; popup.close(); finalizeOAuthConnect(provider); }, 30000);
-  } else {
-    setTimeout(() => finalizeMailConnect(), 1800);
+  const preset = IMAP_PRESETS[provider];
+  if (!preset) return;
+
+  // Pré-remplir le formulaire
+  const serverEl = document.getElementById('imap-server');
+  const portEl   = document.getElementById('imap-port');
+  const sslEl    = document.getElementById('imap-ssl');
+  const pwdLabel = document.getElementById('imap-pwd-label');
+  const noteEl   = document.getElementById('imap-provider-note');
+
+  if (serverEl) serverEl.value = preset.host;
+  if (portEl)   portEl.value   = preset.port;
+  if (sslEl)    sslEl.value    = preset.ssl;
+  if (pwdLabel) pwdLabel.textContent = preset.pwdLabel;
+
+  if (noteEl) {
+    noteEl.style.display      = 'block';
+    noteEl.style.background   = preset.noteBg;
+    noteEl.style.border       = `1px solid ${preset.noteBdr}`;
+    noteEl.style.color        = preset.noteColor;
+    noteEl.innerHTML          = preset.note;
   }
+
+  // Ouvrir le formulaire et focus sur l'email
+  const form = document.getElementById('imap-form');
+  if (form) form.classList.add('open');
+  setTimeout(() => document.getElementById('imap-email')?.focus(), 80);
+
+  // Marquer le bouton actif
+  document.querySelectorAll('.mail-provider-btn').forEach(btn => btn.style.borderColor = '');
+  const activeBtn = document.querySelector(`.mail-provider-btn[onclick*="${provider}"]`);
+  if (activeBtn) activeBtn.style.borderColor = 'var(--grn)';
 }
 
-function showOAuthPendingState(provider, label) {
-  const sub = document.getElementById('step-mail-sub');
-  if (sub) sub.innerHTML = `<strong>Autorisation ${label} en cours…</strong><br><span style="font-size:11px;color:var(--ink4)">Une fenêtre s'est ouverte. Connectez-vous à ${label} et autorisez MailOne à lire vos emails.</span>`;
-  document.querySelectorAll('.mail-provider-btn').forEach(btn => { btn.disabled = true; btn.style.opacity = '.5'; });
+function toggleImapForm() {
+  connectProvider('other');
 }
-
-function finalizeOAuthConnect(provider) {
-  const labels = { gmail: 'Gmail', outlook: 'Outlook / Microsoft 365' };
-  const label = labels[provider] || provider;
-  document.querySelectorAll('.mail-provider-btn').forEach(btn => { btn.disabled = false; btn.style.opacity = ''; });
-  const stepMailDiv = document.getElementById('step-mail');
-  if (stepMailDiv && !document.getElementById('oauth-success-msg')) {
-    const successDiv = document.createElement('div');
-    successDiv.id = 'oauth-success-msg';
-    successDiv.style.cssText = 'background:var(--grn-l);border:1px solid #C5E3D2;border-radius:10px;padding:14px 16px;margin-bottom:12px;display:flex;align-items:center;gap:10px;font-size:13px;color:var(--grn-d);font-weight:600';
-    successDiv.innerHTML = `<span style="font-size:18px">✅</span><div><div>${label} connecté !</div><div style="font-size:11px;font-weight:400;color:var(--ink3);margin-top:2px">MailOne peut maintenant lire vos emails en lecture seule.</div></div>`;
-    const skipLink = stepMailDiv.querySelector('.skip-link');
-    if (skipLink) stepMailDiv.insertBefore(successDiv, skipLink);
-    else stepMailDiv.appendChild(successDiv);
-  }
-  stepMailDiv?.querySelectorAll('.mail-provider-btn, .imap-form, #btn-imap').forEach(el => el.style.display = 'none');
-  const skipLink = document.querySelector('#step-mail .skip-link');
-  if (skipLink) skipLink.style.display = 'none';
-  const continueBtn = document.createElement('button');
-  continueBtn.className = 'submit-btn';
-  continueBtn.style.marginTop = '4px';
-  continueBtn.innerHTML = '🚀 Accéder à mon application →';
-  continueBtn.onclick = finalizeMailConnect;
-  stepMailDiv?.appendChild(continueBtn);
-  showToast('✅', `${label} connecté ! Redirection en cours…`);
-  setTimeout(() => finalizeMailConnect(), 2000);
-}
-
-function toggleImapForm() { document.getElementById('imap-form').classList.toggle('open'); }
 
 function connectImap() {
   const server = document.getElementById('imap-server').value.trim();
@@ -1053,7 +1052,7 @@ function finalizeMailConnect() { window.location.href = _mailConnectOrigin === '
 (function(){
   const hS = document.getElementById('sl-roi-h'), rS = document.getElementById('sl-roi-r');
   if (!hS || !rS) return;
-  const PRICE = 1188, DAYS = 220;
+  const PRICE = 179.88, DAYS = 220;
   function fmt(n) { return Math.round(n).toLocaleString('fr-FR'); }
   function calc() {
     const h = parseFloat(hS.value), r = parseFloat(rS.value);
