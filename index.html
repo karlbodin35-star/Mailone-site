@@ -1592,25 +1592,18 @@ footer {
       <h2 class="sec-h2 reveal reveal-delay-1" style="color:#F5F3EF">Tout Premium. Toujours.</h2>
       <p class="sec-sub reveal reveal-delay-2">IA MailOne Pro incluse dans chaque offre. 14 jours gratuits. Sans carte bancaire.</p>
     </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:14px;margin:36px 0" class="reveal">
-      <div class="billing-toggle">
-        <button class="on" id="toggle-monthly" onclick="setBilling('monthly')">Mensuel</button>
-        <button class="off" id="toggle-annual" onclick="setBilling('annual')">Annuel</button>
-      </div>
-      <div id="annual-badge" style="display:none;background:rgba(42,122,80,.12);border:1px solid rgba(42,122,80,.22);border-radius:100px;padding:6px 18px;font-size:12.5px;font-weight:600;color:var(--grn-m);align-items:center;gap:6px">
-        2 mois offerts — économisez 29,98 €
-      </div>
+    <div style="display:flex;justify-content:center;margin:28px 0 0" class="reveal">
       <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(42,122,80,.1);border:1px solid rgba(42,122,80,.2);border-radius:100px;padding:5px 16px;font-size:12px;font-weight:600;color:var(--grn-m)">
-        <span class="pulse" style="color:var(--grn-m)" aria-hidden="true"></span>IA MailOne Pro incluse dans toutes les offres
+        <span class="pulse" style="color:var(--grn-m)" aria-hidden="true"></span>IA MailOne Pro incluse · 14 jours gratuits · Sans carte bancaire
       </div>
     </div>
 
-    <div class="plans" style="max-width:480px;margin:40px auto 0">
-      <div class="plan featured reveal">
-        <div class="plan-name">MailOne Solo</div>
-        <div id="price-solo" class="plan-price"><sup>€</sup>14,99<sub>/mois</sub></div>
-        <div id="tag-solo" class="plan-tag">1 boîte mail HT · Toutes fonctionnalités incluses</div>
-        <div id="save-solo" class="plan-save" style="display:none"><span id="save-solo-txt">2 mois offerts — économisez 29,98 €</span></div>
+    <div class="plans" style="max-width:760px;margin:32px auto 0;grid-template-columns:1fr 1fr;align-items:stretch">
+      <!-- Mensuel -->
+      <div class="plan reveal">
+        <div class="plan-name">Mensuel</div>
+        <div class="plan-price"><sup>€</sup>14,99<sub>/mois</sub></div>
+        <div class="plan-tag">Sans engagement · Résiliable à tout moment</div>
         <div class="plan-divider"></div>
         <ul class="plan-feats">
           <li><span class="plan-check">✓</span>1 boîte mail</li>
@@ -1622,10 +1615,31 @@ footer {
           <li><span class="plan-check">✓</span>API & intégrations</li>
           <li><span class="plan-check">✓</span>Support email</li>
         </ul>
-        <button class="plan-cta plan-cta-primary" id="btn-solo" onclick="goToSignup('solo')">Démarrer — 14j gratuits</button>
+        <button class="plan-cta plan-cta-ghost" onclick="goToSignup('solo','monthly')">Démarrer — 14j gratuits</button>
+      </div>
+
+      <!-- Annuel -->
+      <div class="plan featured reveal reveal-delay-1" style="transform:none">
+        <div class="plan-pop">2 mois offerts</div>
+        <div class="plan-name">Annuel</div>
+        <div class="plan-price"><sup>€</sup>149,90<sub>/an</sub></div>
+        <div class="plan-tag">soit 12,49€/mois · Facturé en une fois</div>
+        <div class="plan-save">Économisez 29,98 € vs mensuel × 12</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-feats">
+          <li><span class="plan-check">✓</span>1 boîte mail</li>
+          <li><span class="plan-check">✓</span>Tri & résumé IA illimité</li>
+          <li><span class="plan-check">✓</span><strong>IA MailOne Pro</strong></li>
+          <li><span class="plan-check">✓</span>Relances automatiques</li>
+          <li><span class="plan-check">✓</span>Recherche intelligente</li>
+          <li><span class="plan-check">✓</span>20 langues</li>
+          <li><span class="plan-check">✓</span>API & intégrations</li>
+          <li><span class="plan-check">✓</span>Support email</li>
+        </ul>
+        <button class="plan-cta plan-cta-primary" onclick="goToSignup('solo','annual')">Choisir l'annuel — 14j gratuits</button>
       </div>
     </div>
-    <p id="annual-note" style="display:none;text-align:center;margin-top:22px;font-size:12px;color:rgba(255,255,255,.35)">Facturation annuelle en une seule fois · Économies calculées vs abonnement mensuel × 12</p>
+    <p style="text-align:center;margin-top:18px;font-size:12px;color:rgba(255,255,255,.35)">Facturation annuelle en une seule fois · Remboursement intégral dans les 14 premiers jours</p>
   </div>
 </section>
 
@@ -1747,45 +1761,11 @@ const observer = new IntersectionObserver(entries => {
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
 // ── Signup ────────────────────────────────────────────
-function goToSignup(plan) {
+function goToSignup(plan, billing) {
+  billing = billing || 'monthly';
   PlanManager.set(plan);
-  localStorage.setItem('mailone_billing', billingCycle);
-  window.location.href = 'login.html?action=signup&plan=' + plan + '&billing=' + billingCycle;
-}
-
-// ── Billing toggle ────────────────────────────────────
-const PRICING = {
-  monthly: {
-    solo: { display: '14,99', sub: '/mois', tag: '1 boîte mail HT · Toutes fonctionnalités incluses' },
-  },
-  annual: {
-    solo: { display: '149,90', sub: '/an', tag: '1 boîte · Facturé annuellement', save: '2 mois offerts — économisez 29,98 €' },
-  },
-};
-let billingCycle = 'monthly';
-
-function setBilling(cycle) {
-  billingCycle = cycle;
-  const d = PRICING[cycle].solo;
-  const isA = cycle === 'annual';
-  const label = isA ? 'Choisir l\'annuel — 14j gratuits' : 'Démarrer — 14j gratuits';
-
-  document.getElementById('toggle-monthly').className = isA ? 'off' : 'on';
-  document.getElementById('toggle-annual').className  = isA ? 'on'  : 'off';
-
-  document.getElementById('price-solo').innerHTML = `<sup>€</sup>${d.display}<sub>${d.sub}</sub>`;
-  document.getElementById('tag-solo').textContent = d.tag;
-  const saveEl  = document.getElementById('save-solo');
-  const saveTxt = document.getElementById('save-solo-txt');
-  if (saveEl)  saveEl.style.display = isA ? 'block' : 'none';
-  if (saveTxt && isA) saveTxt.textContent = d.save;
-  const btn = document.getElementById('btn-solo');
-  if (btn) btn.textContent = label;
-
-  const ab = document.getElementById('annual-badge');
-  const an = document.getElementById('annual-note');
-  if (ab) ab.style.display = isA ? 'flex' : 'none';
-  if (an) an.style.display = isA ? 'block' : 'none';
+  localStorage.setItem('mailone_billing', billing);
+  window.location.href = 'login.html?action=signup&plan=' + plan + '&billing=' + billing;
 }
 
 // ── FAQ ───────────────────────────────────────────────
