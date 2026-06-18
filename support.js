@@ -216,44 +216,13 @@
         body: JSON.stringify({ message: content, history }),
       });
 
-      if (!res.ok) throw new Error('Erreur réseau');
+      const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || 'Erreur réseau');
 
       removeTyping();
+      const fullText = data.reply || '';
+      addMsg('bot', fullText);
 
-      // Créer la bulle de réponse
-      const botDiv = document.createElement('div');
-      botDiv.className = 'max-msg bot';
-      const bubble = document.createElement('div');
-      bubble.className = 'max-bubble';
-      botDiv.appendChild(bubble);
-      msgs.appendChild(botDiv);
-
-      // Lire le stream SSE
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let fullText = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        const chunk = decoder.decode(value);
-        // Parser les events SSE Anthropic
-        const lines = chunk.split('\n');
-        for (const line of lines) {
-          if (line.startsWith('data: ')) {
-            try {
-              const json = JSON.parse(line.slice(6));
-              if (json.type === 'content_block_delta' && json.delta?.text) {
-                fullText += json.delta.text;
-                bubble.innerHTML = fullText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>');
-                msgs.scrollTop = msgs.scrollHeight;
-              }
-            } catch { /* ignore parse errors */ }
-          }
-        }
-      }
-
-      // Sauvegarder dans l'historique
       history.push({ role: 'user', content });
       history.push({ role: 'assistant', content: fullText });
       if (history.length > 16) history = history.slice(-16);

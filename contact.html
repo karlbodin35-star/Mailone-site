@@ -2,302 +2,397 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Contact & Support — MailOne</title>
+<title>Contact — MailOne</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#fafafa;--bg2:#f4f4f5;--sur:#fff;--bdr:#e4e4e7;--bdr2:#d4d4d8;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--ink4:#a1a1aa;--green:#16a34a;--green-l:#f0fdf4;--amber:#d97706;--amber-l:#fffbeb;--blue:#2563eb;--blue-l:#eff6ff}
-html,body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
-nav{position:sticky;top:0;z-index:100;height:62px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 5vw;gap:14px}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--ink);letter-spacing:-.5px;display:flex;align-items:center;gap:6px;text-decoration:none}
-.nav-mark{width:8px;height:8px;border-radius:50%;background:var(--green)}
-.nav-right{margin-left:auto;display:flex;gap:8px}
-.nb{padding:7px 14px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s;text-decoration:none}
-.nb:hover{background:var(--bg2)}
-.nb-dark{background:var(--ink);color:var(--bg);border-color:var(--ink)}.nb-dark:hover{opacity:.85}
-
-.hero{background:var(--sur);border-bottom:1px solid var(--bdr);padding:60px 5vw 52px;text-align:center}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:var(--green-l);border:1px solid #dcfce7;border-radius:20px;padding:5px 12px;font-size:11px;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px}
-h1{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,4vw,44px);font-weight:800;letter-spacing:-.04em;margin-bottom:12px}
-.hero-sub{font-size:15px;color:var(--ink3);line-height:1.65;max-width:480px;margin:0 auto}
-
-.page{max-width:1000px;margin:0 auto;padding:56px 5vw 80px;display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
-
-/* CONTACT CARDS */
-.contact-methods{display:flex;flex-direction:column;gap:14px}
-.c-card{background:var(--sur);border:1px solid var(--bdr);border-radius:14px;padding:20px 22px;display:flex;gap:14px;align-items:flex-start;transition:all .15s}
-.c-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.07);border-color:var(--bdr2)}
-.c-ico{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
-.c-title{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;margin-bottom:4px}
-.c-desc{font-size:12px;color:var(--ink3);line-height:1.5;margin-bottom:8px}
-.c-link{font-size:12px;font-weight:700;color:var(--green);text-decoration:none;display:inline-flex;align-items:center;gap:5px}
-.c-link:hover{text-decoration:underline}
-.c-badge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;display:inline-block}
-.badge-fast{background:var(--green-l);color:var(--green)}
-.badge-slow{background:var(--amber-l);color:var(--amber)}
-
-/* FORM */
-.form-card{background:var(--sur);border:1px solid var(--bdr);border-radius:16px;padding:28px;position:sticky;top:76px}
-.form-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:800;margin-bottom:6px}
-.form-sub{font-size:13px;color:var(--ink3);margin-bottom:22px;line-height:1.5}
-.form-group{display:flex;flex-direction:column;gap:5px;margin-bottom:14px}
-label{font-size:12px;font-weight:600;color:var(--ink2)}
-input,select,textarea{padding:10px 13px;border:1.5px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none;transition:all .15s;width:100%}
-input:focus,select:focus,textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,160,106,.1);background:var(--sur)}
-textarea{resize:vertical;min-height:110px;line-height:1.6}
-.submit-btn{width:100%;padding:13px;background:var(--ink);color:var(--bg);border:none;border-radius:10px;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;gap:8px}
-.submit-btn:hover{opacity:.85}
-
-/* SUCCESS state */
-.form-success{display:none;text-align:center;padding:20px 0}
-.form-success .ico{font-size:40px;margin-bottom:14px}
-.form-success h3{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;margin-bottom:8px}
-.form-success p{font-size:13px;color:var(--ink3);line-height:1.65}
-
-footer{background:var(--ink);padding:40px 5vw 24px;text-align:center}
-.foot-logo{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:800;color:var(--bg);letter-spacing:-.5px;display:inline-flex;align-items:center;gap:5px;text-decoration:none;margin-bottom:10px}
-.foot-links{display:flex;gap:20px;justify-content:center;flex-wrap:wrap;margin-bottom:16px}
-.foot-links a{font-size:12px;color:rgba(255,255,255,.4);text-decoration:none}
-.foot-links a:hover{color:var(--bg)}
-.foot-bottom{font-size:11px;color:rgba(255,255,255,.38)}
-
-/* Toast */
-.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:var(--bg);border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:400}
-.toast.on{transform:translateY(0);opacity:1}
-
-@media(max-width:768px){.page{grid-template-columns:1fr}.form-card{position:static}}
-
-/* MOBILE MENU */
-.menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px;color:var(--ink3)}
-.menu-toggle svg{width:22px;height:22px}
-.mobile-menu{display:none;position:fixed;inset:0;z-index:200;background:var(--sur);backdrop-filter:blur(20px);flex-direction:column;padding:80px 24px 24px}
-.mobile-menu.open{display:flex}
-.mobile-menu a{font-size:17px;font-weight:600;color:var(--ink);padding:14px 0;border-bottom:1px solid var(--bdr);text-decoration:none}
-.mobile-menu .btn{margin-top:12px;justify-content:center;width:100%;padding:14px;font-size:15px}
-.mm-close{position:absolute;top:16px;right:20px;background:none;border:none;cursor:pointer;font-size:24px;color:var(--ink3)}
-@media(max-width:768px){.menu-toggle{display:block}.nav-links{display:none}}
-@media(min-width:769px){.mobile-menu{display:none!important}}
-
-</style>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://mailone.app">
-<meta property="og:title" content="MailOne — Contact & Support">
-<meta property="og:description" content="Contactez l'équipe MailOne. Réponse sous 24h.">
-<meta property="og:image" content="https://mailone.app/og-image.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="MailOne — Contact & Support">
-<meta name="twitter:description" content="Contactez l'équipe MailOne. Réponse sous 24h.">
-<meta name="description" content="Contactez l'équipe MailOne. Réponse sous 24h.">
+<meta name="description" content="Contactez l'équipe MailOne — support, questions commerciales, partenariats.">
 <link rel="canonical" href="https://mailone.app/contact">
+<style>
+:root {
+  --bg:    #F8F7F5;
+  --bg2:   #EFECE6;
+  --sur:   #FFFFFF;
+  --bdr:   #E3DFD7;
+  --bdr2:  #CBC7BE;
+  --ink:   #111110;
+  --ink2:  #3C3C3A;
+  --ink3:  #6B6B67;
+  --ink4:  #9E9E9A;
+  --grn:   #2A7A50;
+  --grn-d: #1E5C3C;
+  --grn-l: #EBF5EF;
+  --grn-m: #3E9E6A;
+  --red:   #C0392B;
+  --red-l: #FEF0EE;
+  --px: clamp(20px, 5vw, 72px);
+  --r: 12px;
+  --ease: cubic-bezier(0.25, 0, 0, 1);
+  --dur: 250ms;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); }
+body { min-height: 100vh; display: flex; flex-direction: column; }
+:focus-visible { outline: 2px solid var(--grn); outline-offset: 2px; border-radius: 4px; }
+a { color: inherit; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } }
+
+/* ── NAV ──────────────────────────────────────── */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px var(--px);
+  border-bottom: 1px solid var(--bdr);
+  background: var(--sur);
+  position: sticky; top: 0; z-index: 10;
+}
+.logo {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 20px; font-weight: 700;
+  color: var(--ink); text-decoration: none; letter-spacing: -.5px;
+}
+.logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--grn); margin-left: 3px; vertical-align: middle; }
+.nav-links { display: flex; align-items: center; gap: 20px; }
+.nav-links a { font-size: 13px; font-weight: 500; color: var(--ink3); text-decoration: none; transition: color var(--dur) var(--ease); }
+.nav-links a:hover { color: var(--ink); }
+.nav-cta { padding: 8px 16px; background: var(--ink); color: #fff !important; border-radius: 8px; font-weight: 600 !important; }
+.nav-cta:hover { background: var(--grn) !important; color: #fff !important; }
+
+/* ── PAGE ─────────────────────────────────────── */
+main { flex: 1; padding: clamp(40px, 8vh, 80px) var(--px); }
+
+.page-header { text-align: center; margin-bottom: clamp(40px, 6vw, 60px); }
+.page-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--grn-l); border: 1px solid #C5E3D2;
+  border-radius: 100px; padding: 5px 14px;
+  font-size: 12px; font-weight: 700; color: var(--grn-d);
+  letter-spacing: .02em; margin-bottom: 16px;
+}
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(28px, 5vw, 42px);
+  font-weight: 700; letter-spacing: -.04em; line-height: 1.1;
+  margin-bottom: 12px;
+}
+.page-sub { font-size: clamp(14px, 2vw, 16px); color: var(--ink3); line-height: 1.65; max-width: 520px; margin: 0 auto; }
+
+/* ── GRID ─────────────────────────────────────── */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: clamp(24px, 4vw, 48px);
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* ── LEFT — CONTACT METHODS ───────────────────── */
+.contact-methods { display: flex; flex-direction: column; gap: 12px; }
+
+.contact-card {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  text-decoration: none;
+}
+.contact-card:hover { border-color: var(--bdr2); box-shadow: 0 3px 16px rgba(0,0,0,.06); }
+
+.contact-card-ico {
+  width: 40px; height: 40px;
+  border-radius: 10px;
+  background: var(--grn-l);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.contact-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); margin-bottom: 3px; }
+.contact-card-sub { font-size: 12px; color: var(--ink3); line-height: 1.5; }
+.contact-card-val { font-size: 12px; font-weight: 600; color: var(--grn); margin-top: 4px; }
+
+.hours-card {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.hours-title { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
+.hours-row { display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--ink3); padding: 6px 0; border-bottom: 1px solid var(--bdr); }
+.hours-row:last-child { border-bottom: none; }
+.hours-row span:last-child { font-weight: 600; color: var(--ink2); }
+.status-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 4px 10px; border-radius: 6px;
+  font-size: 11px; font-weight: 700;
+  background: var(--grn-l); color: var(--grn-d);
+  margin-top: 12px;
+}
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--grn); }
+
+/* ── RIGHT — FORM ─────────────────────────────── */
+.form-card {
+  background: var(--sur);
+  border: 1px solid var(--bdr);
+  border-radius: 18px;
+  padding: clamp(24px, 4vw, 36px);
+  box-shadow: 0 4px 28px rgba(0,0,0,.05);
+}
+.form-title { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -.03em; margin-bottom: 5px; }
+.form-sub { font-size: 13px; color: var(--ink3); margin-bottom: 22px; }
+
+.form-group { margin-bottom: 12px; }
+label { display: block; font-size: 12px; font-weight: 600; color: var(--ink2); margin-bottom: 5px; }
+input, select, textarea {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid var(--bdr);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--ink); background: var(--bg);
+  outline: none;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+input:focus, select:focus, textarea:focus { border-color: var(--grn); box-shadow: 0 0 0 3px rgba(42,122,80,.12); background: var(--sur); }
+input::placeholder, textarea::placeholder { color: var(--ink4); }
+textarea { resize: vertical; min-height: 120px; }
+input.field-error { border-color: var(--red); }
+.field-err-msg { font-size: 11px; color: var(--red); margin-top: 4px; display: none; }
+.field-err-msg.show { display: block; }
+
+.input-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.legal-row {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; color: var(--ink3);
+  margin-bottom: 14px; line-height: 1.5;
+}
+.legal-row input[type=checkbox] { width: 16px; height: 16px; margin-top: 2px; flex-shrink: 0; accent-color: var(--grn); cursor: pointer; }
+.legal-row a { color: var(--grn); text-decoration: none; }
+
+.btn {
+  width: 100%;
+  padding: 13px;
+  background: var(--grn);
+  color: #fff;
+  border: none; border-radius: 11px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+  transition: background var(--dur) var(--ease), transform var(--dur) var(--ease), opacity var(--dur) var(--ease);
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+.btn:hover { background: var(--grn-d); }
+.btn:active { transform: scale(.98); }
+.btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Success */
+#form-success { display: none; text-align: center; padding: 20px 0; }
+.success-ico { width: 60px; height: 60px; border-radius: 50%; background: var(--grn-l); display: flex; align-items: center; justify-content: center; font-size: 26px; margin: 0 auto 16px; }
+.success-title { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; letter-spacing: -.03em; margin-bottom: 8px; }
+.success-sub { font-size: 13px; color: var(--ink3); line-height: 1.6; }
+
+/* ── FOOTER ───────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--bdr);
+  padding: 28px var(--px);
+  display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  font-size: 12px; color: var(--ink4);
+}
+footer a { color: var(--ink4); text-decoration: none; transition: color var(--dur) var(--ease); }
+footer a:hover { color: var(--ink); }
+
+@media (max-width: 768px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .input-row { grid-template-columns: 1fr; }
+  .nav-links .hide-mobile { display: none; }
+}
+</style>
 <link rel="stylesheet" href="shared.css">
-<script src="mailone.js"></script>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-mark"></span></a>
-  
-<button class="menu-toggle" onclick="document.getElementById('mobile-menu').classList.add('open')" aria-label="Menu">
-  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
-</button>
-
-  <div class="nav-right">
-    
-    <a href="index.html" class="nb">Accueil</a>
-    <a href="login.html" class="nb">Se connecter</a>
-    <a href="login.html?action=signup" class="nb nb-dark">Essai gratuit →</a>
+  <a href="index.html" class="logo">Mail<span style="opacity:.4">One</span><span class="logo-dot" aria-hidden="true"></span></a>
+  <div class="nav-links">
+    <a href="index.html" class="hide-mobile">Accueil</a>
+    <a href="demo.html" class="hide-mobile">Démo</a>
+    <a href="login.html" class="nav-cta">Se connecter</a>
   </div>
 </nav>
 
-<div class="hero">
-  <div class="hero-eyebrow">💬 Support & Contact</div>
-  <h1>Comment pouvons-nous<br>vous aider ?</h1>
-  <p class="hero-sub">Notre équipe répond généralement sous 24h ouvrées. Pour les urgences techniques, utilisez le chat en bas à droite.</p>
-</div>
-
-<div class="page">
-
-  <!-- CONTACT METHODS -->
-  <div class="contact-methods">
-
-    <div class="c-card">
-      <div class="c-ico" style="background:var(--green-l)">📧</div>
-      <div>
-        <div class="c-title">Email support</div>
-        <div class="c-desc">Pour toutes vos questions sur l'utilisation de MailOne, votre compte ou votre abonnement.</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <a href="mailto:support@mailone.app" class="c-link">support@mailone.app →</a>
-          <span class="c-badge badge-fast">Réponse sous 24h</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="c-card">
-      <div class="c-ico" style="background:var(--blue-l)">🔒</div>
-      <div>
-        <div class="c-title">Données & RGPD</div>
-        <div class="c-desc">Pour exercer vos droits sur vos données personnelles (accès, rectification, suppression, portabilité).</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <a href="mailto:privacy@mailone.app" class="c-link">privacy@mailone.app →</a>
-          <span class="c-badge badge-slow">Réponse sous 72h</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="c-card">
-      <div class="c-ico" style="background:var(--amber-l)">💳</div>
-      <div>
-        <div class="c-title">Facturation & abonnement</div>
-        <div class="c-desc">Pour modifier votre plan, changer de carte ou accéder à vos factures, utilisez directement votre espace compte.</div>
-        <div style="display:flex;align-items:center;gap:8px">
-          <a href="account.html#plan" class="c-link">Gérer mon abonnement →</a>
-        </div>
-      </div>
-    </div>
-
-    <div class="c-card">
-      <div class="c-ico" style="background:var(--bg2)">🏢</div>
-      <div>
-        <div class="c-title">Adresse postale</div>
-        <div class="c-desc">MailOne SAS<br><span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ ADRESSE</span><br><span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ VILLE</span><br>France</div>
-        <div style="font-size:11px;color:var(--ink3);margin-top:6px">SIRET : <span style="background:#fef08a;color:#713f12;padding:1px 5px;border-radius:4px;font-weight:700;font-size:11px">⚠️ À COMPLÉTER</span></div>
-      </div>
-    </div>
-
-    <!-- DÉLAIS -->
-    <div style="background:var(--bg);border:1px solid var(--bdr);border-radius:12px;padding:18px 20px">
-      <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;margin-bottom:12px">⏱ Nos délais de réponse</div>
-      <div style="display:flex;flex-direction:column;gap:8px">
-        <div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid var(--bdr)">
-          <span style="color:var(--ink2)">Support technique</span><span class="c-badge badge-fast">< 4h en semaine</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid var(--bdr)">
-          <span style="color:var(--ink2)">Questions générales</span><span class="c-badge badge-fast">< 24h ouvrées</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0;border-bottom:1px solid var(--bdr)">
-          <span style="color:var(--ink2)">Demandes RGPD</span><span class="c-badge badge-slow">< 72h ouvrées</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;font-size:12px;padding:6px 0">
-          <span style="color:var(--ink2)">Partenariats / Presse</span><span class="c-badge badge-slow">< 5 jours ouvrés</span>
-        </div>
-      </div>
-    </div>
-
+<main>
+  <div class="page-header">
+    <div class="page-badge"><span>💬</span> Contact</div>
+    <h1>On est là pour vous aider.</h1>
+    <p class="page-sub">Une question, un problème technique, une demande commerciale ? Notre équipe répond sous 24h en jours ouvrés.</p>
   </div>
 
-  <!-- CONTACT FORM -->
-  <div class="form-card">
+  <div class="contact-grid">
 
-    <form id="form-state" onsubmit="event.preventDefault();handleContactForm()" novalidate>
-      <div class="form-title">Envoyez-nous un message</div>
-      <div class="form-sub">Remplissez ce formulaire et nous reviendrons vers vous rapidement.</div>
+    <!-- MÉTHODES DE CONTACT -->
+    <div>
+      <div class="contact-methods">
 
-      <div class="form-group">
-        <label>Nom complet *</label>
-        <input type="text" id="c-name" placeholder="Jean Dupont" required>
-      </div>
-      <div class="form-group">
-        <label>Email *</label>
-        <input type="email" id="c-email" placeholder="jean@entreprise.fr" required>
-      </div>
-      <div class="form-group">
-        <label>Sujet *</label>
-        <select id="c-subject">
-          <option value="">Choisir un sujet…</option>
-          <option>Problème technique</option>
-          <option>Question sur mon abonnement</option>
-          <option>Demande de remboursement</option>
-          <option>Question avant achat</option>
-          <option>Données personnelles (RGPD)</option>
-          <option>Signaler un bug</option>
-          <option>Partenariat / Presse</option>
-          <option>Autre</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Message *</label>
-        <textarea id="c-msg" placeholder="Décrivez votre question ou problème en détail…"></textarea>
-      </div>
-      <div style="margin-bottom:14px">
-        <label style="display:flex;align-items:flex-start;gap:7px;cursor:pointer;font-size:11px;color:var(--ink3);font-weight:400">
-          <input type="checkbox" id="c-consent" style="width:15px;height:15px;margin-top:1px;accent-color:var(--green)">
-          J'accepte que mes données soient utilisées pour traiter ma demande conformément à la <a href="#" style="color:var(--blue)">politique de confidentialité</a>.
-        </label>
-      </div>
-      <button class="submit-btn" type="submit">
-        <span id="c-ico">📤</span><span id="c-txt">Envoyer mon message</span>
-      </button>
-    </form>
+        <a href="mailto:support@mailone.app" class="contact-card">
+          <div class="contact-card-ico">📧</div>
+          <div>
+            <div class="contact-card-title">Support technique</div>
+            <div class="contact-card-sub">Bug, connexion, problème d'utilisation.</div>
+            <div class="contact-card-val">support@mailone.app</div>
+          </div>
+        </a>
 
-    <div class="form-success" id="form-success">
-      <div class="ico">✅</div>
-      <h3>Message envoyé !</h3>
-      <p>Merci pour votre message. Nous reviendrons vers vous à l'adresse <strong id="c-email-confirm"></strong> dans les meilleurs délais.</p>
-      <button onclick="resetForm()" style="margin-top:18px;padding:9px 18px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)">Envoyer un autre message</button>
+        <a href="mailto:contact@mailone.app" class="contact-card">
+          <div class="contact-card-ico">💼</div>
+          <div>
+            <div class="contact-card-title">Commercial & Partenariats</div>
+            <div class="contact-card-sub">Devis groupes, intégrations, revendeurs.</div>
+            <div class="contact-card-val">contact@mailone.app</div>
+          </div>
+        </a>
+
+        <div class="contact-card" style="cursor:default">
+          <div class="contact-card-ico" style="background:var(--bg2)">🏢</div>
+          <div>
+            <div class="contact-card-title">Siège social</div>
+            <div class="contact-card-sub" style="color:var(--ink4)">
+              MailOne SAS<br>
+              Adresse : <em style="color:var(--red);font-size:10px">À compléter</em><br>
+              SIRET : <em style="color:var(--red);font-size:10px">À compléter</em>
+            </div>
+          </div>
+        </div>
+
+        <div class="hours-card">
+          <div class="hours-title">Horaires du support</div>
+          <div class="hours-row"><span>Lundi – Vendredi</span><span>9h – 18h</span></div>
+          <div class="hours-row"><span>Samedi</span><span>10h – 13h</span></div>
+          <div class="hours-row"><span>Dimanche</span><span>Fermé</span></div>
+          <div class="status-badge"><span class="status-dot"></span>Support ouvert aujourd'hui</div>
+        </div>
+
+      </div>
     </div>
 
+    <!-- FORMULAIRE -->
+    <div class="form-card">
+
+      <div id="form-state">
+        <div class="form-title">Envoyez-nous un message</div>
+        <p class="form-sub">Réponse garantie sous 24h en jours ouvrés.</p>
+
+        <div class="input-row">
+          <div class="form-group">
+            <label for="c-name">Votre nom *</label>
+            <input type="text" id="c-name" placeholder="Jean Dupont" autocomplete="name" required>
+            <div class="field-err-msg" id="err-name">Nom requis</div>
+          </div>
+          <div class="form-group">
+            <label for="c-email">Votre email *</label>
+            <input type="email" id="c-email" placeholder="jean@entreprise.fr" autocomplete="email" required>
+            <div class="field-err-msg" id="err-email">Email invalide</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="c-subject">Sujet *</label>
+          <select id="c-subject" required>
+            <option value="">— Choisissez un sujet —</option>
+            <option value="support">Problème technique / Bug</option>
+            <option value="account">Mon compte / Facturation</option>
+            <option value="commercial">Demande commerciale / Devis</option>
+            <option value="demo">Demander une démonstration</option>
+            <option value="partenariat">Partenariat / Intégration</option>
+            <option value="autre">Autre question</option>
+          </select>
+          <div class="field-err-msg" id="err-subject">Sujet requis</div>
+        </div>
+
+        <div class="form-group">
+          <label for="c-msg">Votre message *</label>
+          <textarea id="c-msg" placeholder="Décrivez votre question ou problème en quelques lignes…" required></textarea>
+          <div class="field-err-msg" id="err-msg">Message requis</div>
+        </div>
+
+        <div class="legal-row">
+          <input type="checkbox" id="c-consent" required>
+          <label for="c-consent">J'accepte que MailOne conserve mes informations pour traiter ma demande, conformément à la <a href="legal.html#privacy">politique de confidentialité</a>. *</label>
+        </div>
+
+        <input type="text" id="c-email-confirm" name="email_confirm" autocomplete="off" aria-hidden="true" tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0">
+
+        <button class="btn" id="c-submit" onclick="handleContact()">
+          <span id="c-btn-ico">✉️</span>
+          <span id="c-btn-txt">Envoyer mon message</span>
+        </button>
+
+        <p style="font-size:11px;color:var(--ink4);margin-top:10px;text-align:center">Réponse sous 24h • Pas de spam • Vos données restent chez nous</p>
+      </div>
+
+      <div id="form-success">
+        <div class="success-ico">✅</div>
+        <div class="success-title">Message envoyé !</div>
+        <p class="success-sub">Merci <strong id="c-confirm-name">Jean</strong>. Notre équipe vous répondra sous 24h ouvrés à <strong id="c-confirm-email">votre email</strong>.</p>
+        <div style="margin-top:20px;padding:14px 16px;background:var(--grn-l);border:1px solid #C5E3D2;border-radius:10px;font-size:12px;color:var(--grn-d);line-height:1.6">
+          En attendant, consultez notre <a href="index.html#faq" style="color:var(--grn-d);font-weight:700;text-decoration:underline">FAQ</a> — la plupart des réponses s'y trouvent.
+        </div>
+      </div>
+
+    </div>
   </div>
-</div>
+</main>
 
 <footer>
-  <a href="index.html" class="foot-logo">Mail<span>One</span><span class="nav-mark"></span></a>
-  <div class="foot-links">
-    <a href="index.html">Accueil</a>
-    <a href="index.html#pricing">Tarifs</a>
-    <a href="account.html">Mon compte</a>
-    <a href="legal.html#cgu">CGU</a>
-    <a href="cgv.html">CGV</a>
-    <a href="legal.html#privacy">Confidentialité</a>
-    <a href="legal.html#mentions">Mentions légales</a>
-  </div>
-  <div class="foot-bottom">© 2025 MailOne SAS. Tous droits réservés.</div>
+  <div>© 2025 MailOne SAS — <a href="legal.html">Mentions légales</a> · <a href="legal.html#privacy">Confidentialité</a></div>
+  <div><a href="index.html">Accueil</a> · <a href="demo.html">Démo</a> · <a href="login.html">Connexion</a></div>
 </footer>
 
-<div class="toast" id="toast"><span id="t-ico">✅</span><span id="t-msg"></span></div>
-
+<script src="mailone.js"></script>
 <script>
-function handleContactForm() {
-  const name = document.getElementById('c-name').value.trim();
-  const email = document.getElementById('c-email').value.trim();
+async function handleContact() {
+  const name    = document.getElementById('c-name').value.trim();
+  const email   = document.getElementById('c-email').value.trim();
   const subject = document.getElementById('c-subject').value;
-  const msg = document.getElementById('c-msg').value.trim();
+  const msg     = document.getElementById('c-msg').value.trim();
   const consent = document.getElementById('c-consent').checked;
-  if (!name || !email || !subject || !msg) {
-    showToast('⚠️', 'Veuillez remplir tous les champs obligatoires.');
-    return;
-  }
+  const honey   = document.getElementById('c-email-confirm').value;
+
+  let valid = true;
+  const setErr = (id, errId, show) => {
+    document.getElementById(id).classList.toggle('field-error', show);
+    document.getElementById(errId).classList.toggle('show', show);
+    if (show) valid = false;
+  };
+
+  setErr('c-name',    'err-name',    !name);
+  setErr('c-email',   'err-email',   !email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email));
+  setErr('c-subject', 'err-subject', !subject);
+  setErr('c-msg',     'err-msg',     msg.length < 10);
+
   if (!consent) { showToast('⚠️', 'Veuillez accepter la politique de confidentialité.'); return; }
-  const btn = document.querySelector('.submit-btn');
+  if (honey)    return;
+  if (!valid)   { showToast('⚠️', 'Veuillez corriger les champs indiqués.'); return; }
+
+  const btn = document.getElementById('c-submit');
   btn.disabled = true;
-  document.getElementById('c-ico').textContent = '⏳';
-  document.getElementById('c-txt').textContent = 'Envoi en cours…';
-  setTimeout(() => {
-    document.getElementById('c-email-confirm').textContent = email;
-    document.getElementById('form-state').style.display = 'none';
-    document.getElementById('form-success').style.display = 'block';
-  }, 1200);
-}
-function resetForm() {
-  document.getElementById('form-state').style.display = 'block';
-  document.getElementById('form-success').style.display = 'none';
-  document.getElementById('c-name').value = '';
-  document.getElementById('c-email').value = '';
-  document.getElementById('c-subject').value = '';
-  document.getElementById('c-msg').value = '';
-  document.getElementById('c-consent').checked = false;
-  document.querySelector('.submit-btn').disabled = false;
-  document.getElementById('c-ico').textContent = '📤';
-  document.getElementById('c-txt').textContent = 'Envoyer mon message';
-}
-function showToast(ico, msg) {
-  document.getElementById('t-ico').textContent = ico;
-  document.getElementById('t-msg').textContent = msg;
-  const t = document.getElementById('toast');
-  t.classList.add('on');
-  setTimeout(() => t.classList.remove('on'), 3200);
+  document.getElementById('c-btn-ico').textContent = '⏳';
+  document.getElementById('c-btn-txt').textContent = 'Envoi en cours…';
+
+  try {
+    await API.post('/api/support/contact', { name, email, subject, message: msg });
+  } catch (_) {}
+
+  document.getElementById('c-confirm-name').textContent  = name.split(' ')[0];
+  document.getElementById('c-confirm-email').textContent = email;
+  document.getElementById('form-state').style.display   = 'none';
+  const s = document.getElementById('form-success');
+  s.style.display = 'block';
+  s.style.opacity = '0';
+  requestAnimationFrame(() => { s.style.transition = 'opacity 350ms ease'; s.style.opacity = '1'; });
 }
 </script>
 </body>

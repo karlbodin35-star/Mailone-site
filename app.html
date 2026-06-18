@@ -8,7 +8,19 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#fafafa;--bg2:#f4f4f5;--bg3:#e4e4e7;--sur:#fff;--bdr:#e4e4e7;--bdr2:#d4d4d8;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--ink4:#a1a1aa;--urgent:#c93820;--urgent-bg:#fef1ee;--quote:#1a66cc;--quote-bg:#eef4fd;--appt:#147a50;--appt-bg:#edf8f2;--invoice:#b86c0a;--invoice-bg:#fdf5e7;--teal:#0d9488;--teal-l:#f0fdfa;--green:#16a34a;--green-l:#f0fdf4;--purple:#9333ea;--purple-l:#faf5ff;--amber:#d97706;--amber-l:#fffbeb}
+:root{
+  --bg:#F8F7F5;--bg2:#EFECE6;--bg3:#E3DFD7;
+  --sur:#FFFFFF;--bdr:#E3DFD7;--bdr2:#CBC7BE;
+  --ink:#111110;--ink2:#3C3C3A;--ink3:#6B6B67;--ink4:#9E9E9A;
+  --urgent:#C0392B;--urgent-bg:#FEF0EE;
+  --quote:#1D4ED8;--quote-bg:#EFF4FF;
+  --appt:#2A7A50;--appt-bg:#EBF5EF;
+  --invoice:#B45309;--invoice-bg:#FEF9EC;
+  --teal:#2A7A50;--teal-l:#EBF5EF;
+  --green:#2A7A50;--green-l:#EBF5EF;
+  --purple:#6D28D9;--purple-l:#F5F3FF;
+  --amber:#B45309;--amber-l:#FEF9EC;
+}
 html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
 .app{display:flex;height:100vh}
 
@@ -16,8 +28,8 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .sidebar{width:234px;background:var(--ink);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
 .sb-logo-zone{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sb-logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.5px;display:flex;align-items:center;gap:7px;text-decoration:none}
-.sb-logo-dot{width:8px;height:8px;border-radius:50%;background:#22c55e}
-.sb-plan-pill{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:rgba(94,234,212,.1);border:1px solid rgba(94,234,212,.18);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:800;color:#22c55e;text-transform:uppercase;letter-spacing:.07em}
+.sb-logo-dot{width:8px;height:8px;border-radius:50%;background:#3E9E6A}
+.sb-plan-pill{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:rgba(42,122,80,.12);border:1px solid rgba(42,122,80,.22);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:800;color:#3E9E6A;text-transform:uppercase;letter-spacing:.07em}
 .sb-user{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sb-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#f97316,#dc2626)}
 .sb-uname{font-size:12px;font-weight:600;color:#fff;line-height:1.3}
@@ -33,7 +45,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .sb-div{height:1px;background:rgba(255,255,255,.06);margin:5px 12px}
 .sb-bottom{margin-top:auto;padding:12px 14px;border-top:1px solid rgba(255,255,255,.06)}
 .sb-bar{height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin:4px 0 2px}
-.sb-fill{height:100%;width:28%;background:linear-gradient(90deg,#22c55e,#3b82f6);border-radius:3px}
+.sb-fill{height:100%;width:28%;background:linear-gradient(90deg,#3E9E6A,#3b82f6);border-radius:3px}
 .sb-logout{display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.28);cursor:pointer;margin-top:8px;padding:5px;border-radius:6px;transition:all .15s}
 .sb-logout:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6)}
 
@@ -309,9 +321,9 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .toast.on{transform:translateY(0);opacity:1}
 
 /* Perf badge */
-.perf-badge{position:fixed;bottom:18px;left:18px;background:var(--ink);border:1px solid rgba(94,234,212,.2);border-radius:9px;padding:7px 12px;display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.4);z-index:200;transform:translateY(60px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.perf-badge{position:fixed;bottom:18px;left:18px;background:var(--ink);border:1px solid rgba(42,122,80,.25);border-radius:9px;padding:7px 12px;display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.4);z-index:200;transform:translateY(60px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
 .perf-badge.on{transform:translateY(0);opacity:1}
-.perf-ms{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#22c55e}
+.perf-ms{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#3E9E6A}
 
 /* SKELETON LOADING */
 .skeleton{background:linear-gradient(90deg,var(--bg) 25%,var(--bdr) 50%,var(--bg) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px}
@@ -371,7 +383,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <div style="font-size:10px;color:rgba(255,255,255,.26);margin-bottom:4px">Stockage utilisé</div>
     <div class="sb-bar"><div class="sb-fill"></div></div>
     <div style="font-size:10px;color:rgba(255,255,255,.38);margin-top:2px">1.2 Go / 5 Go</div>
-    <a href="referral.html" style="display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.35);cursor:pointer;padding:5px;border-radius:6px;transition:all .15s;text-decoration:none;margin-bottom:3px" onmouseover="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.7)'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.35)'"><span>🎁</span>Parrainer un confrère</a><a href="account.html" style="display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.35);cursor:pointer;padding:5px;border-radius:6px;transition:all .15s;text-decoration:none;margin-bottom:3px" onmouseover="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.7)'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.35)'"><span>⚙️</span>Mon compte</a>
+    <a href="account.html" style="display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.35);cursor:pointer;padding:5px;border-radius:6px;transition:all .15s;text-decoration:none;margin-bottom:3px" onmouseover="this.style.background='rgba(255,255,255,.06)';this.style.color='rgba(255,255,255,.7)'" onmouseout="this.style.background='';this.style.color='rgba(255,255,255,.35)'"><span>⚙️</span>Mon compte</a>
     <div style="display:flex;flex-direction:column;gap:3px;margin:6px 0 4px;padding:7px 8px;background:rgba(255,255,255,.04);border-radius:7px;border:1px solid rgba(255,255,255,.07)">
       <div style="font-size:9px;font-weight:700;color:rgba(94,234,212,.7);letter-spacing:.5px;margin-bottom:2px">CONFIDENTIALITÉ</div>
       <div style="font-size:10px;color:rgba(255,255,255,.38);display:flex;align-items:center;gap:5px"><span style="color:rgba(94,234,212,.6)">🔒</span>Chiffrement AES-256-GCM</div>
@@ -518,7 +530,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 <div id="onb-overlay" class="onb-overlay" style="display:none">
   <div class="onb-modal">
     <div class="onb-head">
-      <div class="onb-logo">MailOne<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#22c55e;margin-left:3px;vertical-align:middle"></span></div>
+      <div class="onb-logo">MailOne<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3E9E6A;margin-left:3px;vertical-align:middle"></span></div>
       <div class="onb-title" id="onb-title">Bienvenue ! Quel est votre métier ?</div>
       <div class="onb-sub" id="onb-sub">MailOne va configurer les catégories de tri adaptées à votre activité pour vous faire gagner un maximum de temps.</div>
       <div class="onb-detected" id="onb-detected" style="display:none"></div>
@@ -2172,5 +2184,6 @@ checkEmailAccount();
 </script>
 <div class="toast" id="toast" style="position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9998;max-width:320px;border:1px solid rgba(255,255,255,.08)"><span id="t-ico"></span><span id="t-msg"></span></div>
 <script src="support.js"></script>
+<script src="push.js"></script>
 </body>
 </html>
