@@ -234,7 +234,7 @@ input::placeholder { color: var(--ink4); }
         <div class="plan-current">
           <div>
             <div class="plan-badge-big" id="plan-label">⭐ Plan Solo — Mensuel</div>
-            <div class="plan-renew" id="plan-renew">Prochain renouvellement : 26 avril 2025 · 99,00€</div>
+            <div class="plan-renew" id="plan-renew">Prochain renouvellement : — · 14,99€</div>
           </div>
           <div>
             <div class="plan-price-big" id="plan-price">14,99€</div>
@@ -268,30 +268,10 @@ input::placeholder { color: var(--ink4); }
         <div><div class="sc-title">Historique de facturation</div><div class="sc-sub">Toutes vos factures téléchargeables</div></div>
       </div>
       <div class="sc-body">
-        <div class="invoice-row">
-          <div><div style="font-size:13px;font-weight:600">Mars 2025</div><div class="inv-date">26/03/2025</div></div>
-          <div style="display:flex;align-items:center;gap:11px">
-            <span class="inv-amount">99,00€</span>
-            <span class="inv-badge inv-paid">Payé</span>
-            <a class="inv-dl" href="javascript:void(0)" onclick="dlInvoice('mars-2025')">📥 PDF</a>
-          </div>
-        </div>
-        <div class="invoice-row">
-          <div><div style="font-size:13px;font-weight:600">Février 2025</div><div class="inv-date">26/02/2025</div></div>
-          <div style="display:flex;align-items:center;gap:11px">
-            <span class="inv-amount">99,00€</span>
-            <span class="inv-badge inv-paid">Payé</span>
-            <a class="inv-dl" href="javascript:void(0)" onclick="dlInvoice('fev-2025')">📥 PDF</a>
-          </div>
-        </div>
-        <div class="invoice-row">
-          <div><div style="font-size:13px;font-weight:600">Janvier 2025</div><div class="inv-date">26/01/2025</div></div>
-          <div style="display:flex;align-items:center;gap:11px">
-            <span class="inv-amount">99,00€</span>
-            <span class="inv-badge inv-paid">Payé</span>
-            <a class="inv-dl" href="javascript:void(0)" onclick="dlInvoice('jan-2025')">📥 PDF</a>
-          </div>
-        </div>
+        <p style="font-size:13px;color:var(--ink3);line-height:1.65;margin-bottom:16px">Vos factures sont générées et hébergées par Stripe. Accédez au portail de facturation pour les télécharger.</p>
+        <button onclick="openPortal()" style="display:inline-flex;align-items:center;gap:7px;padding:10px 18px;background:var(--grn);color:#fff;border:none;border-radius:9px;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer">
+          📥 Accéder à mes factures
+        </button>
         <div style="margin-top:14px;font-size:12px;color:var(--ink3)">
           Besoin d'une facture avec TVA intra-communautaire ? <a href="contact.html" style="color:var(--grn);font-weight:600;text-decoration:none">Contactez-nous →</a>
         </div>
