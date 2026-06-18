@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Connexion en cours — MailOne</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: #F8F7F5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  color: #111110;
+}
+.card {
+  text-align: center;
+  padding: 48px 40px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,.08);
+  max-width: 360px;
+  width: 90%;
+}
+.icon { font-size: 48px; margin-bottom: 16px; }
+h1 { font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+p  { font-size: 13px; color: #6B6B67; line-height: 1.6; }
+.spinner {
+  width: 36px; height: 36px;
+  border: 3px solid #E3DFD7;
+  border-top-color: #2A7A50;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  margin: 0 auto 16px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="spinner" id="spinner"></div>
+  <h1 id="title">Connexion en cours…</h1>
+  <p id="desc">Fermeture automatique dans un instant.</p>
+</div>
+
+<script>
+(function () {
+  const params   = new URLSearchParams(window.location.search);
+  const success  = params.get('success') === '1';
+  const provider = params.get('provider') || '';
+  const email    = params.get('email')    || '';
+  const error    = params.get('error')    || '';
+
+  const title  = document.getElementById('title');
+  const desc   = document.getElementById('desc');
+  const spinner = document.getElementById('spinner');
+
+  if (success) {
+    spinner.style.display = 'none';
+    document.getElementById('card').insertAdjacentHTML('afterbegin', '<div class="icon">✅</div>');
+    const provLabel = provider === 'gmail' ? 'Gmail' : provider === 'outlook' ? 'Outlook' : provider;
+    title.textContent = provLabel + ' connecté !';
+    desc.textContent  = email ? email + ' — fermeture automatique…' : 'Fermeture automatique…';
+  } else if (error && error !== 'annulé') {
+    spinner.style.display = 'none';
+    document.getElementById('card').insertAdjacentHTML('afterbegin', '<div class="icon">❌</div>');
+    title.textContent = 'Connexion échouée';
+    desc.textContent  = 'Fermez cette fenêtre et réessayez.';
+  }
+
+  // Try postMessage (works if COOP allows it)
+  try {
+    if (window.opener && !window.opener.closed) {
+      const msg = success
+        ? { type: 'oauth_success', provider, email }
+        : { type: 'oauth_error',   error };
+      window.opener.postMessage(msg, window.location.origin);
+    }
+  } catch (_) {}
+
+  // Always close the popup
+  setTimeout(() => { try { window.close(); } catch (_) {} }, 1500);
+})();
+</script>
+</body>
+</html>
