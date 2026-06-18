@@ -779,7 +779,10 @@ async function analyzeEmail() {
       }),
     });
 
-    if (!replyRes.ok) throw new Error('Erreur génération réponse (' + replyRes.status + ')');
+    if (!replyRes.ok) {
+      const errData = await replyRes.json().catch(() => ({}));
+      throw new Error(errData.error || 'Erreur génération réponse (' + replyRes.status + ')');
+    }
 
     await streamReply(replyRes);
 
@@ -808,40 +811,27 @@ async function analyzeEmail() {
 }
 
 async function streamReply(response) {
-  const reader  = response.body.getReader();
-  const decoder = new TextDecoder();
-  let buffer = '';
-  let fullText = '';
+  const data = await response.json();
+  const text = data.reply || '';
+  currentReply = text;
+
   const box = document.getElementById('reply-box');
+  if (!box) return;
 
-  while (true) {
-    const { done, value } = await reader.read();
-    if (done) break;
-    buffer += decoder.decode(value, { stream: true });
-    const lines = buffer.split('\n');
-    buffer = lines.pop();
-
-    for (const line of lines) {
-      if (!line.startsWith('data:')) continue;
-      const raw = line.slice(5).trim();
-      if (raw === '[DONE]') break;
-      try {
-        const parsed = JSON.parse(raw);
-        const delta = parsed.delta?.text || '';
-        if (delta && box) {
-          fullText += delta;
-          currentReply = fullText;
-          box.innerHTML = escapeHtml(fullText) + '<span class="typing-cursor"></span>';
-        }
-      } catch {}
+  // Simulate typing: reveal ~4 chars every 18ms → ~220 chars/sec, realistic feel
+  await new Promise(resolve => {
+    let i = 0;
+    function tick() {
+      i = Math.min(i + 4, text.length);
+      box.innerHTML = escapeHtml(text.slice(0, i)) + (i < text.length ? '<span class="typing-cursor"></span>' : '');
+      if (i < text.length) {
+        setTimeout(tick, 18);
+      } else {
+        resolve();
+      }
     }
-  }
-
-  // Final: remove cursor
-  if (box) {
-    currentReply = fullText;
-    box.innerHTML = escapeHtml(fullText);
-  }
+    tick();
+  });
 }
 
 // ════════════════════════════════════════════════
