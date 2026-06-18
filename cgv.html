@@ -2,41 +2,101 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CGV — MailOne</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared.css">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="canonical" href="https://mailone.app/cgv">
 <meta property="og:title" content="MailOne — CGV">
 <meta property="og:description" content="Conditions Générales de Vente de MailOne.">
 <meta name="description" content="Conditions Générales de Vente de MailOne — SaaS de gestion d'emails pour artisans et PME.">
-<style>
-.legal-page{max-width:760px;margin:0 auto;padding:48px clamp(20px,5vw,60px) 80px}
-.legal-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--g500);text-decoration:none;margin-bottom:28px;transition:color .15s}
-.legal-back:hover{color:var(--g900)}
-.legal-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,4vw,38px);font-weight:700;letter-spacing:-.03em;margin-bottom:8px}
-.legal-updated{font-size:13px;color:var(--g400);margin-bottom:36px}
-.legal-section{margin-bottom:32px}
-.legal-section h2{font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;letter-spacing:-.02em;margin-bottom:12px;padding-bottom:8px;border-bottom:1px solid var(--g200)}
-.legal-section h3{font-size:15px;font-weight:700;margin:16px 0 8px;color:var(--g800)}
-.legal-section p,.legal-section li{font-size:14px;color:var(--g600);line-height:1.75;margin-bottom:8px}
-.legal-section ul{padding-left:20px;margin-bottom:12px}
-.legal-section li{margin-bottom:4px}
-.placeholder{background:#fef08a;color:#713f12;padding:1px 6px;border-radius:4px;font-weight:700;font-size:12px}
-
-</style>
+<link rel="stylesheet" href="shared.css">
 <script src="mailone.js"></script>
+<style>
+:root {
+  --bg:    #F8F7F5;
+  --bg2:   #EFECE6;
+  --sur:   #FFFFFF;
+  --bdr:   #E3DFD7;
+  --bdr2:  #CBC7BE;
+  --ink:   #111110;
+  --ink2:  #3C3C3A;
+  --ink3:  #6B6B67;
+  --ink4:  #9E9E9A;
+  --grn:   #2A7A50;
+  --grn-d: #1E5C3C;
+  --blue:  #1D4ED8;
+  --ease: cubic-bezier(0.25, 0, 0, 1);
+  --dur: 250ms;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); scroll-behavior: smooth; }
+body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+:focus-visible { outline: 2px solid var(--grn); outline-offset: 2px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; } }
+
+/* NAV */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  height: 60px; background: rgba(248,247,245,.92);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--bdr);
+  display: flex; align-items: center; padding: 0 clamp(20px,5vw,60px); gap: 12px;
+}
+.nav-logo { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700; color: var(--ink); letter-spacing: -.5px; text-decoration: none; display: flex; align-items: center; }
+.nav-logo span { color: var(--ink4); }
+.nav-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--grn); margin-left: 3px; vertical-align: middle; }
+.nav-right { margin-left: auto; display: flex; gap: 8px; }
+.nb { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--bdr); background: transparent; font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 600; color: var(--ink2); text-decoration: none; transition: background var(--dur) var(--ease); }
+.nb:hover { background: var(--bg2); }
+.nb-grn { background: var(--grn); color: #fff; border-color: var(--grn); }
+.nb-grn:hover { background: var(--grn-d); border-color: var(--grn-d); }
+
+/* PAGE */
+.legal-page { max-width: 760px; margin: 0 auto; padding: clamp(36px,5vw,56px) clamp(20px,5vw,60px) clamp(60px,8vw,100px); }
+.legal-back {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 13px; font-weight: 500; color: var(--ink3);
+  text-decoration: none; margin-bottom: 28px;
+  transition: color var(--dur) var(--ease);
+}
+.legal-back:hover { color: var(--ink); }
+.legal-title { font-family: 'Space Grotesk', sans-serif; font-size: clamp(26px,4vw,36px); font-weight: 700; letter-spacing: -.04em; margin-bottom: 8px; }
+.legal-updated { font-size: 13px; color: var(--ink4); margin-bottom: 36px; }
+
+/* SECTIONS */
+.legal-section { margin-bottom: 32px; }
+.legal-section h2 {
+  font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700;
+  letter-spacing: -.02em; margin-bottom: 12px; padding-bottom: 8px;
+  border-bottom: 1px solid var(--bdr); color: var(--ink);
+}
+.legal-section h3 { font-size: 14.5px; font-weight: 700; margin: 16px 0 8px; color: var(--ink2); }
+.legal-section p, .legal-section li { font-size: 14px; color: var(--ink3); line-height: 1.75; margin-bottom: 8px; }
+.legal-section ul { padding-left: 20px; margin-bottom: 12px; }
+.legal-section li { margin-bottom: 4px; }
+.legal-section strong { color: var(--ink2); font-weight: 700; }
+.legal-section a { color: var(--blue); }
+.placeholder { background: #FEF9C3; color: #713F12; padding: 1px 6px; border-radius: 4px; font-weight: 700; font-size: 12px; }
+
+/* FOOTER */
+.page-footer {
+  border-top: 1px solid var(--bdr);
+  padding: 24px clamp(20px,5vw,60px);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  font-size: 12px; color: var(--ink4);
+}
+.page-footer a { color: var(--ink4); text-decoration: none; transition: color var(--dur) var(--ease); }
+.page-footer a:hover { color: var(--ink); }
+</style>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-mark"></span></a>
+  <a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-dot" aria-hidden="true"></span></a>
   <div class="nav-right">
-    
-    <a href="index.html" class="btn btn-s">Accueil</a>
-    <a href="login.html" class="btn btn-p">Démarrer</a>
+    <a href="index.html" class="nb">Accueil</a>
+    <a href="login.html?action=signup" class="nb nb-grn">Démarrer</a>
   </div>
 </nav>
 
@@ -53,14 +113,12 @@
 
   <div class="legal-section">
     <h2>Article 2 — Offres et tarifs</h2>
-    <h3>2.1 Offres disponibles</h3>
-    <p>MailOne propose trois offres :</p>
+    <h3>2.1 Offre disponible</h3>
+    <p>MailOne propose une offre unique :</p>
     <ul>
-      <li><strong>Solo</strong> — 1 boîte mail connectée — 99€ HT / mois</li>
-      <li><strong>Équipe</strong> — 10 boîtes mail — 900€ HT / mois (90€ / boîte)</li>
-      <li><strong>Entreprise</strong> — 20 boîtes mail — 1 780€ HT / mois (89€ / boîte)</li>
+      <li><strong>MailOne Solo</strong> — 1 boîte mail, toutes fonctionnalités incluses — 14,99€ HT / mois</li>
     </ul>
-    <p>Chaque offre est disponible en facturation mensuelle ou annuelle. L'abonnement annuel bénéficie de 2 mois offerts.</p>
+    <p>L'offre est disponible en facturation mensuelle ou annuelle. L'abonnement annuel bénéficie de 2 mois offerts (149,90€ HT / an).</p>
 
     <h3>2.2 Essai gratuit</h3>
     <p>Chaque nouveau Client bénéficie d'un essai gratuit de 14 jours calendaires, sans engagement et sans carte bancaire. À l'issue de l'essai, le Client doit souscrire un abonnement payant pour continuer à utiliser le service.</p>
@@ -128,7 +186,7 @@
 
   <div class="legal-section">
     <h2>Article 9 — Protection des données</h2>
-    <p>Le traitement des données personnelles est régi par la Politique de Confidentialité disponible sur <a href="legal.html#privacy" style="color:var(--green-600)">legal.html#privacy</a>.</p>
+    <p>Le traitement des données personnelles est régi par la <a href="legal.html#privacy">Politique de Confidentialité</a>.</p>
     <p>MailOne est conforme au RGPD. Les données sont hébergées en Union Européenne. L'agent IA traite les emails localement dans le navigateur du Client — les contenus des emails ne transitent pas par les serveurs de MailOne.</p>
   </div>
 
@@ -157,16 +215,16 @@
   </div>
 </div>
 
-<div class="simple-footer">
+<footer class="page-footer">
   <span>© 2025 MailOne SAS</span>
-  <div style="display:flex;gap:16px">
+  <div style="display:flex;gap:16px;flex-wrap:wrap">
     <a href="legal.html">Mentions légales</a>
     <a href="legal.html#privacy">Confidentialité</a>
     <a href="legal.html#cgu">CGU</a>
     <a href="cgv.html">CGV</a>
     <a href="contact.html">Contact</a>
   </div>
-</div>
+</footer>
 
 </body>
 </html>

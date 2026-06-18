@@ -2,135 +2,175 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mon compte — MailOne</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="robots" content="noindex">
+<script src="mailone.js"></script>
 <style>
-*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#fafafa;--bg2:#f4f4f5;--sur:#fff;--bdr:#e4e4e7;--bdr2:#d4d4d8;--ink:#18181b;--ink2:#52525b;--ink3:#71717a;--ink4:#a1a1aa;--green:#16a34a;--green-l:#f0fdf4;--amber:#d97706;--amber-l:#fffbeb;--red:#dc2626;--red-l:#fef2f2;--purple:#9333ea;--purple-l:#faf5ff;--teal:#0d9488;--teal-l:#f0fdfa}
-html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink)}
+:root {
+  --bg:    #F8F7F5;
+  --bg2:   #EFECE6;
+  --sur:   #FFFFFF;
+  --bdr:   #E3DFD7;
+  --bdr2:  #CBC7BE;
+  --ink:   #111110;
+  --ink2:  #3C3C3A;
+  --ink3:  #6B6B67;
+  --ink4:  #9E9E9A;
+  --grn:   #2A7A50;
+  --grn-d: #1E5C3C;
+  --grn-l: #EBF5EF;
+  --grn-m: #3E9E6A;
+  --drk:   #131210;
+  --red:   #C0392B;
+  --red-l: #FEF0EE;
+  --amber: #B45309;
+  --amber-l: #FEF9EC;
+  --blue:  #1D4ED8;
+  --teal:  #0D9488;
+  --teal-l: #F0FDFA;
+  --ease: cubic-bezier(0.25, 0, 0, 1);
+  --dur: 250ms;
+}
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--ink); }
+:focus-visible { outline: 2px solid var(--grn); outline-offset: 2px; border-radius: 4px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; } }
 
-/* NAV */
-nav{position:sticky;top:0;z-index:100;height:58px;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 5vw;gap:14px}
-.nav-logo{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:800;color:var(--ink);letter-spacing:-.5px;display:flex;align-items:center;gap:6px;text-decoration:none}
-.nav-mark{width:7px;height:7px;border-radius:50%;background:var(--green)}
-.nav-right{margin-left:auto;display:flex;gap:8px;align-items:center}
-.nb{padding:6px 13px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2);transition:all .15s;text-decoration:none}
-.nb:hover{background:var(--bg2)}
-.nb-green{background:var(--green);color:#fff;border-color:var(--green)}.nb-green:hover{opacity:.87}
+/* ── NAV ──────────────────────────────────────── */
+nav {
+  position: sticky; top: 0; z-index: 100;
+  height: 58px; display: flex; align-items: center; padding: 0 clamp(16px,5vw,48px); gap: 12px;
+  background: rgba(248,247,245,.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--bdr);
+}
+.logo { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -.5px; }
+.logo-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--grn); margin-left: 3px; vertical-align: middle; }
+.nav-right { margin-left: auto; display: flex; gap: 8px; align-items: center; }
+.nb { padding: 7px 13px; border-radius: 9px; border: 1.5px solid var(--bdr); background: transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; color: var(--ink2); transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease); text-decoration: none; }
+.nb:hover { background: var(--bg2); border-color: var(--bdr2); }
 
-/* LAYOUT */
-.page{max-width:860px;margin:0 auto;padding:40px 5vw 80px;display:grid;grid-template-columns:220px 1fr;gap:28px;align-items:start}
-.sidebar-nav{background:var(--sur);border:1px solid var(--bdr);border-radius:14px;padding:8px;position:sticky;top:76px}
-.sn-item{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:500;color:var(--ink2);transition:all .15s;text-decoration:none}
-.sn-item:hover{background:var(--bg)}
-.sn-item.active{background:var(--bg2);color:var(--ink);font-weight:700}
-.sn-div{height:1px;background:var(--bdr);margin:5px 0}
+/* ── LAYOUT ───────────────────────────────────── */
+.page { max-width: 880px; margin: 0 auto; padding: 36px clamp(16px,5vw,40px) 80px; display: grid; grid-template-columns: 210px 1fr; gap: 24px; align-items: start; }
 
-/* CARDS */
-.main-content{display:flex;flex-direction:column;gap:20px}
-.section-card{background:var(--sur);border:1px solid var(--bdr);border-radius:16px;overflow:hidden}
-.sc-head{padding:18px 22px;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:12px}
-.sc-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800}
-.sc-sub{font-size:12px;color:var(--ink3);margin-top:2px}
-.sc-body{padding:22px}
+/* ── SIDEBAR ──────────────────────────────────── */
+.sidebar-nav { background: var(--sur); border: 1px solid var(--bdr); border-radius: 14px; padding: 7px; position: sticky; top: 74px; }
+.sn-item { display: flex; align-items: center; gap: 8px; padding: 9px 11px; border-radius: 9px; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--ink2); transition: background var(--dur) var(--ease), color var(--dur) var(--ease); text-decoration: none; }
+.sn-item:hover { background: var(--bg); color: var(--ink); }
+.sn-item.active { background: var(--bg2); color: var(--ink); font-weight: 700; }
+.sn-div { height: 1px; background: var(--bdr); margin: 5px 0; }
 
-/* PROFILE */
-.av-row{display:flex;align-items:center;gap:16px;margin-bottom:22px}
-.av-big{width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:#fff;background:linear-gradient(135deg,#f97316,#dc2626)}
-.av-info{}
-.av-name{font-family:'Space Grotesk',sans-serif;font-size:16px;font-weight:800}
-.av-email{font-size:12px;color:var(--ink3);margin-top:2px}
+/* ── CARDS ────────────────────────────────────── */
+.main-content { display: flex; flex-direction: column; gap: 18px; }
+.section-card { background: var(--sur); border: 1px solid var(--bdr); border-radius: 16px; overflow: hidden; }
+.sc-head { padding: 16px 20px; border-bottom: 1px solid var(--bdr); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.sc-title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: var(--ink); }
+.sc-sub { font-size: 11px; color: var(--ink4); margin-top: 2px; }
+.sc-body { padding: 20px; }
 
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.field-group{display:flex;flex-direction:column;gap:5px}
-.field-group.full{grid-column:span 2}
-label{font-size:12px;font-weight:600;color:var(--ink2)}
-input,select{padding:10px 13px;border:1.5px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);background:var(--bg);outline:none;transition:all .15s;width:100%}
-input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,160,106,.1);background:var(--sur)}
-.save-btn{padding:9px 18px;background:var(--ink);color:var(--bg);border:none;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
-.save-btn:hover{opacity:.85}
-.save-btn.success{background:var(--green)}
+/* AVATAR */
+.av-row { display: flex; align-items: center; gap: 14px; margin-bottom: 20px; }
+.av-big { width: 52px; height: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #fff; background: linear-gradient(135deg, var(--grn), var(--grn-m)); flex-shrink: 0; }
+.av-name { font-family: 'Space Grotesk', sans-serif; font-size: 15px; font-weight: 700; }
+.av-email { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+
+/* FORM */
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 11px; margin-bottom: 12px; }
+.field-group { display: flex; flex-direction: column; gap: 5px; }
+.field-group.full { grid-column: span 2; }
+label { font-size: 12px; font-weight: 600; color: var(--ink2); }
+input, select {
+  padding: 10px 13px; border: 1.5px solid var(--bdr); border-radius: 9px;
+  font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--ink);
+  background: var(--bg); outline: none; width: 100%;
+  transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+input:focus, select:focus { border-color: var(--grn); box-shadow: 0 0 0 3px rgba(42,122,80,.1); background: var(--sur); }
+input::placeholder { color: var(--ink4); }
+.save-btn {
+  padding: 8px 16px; background: var(--grn); color: #fff;
+  border: none; border-radius: 8px; font-family: 'Space Grotesk', sans-serif;
+  font-size: 12px; font-weight: 700; cursor: pointer;
+  transition: background var(--dur) var(--ease), opacity var(--dur) var(--ease);
+  -webkit-tap-highlight-color: transparent;
+}
+.save-btn:hover { background: var(--grn-d); }
+.save-btn.success { background: var(--grn-d); }
+.save-btn:disabled { opacity: .5; }
 
 /* PLAN */
-.plan-current{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--bdr);border-radius:11px;padding:16px 18px;margin-bottom:16px}
-.plan-badge-big{font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:800}
-.plan-price-big{font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:800;color:var(--ink)}
-.plan-renew{font-size:11px;color:var(--ink3);margin-top:2px}
-.plan-perms{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:16px}
-.perm-item{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink2);padding:8px 12px;background:var(--bg);border:1px solid var(--bdr);border-radius:8px}
-.perm-ico{font-size:14px}
-.action-row{display:flex;gap:10px;flex-wrap:wrap}
-.action-btn{padding:9px 16px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;border:1px solid var(--bdr);background:transparent;color:var(--ink2)}
-.action-btn:hover{background:var(--bg2)}
-.action-btn.primary{background:var(--green);color:#fff;border-color:var(--green)}.action-btn.primary:hover{opacity:.87}
-.action-btn.outline-green{border-color:var(--green);color:var(--green)}.action-btn.outline-green:hover{background:var(--green-l)}
+.plan-current { display: flex; align-items: center; justify-content: space-between; background: var(--bg2); border: 1px solid var(--bdr); border-radius: 11px; padding: 14px 16px; margin-bottom: 14px; gap: 12px; }
+.plan-badge-big { font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); }
+.plan-price-big { font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700; color: var(--grn-d); text-align: right; }
+.plan-renew { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+.plan-perms { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; margin-bottom: 14px; }
+.perm-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink2); padding: 8px 11px; background: var(--bg); border: 1px solid var(--bdr); border-radius: 8px; }
+.perm-ico { font-size: 14px; }
+.action-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.action-btn { padding: 8px 14px; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease); border: 1.5px solid var(--bdr); background: transparent; color: var(--ink2); -webkit-tap-highlight-color: transparent; }
+.action-btn:hover { background: var(--bg2); border-color: var(--bdr2); }
+.action-btn.primary { background: var(--grn); color: #fff; border-color: var(--grn); }
+.action-btn.primary:hover { background: var(--grn-d); border-color: var(--grn-d); }
+.action-btn.outline-grn { border-color: var(--grn); color: var(--grn); }
+.action-btn.outline-grn:hover { background: var(--grn-l); }
 
 /* INVOICES */
-.invoice-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--bg2);font-size:13px}
-.invoice-row:last-child{border-bottom:none;padding-bottom:0}
-.inv-date{color:var(--ink3)}
-.inv-amount{font-weight:700}
-.inv-badge{font-size:10px;padding:2px 7px;border-radius:20px;font-weight:700}
-.inv-paid{background:var(--green-l);color:var(--green)}
-.inv-dl{font-size:11px;color:var(--teal);cursor:pointer;text-decoration:none}
-.inv-dl:hover{text-decoration:underline}
+.invoice-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--bdr); font-size: 13px; gap: 10px; }
+.invoice-row:last-child { border-bottom: none; padding-bottom: 0; }
+.inv-date { font-size: 11px; color: var(--ink3); margin-top: 1px; }
+.inv-amount { font-weight: 700; }
+.inv-badge { font-size: 10px; padding: 2px 8px; border-radius: 20px; font-weight: 700; }
+.inv-paid { background: var(--grn-l); color: var(--grn-d); }
+.inv-dl { font-size: 11px; color: var(--grn); cursor: pointer; text-decoration: none; font-weight: 600; }
+.inv-dl:hover { text-decoration: underline; }
 
 /* SECURITY */
-.security-item{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--bg2)}
-.security-item:last-child{border-bottom:none;padding-bottom:0}
-.si-label{font-size:13px;font-weight:600;color:var(--ink)}
-.si-value{font-size:12px;color:var(--ink3);margin-top:2px}
-.si-status{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700}
-.si-status.ok{color:var(--green)}.si-status.warn{color:var(--amber)}
+.security-item { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 0; border-bottom: 1px solid var(--bdr); }
+.security-item:last-child { border-bottom: none; padding-bottom: 0; }
+.si-label { font-size: 13px; font-weight: 600; color: var(--ink); }
+.si-value { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+.si-status { display: flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 700; }
+.si-status.ok   { color: var(--grn); }
+.si-status.warn { color: var(--amber); }
 
 /* RGPD */
-.rgpd-item{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--bg2);gap:16px}
-.rgpd-item:last-child{border-bottom:none;padding-bottom:0}
-.ri-label{font-size:13px;font-weight:600;color:var(--ink);margin-bottom:3px}
-.ri-desc{font-size:11px;color:var(--ink3);line-height:1.5;max-width:360px}
-.ri-btn{padding:7px 14px;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:transparent;color:var(--ink2);white-space:nowrap;transition:all .15s;flex-shrink:0}
-.ri-btn:hover{background:var(--bg2)}
-.ri-btn.danger{border-color:var(--red);color:var(--red)}.ri-btn.danger:hover{background:var(--red-l)}
+.rgpd-item { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; padding: 13px 0; border-bottom: 1px solid var(--bdr); }
+.rgpd-item:last-child { border-bottom: none; padding-bottom: 0; }
+.ri-label { font-size: 13px; font-weight: 600; color: var(--ink); margin-bottom: 3px; }
+.ri-desc { font-size: 11px; color: var(--ink3); line-height: 1.55; max-width: 360px; }
+.ri-btn { padding: 7px 13px; border-radius: 7px; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 600; cursor: pointer; border: 1.5px solid var(--bdr); background: transparent; color: var(--ink2); white-space: nowrap; transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease); flex-shrink: 0; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+.ri-btn:hover { background: var(--bg2); border-color: var(--bdr2); }
+.ri-btn.danger { border-color: var(--red); color: var(--red); }
+.ri-btn.danger:hover { background: var(--red-l); }
 
 /* DANGER ZONE */
-.danger-zone{border-color:#fca5a5}
-.danger-zone .sc-head{background:var(--red-l)}
-.danger-zone .sc-title{color:var(--red)}
-
-/* TOAST */
-.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:var(--bg);border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:400}
-.toast.on{transform:translateY(0);opacity:1}
+.danger-zone { border-color: #FCA5A5; }
+.danger-zone .sc-head { background: var(--red-l); }
+.danger-zone .sc-title { color: var(--red); }
 
 /* MODAL */
-.overlay{position:fixed;inset:0;background:rgba(26,24,20,.55);backdrop-filter:blur(5px);display:none;align-items:center;justify-content:center;z-index:500}
-.overlay.open{display:flex}
-.modal{background:var(--sur);border:1px solid var(--bdr);border-radius:18px;padding:32px;max-width:380px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.12);animation:popIn .25s cubic-bezier(.34,1.56,.64,1)}
-@keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+.overlay { position: fixed; inset: 0; background: rgba(17,17,16,.55); backdrop-filter: blur(6px); display: none; align-items: center; justify-content: center; z-index: 500; padding: 20px; }
+.overlay.open { display: flex; }
+.modal { background: var(--sur); border: 1px solid var(--bdr); border-radius: 18px; padding: clamp(24px,5vw,36px); max-width: 380px; width: 100%; text-align: center; box-shadow: 0 24px 64px rgba(0,0,0,.14); animation: popIn 250ms var(--ease) both; }
+@keyframes popIn { from { opacity: 0; transform: scale(.94); } to { opacity: 1; transform: scale(1); } }
 
-@media(max-width:720px){.page{grid-template-columns:1fr}.sidebar-nav{display:none}.field-row{grid-template-columns:1fr}.field-group.full{grid-column:span 1}.plan-perms{grid-template-columns:1fr}}
-
+@media (max-width: 720px) {
+  .page { grid-template-columns: 1fr; }
+  .sidebar-nav { display: none; }
+  .field-row { grid-template-columns: 1fr; }
+  .field-group.full { grid-column: span 1; }
+  .plan-perms { grid-template-columns: 1fr; }
+}
 </style>
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://mailone.app">
-<meta property="og:title" content="MailOne — Copilote IA">
-<meta property="og:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
-<meta property="og:image" content="https://mailone.app/og-image.png">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="MailOne — Copilote IA">
-<meta name="twitter:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
-<meta name="description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
 <link rel="stylesheet" href="shared.css">
-<script src="mailone.js"></script>
 </head>
 <body>
 
 <nav>
-  <a href="index.html" class="nav-logo">Mail<span>One</span><span class="nav-mark"></span></a>
+  <a href="index.html" class="logo">Mail<span style="opacity:.4">One</span><span class="logo-dot" aria-hidden="true"></span></a>
   <div class="nav-right">
-    
     <a href="app.html" class="nb">← Boîte mail</a>
     <button class="nb" onclick="confirmLogout()">Déconnexion</button>
   </div>
@@ -138,22 +178,22 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
 
 <div class="page">
 
-  <!-- SIDEBAR NAV -->
-  <div class="sidebar-nav">
-    <a class="sn-item active" href="#profile" onclick="scrollTo('profile')">👤 Mon profil</a>
-    <a class="sn-item" href="#plan" onclick="scrollTo('plan')">⭐ Mon abonnement</a>
-    <a class="sn-item" href="#invoices" onclick="scrollTo('invoices')">🧾 Factures</a>
-    <a class="sn-item" href="#security" onclick="scrollTo('security')">🔒 Sécurité</a>
+  <!-- SIDEBAR -->
+  <div class="sidebar-nav" role="navigation" aria-label="Navigation du compte">
+    <a class="sn-item active" href="#profile"  onclick="scrollTo('profile')">👤 Mon profil</a>
+    <a class="sn-item"        href="#plan"     onclick="scrollTo('plan')">⭐ Mon abonnement</a>
+    <a class="sn-item"        href="#invoices" onclick="scrollTo('invoices')">🧾 Factures</a>
+    <a class="sn-item"        href="#security" onclick="scrollTo('security')">🔒 Sécurité</a>
     <div class="sn-div"></div>
-    <a class="sn-item" href="#rgpd" onclick="scrollTo('rgpd')">🛡️ Mes données (RGPD)</a>
+    <a class="sn-item"        href="#rgpd"     onclick="scrollTo('rgpd')">🛡️ Mes données (RGPD)</a>
     <div class="sn-div"></div>
-    <a class="sn-item" href="#danger" onclick="scrollTo('danger')" style="color:var(--red)">⚠️ Zone de danger</a>
+    <a class="sn-item"        href="#danger"   onclick="scrollTo('danger')" style="color:var(--red)">⚠️ Zone de danger</a>
   </div>
 
-  <!-- MAIN CONTENT -->
+  <!-- MAIN -->
   <div class="main-content">
 
-    <!-- PROFILE -->
+    <!-- PROFIL -->
     <div class="section-card" id="profile">
       <div class="sc-head">
         <div><div class="sc-title">Mon profil</div><div class="sc-sub">Vos informations personnelles et professionnelles</div></div>
@@ -161,19 +201,16 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
       </div>
       <div class="sc-body">
         <div class="av-row">
-          <div class="av-big" id="av-big"></div>
-          <div>
-            <div class="av-name" id="av-name"></div>
-            <div class="av-email" id="av-email"></div>
-          </div>
+          <div class="av-big" id="av-big">?</div>
+          <div><div class="av-name" id="av-name">—</div><div class="av-email" id="av-email">—</div></div>
         </div>
         <div class="field-row">
-          <div class="field-group"><label>Prénom</label><input type="text" id="f-prenom" value="" placeholder="Prénom"></div>
-          <div class="field-group"><label>Nom</label><input type="text" id="f-nom" value="" placeholder="Nom"></div>
-          <div class="field-group full"><label>Email</label><input type="email" id="f-email" value="" placeholder="email@exemple.fr"></div>
-          <div class="field-group full"><label>Entreprise</label><input type="text" id="f-company" value="" placeholder="Nom de l'entreprise"></div>
-          <div class="field-group"><label>Téléphone</label><input type="tel" id="f-tel" placeholder="06 XX XX XX XX"></div>
-          <div class="field-group"><label>Secteur</label>
+          <div class="field-group"><label for="f-prenom">Prénom</label><input type="text" id="f-prenom" placeholder="Prénom" autocomplete="given-name"></div>
+          <div class="field-group"><label for="f-nom">Nom</label><input type="text" id="f-nom" placeholder="Nom" autocomplete="family-name"></div>
+          <div class="field-group full"><label for="f-email">Email</label><input type="email" id="f-email" placeholder="email@exemple.fr" autocomplete="email"></div>
+          <div class="field-group full"><label for="f-company">Entreprise</label><input type="text" id="f-company" placeholder="Nom de l'entreprise" autocomplete="organization"></div>
+          <div class="field-group"><label for="f-tel">Téléphone</label><input type="tel" id="f-tel" placeholder="06 XX XX XX XX" autocomplete="tel"></div>
+          <div class="field-group"><label for="f-sector">Secteur</label>
             <select id="f-sector">
               <option>Plomberie / Chauffage</option>
               <option>Électricité</option>
@@ -188,7 +225,7 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
       </div>
     </div>
 
-    <!-- PLAN -->
+    <!-- ABONNEMENT -->
     <div class="section-card" id="plan">
       <div class="sc-head">
         <div><div class="sc-title">Mon abonnement</div><div class="sc-sub">Gérez votre plan et votre facturation</div></div>
@@ -199,9 +236,9 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
             <div class="plan-badge-big" id="plan-label">⭐ Plan Solo — Mensuel</div>
             <div class="plan-renew" id="plan-renew">Prochain renouvellement : 26 avril 2025 · 99,00€</div>
           </div>
-          <div style="text-align:right">
-            <div class="plan-price-big" id="plan-price">99€</div>
-            <div style="font-size:11px;color:var(--ink3)" id="plan-period">/mois</div>
+          <div>
+            <div class="plan-price-big" id="plan-price">14,99€</div>
+            <div style="font-size:11px;color:var(--ink3);text-align:right" id="plan-period">/mois</div>
           </div>
         </div>
 
@@ -213,19 +250,19 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
         </div>
 
         <div class="action-row">
-          <button class="action-btn primary" onclick="openChangePlan()">⬆ Changer de plan</button>
-          <button class="action-btn outline-green" onclick="openSwitchAnnual()">🔄 Passer à l'annuel (2 mois offerts)</button>
-          <button class="action-btn" onclick="openPortal()">💳 Modifier ma carte</button>
-          <button class="action-btn" onclick="openPortal()">📄 Portail de facturation Stripe</button>
+          <button class="action-btn primary"     onclick="openChangePlan()">⬆ Changer de plan</button>
+          <button class="action-btn outline-grn" onclick="openSwitchAnnual()">🔄 Passer à l'annuel (2 mois offerts)</button>
+          <button class="action-btn"             onclick="openPortal()">💳 Modifier ma carte</button>
+          <button class="action-btn"             onclick="openPortal()">📄 Portail de facturation Stripe</button>
         </div>
 
-        <div style="margin-top:14px;background:var(--teal-l);border:1px solid rgba(13,147,115,.2);border-radius:8px;padding:10px 14px;font-size:11px;color:var(--teal);line-height:1.5">
+        <div style="margin-top:14px;background:var(--teal-l);border:1px solid rgba(13,148,136,.2);border-radius:9px;padding:10px 14px;font-size:11px;color:var(--teal);line-height:1.5">
           🔒 La facturation est gérée de manière sécurisée par <strong>Stripe</strong>. MailOne ne stocke jamais vos coordonnées bancaires.
         </div>
       </div>
     </div>
 
-    <!-- INVOICES -->
+    <!-- FACTURES -->
     <div class="section-card" id="invoices">
       <div class="sc-head">
         <div><div class="sc-title">Historique de facturation</div><div class="sc-sub">Toutes vos factures téléchargeables</div></div>
@@ -233,7 +270,7 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
       <div class="sc-body">
         <div class="invoice-row">
           <div><div style="font-size:13px;font-weight:600">Mars 2025</div><div class="inv-date">26/03/2025</div></div>
-          <div style="display:flex;align-items:center;gap:12px">
+          <div style="display:flex;align-items:center;gap:11px">
             <span class="inv-amount">99,00€</span>
             <span class="inv-badge inv-paid">Payé</span>
             <a class="inv-dl" href="javascript:void(0)" onclick="dlInvoice('mars-2025')">📥 PDF</a>
@@ -241,7 +278,7 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
         </div>
         <div class="invoice-row">
           <div><div style="font-size:13px;font-weight:600">Février 2025</div><div class="inv-date">26/02/2025</div></div>
-          <div style="display:flex;align-items:center;gap:12px">
+          <div style="display:flex;align-items:center;gap:11px">
             <span class="inv-amount">99,00€</span>
             <span class="inv-badge inv-paid">Payé</span>
             <a class="inv-dl" href="javascript:void(0)" onclick="dlInvoice('fev-2025')">📥 PDF</a>
@@ -249,53 +286,41 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
         </div>
         <div class="invoice-row">
           <div><div style="font-size:13px;font-weight:600">Janvier 2025</div><div class="inv-date">26/01/2025</div></div>
-          <div style="display:flex;align-items:center;gap:12px">
+          <div style="display:flex;align-items:center;gap:11px">
             <span class="inv-amount">99,00€</span>
             <span class="inv-badge inv-paid">Payé</span>
             <a class="inv-dl" href="javascript:void(0)" onclick="dlInvoice('jan-2025')">📥 PDF</a>
           </div>
         </div>
         <div style="margin-top:14px;font-size:12px;color:var(--ink3)">
-          Besoin d'une facture avec TVA intra-communautaire ? <a href="contact.html" style="color:var(--green);font-weight:600;text-decoration:none">Contactez-nous →</a>
+          Besoin d'une facture avec TVA intra-communautaire ? <a href="contact.html" style="color:var(--grn);font-weight:600;text-decoration:none">Contactez-nous →</a>
         </div>
       </div>
     </div>
 
-    <!-- SECURITY -->
+    <!-- SÉCURITÉ -->
     <div class="section-card" id="security">
       <div class="sc-head">
         <div><div class="sc-title">Sécurité</div><div class="sc-sub">Protégez votre compte</div></div>
       </div>
       <div class="sc-body">
         <div class="security-item">
-          <div>
-            <div class="si-label">Mot de passe</div>
-            <div class="si-value">Dernière modification : jamais</div>
-          </div>
+          <div><div class="si-label">Mot de passe</div><div class="si-value">Dernière modification : jamais</div></div>
           <button class="action-btn" onclick="showChangePwd()">Modifier</button>
         </div>
         <div class="security-item">
-          <div>
-            <div class="si-label">Double authentification (2FA)</div>
-            <div class="si-value">Renforcez la sécurité de votre compte</div>
-          </div>
+          <div><div class="si-label">Double authentification (2FA)</div><div class="si-value">Renforcez la sécurité de votre compte</div></div>
           <div style="display:flex;align-items:center;gap:10px">
             <span class="si-status warn">⚠️ Inactif</span>
-            <button class="action-btn outline-green" onclick="setup2FA()">Activer</button>
+            <button class="action-btn outline-grn" onclick="setup2FA()">Activer</button>
           </div>
         </div>
         <div class="security-item">
-          <div>
-            <div class="si-label">Sessions actives</div>
-            <div class="si-value" id="session-info">1 session active · Ce navigateur</div>
-          </div>
+          <div><div class="si-label">Sessions actives</div><div class="si-value" id="session-info">1 session active · Ce navigateur</div></div>
           <button class="action-btn" onclick="revokeAllSessions()">Déconnecter tout</button>
         </div>
         <div class="security-item">
-          <div>
-            <div class="si-label">Connexion Gmail / Outlook (OAuth)</div>
-            <div class="si-value">Accès lecture seule · Révocable à tout moment</div>
-          </div>
+          <div><div class="si-label">Connexion Gmail / Outlook (OAuth)</div><div class="si-value">Accès lecture seule · Révocable à tout moment</div></div>
           <div style="display:flex;align-items:center;gap:10px">
             <span class="si-status ok">✓ Actif</span>
             <button class="action-btn" onclick="revokeOAuth()" style="color:var(--red);border-color:var(--red)">Révoquer</button>
@@ -306,9 +331,9 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
         <div id="change-pwd-form" style="display:none;margin-top:16px;background:var(--bg);border:1px solid var(--bdr);border-radius:11px;padding:18px">
           <div style="font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;margin-bottom:14px">Modifier le mot de passe</div>
           <div style="display:flex;flex-direction:column;gap:10px">
-            <div class="field-group"><label>Mot de passe actuel</label><input type="password" id="pwd-current" placeholder="••••••••"></div>
-            <div class="field-group"><label>Nouveau mot de passe</label><input type="password" id="pwd-new" placeholder="8 caractères minimum"></div>
-            <div class="field-group"><label>Confirmer le nouveau</label><input type="password" id="pwd-confirm" placeholder="Répétez le mot de passe"></div>
+            <div class="field-group"><label for="pwd-current">Mot de passe actuel</label><input type="password" id="pwd-current" placeholder="••••••••" autocomplete="current-password"></div>
+            <div class="field-group"><label for="pwd-new">Nouveau mot de passe</label><input type="password" id="pwd-new" placeholder="8 caractères minimum" autocomplete="new-password"></div>
+            <div class="field-group"><label for="pwd-confirm">Confirmer le nouveau</label><input type="password" id="pwd-confirm" placeholder="Répétez le mot de passe" autocomplete="new-password"></div>
             <div style="display:flex;gap:8px">
               <button class="save-btn" onclick="savePwd()">Enregistrer</button>
               <button class="action-btn" onclick="hidePwd()">Annuler</button>
@@ -325,34 +350,22 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
       </div>
       <div class="sc-body">
         <div class="rgpd-item">
-          <div>
-            <div class="ri-label">Exporter mes données</div>
-            <div class="ri-desc">Téléchargez toutes vos données personnelles dans un format structuré (JSON). Délai de traitement : 72h ouvrées.</div>
-          </div>
+          <div><div class="ri-label">Exporter mes données</div><div class="ri-desc">Téléchargez toutes vos données personnelles dans un format structuré (JSON). Délai de traitement : 72h ouvrées.</div></div>
           <button class="ri-btn" onclick="exportData()">📥 Exporter</button>
         </div>
         <div class="rgpd-item">
-          <div>
-            <div class="ri-label">Rectifier mes informations</div>
-            <div class="ri-desc">Modifiez vos données personnelles directement depuis la section "Mon profil" ci-dessus.</div>
-          </div>
+          <div><div class="ri-label">Rectifier mes informations</div><div class="ri-desc">Modifiez vos données personnelles directement depuis la section "Mon profil" ci-dessus.</div></div>
           <button class="ri-btn" onclick="scrollTo('profile')">✏️ Modifier</button>
         </div>
         <div class="rgpd-item">
-          <div>
-            <div class="ri-label">Communications marketing</div>
-            <div class="ri-desc">Choisissez si vous souhaitez recevoir nos newsletters, conseils et offres commerciales.</div>
-          </div>
-          <label style="display:flex;align-items:center;gap:8px;cursor:pointer">
-            <input type="checkbox" id="chk-mkt" style="width:16px;height:16px;accent-color:var(--green)" checked>
-            <span style="font-size:12px;color:var(--ink2)">Oui, je les accepte</span>
+          <div><div class="ri-label">Communications marketing</div><div class="ri-desc">Choisissez si vous souhaitez recevoir nos newsletters, conseils et offres commerciales.</div></div>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;flex-shrink:0">
+            <input type="checkbox" id="chk-mkt" style="width:16px;height:16px;accent-color:var(--grn)" checked>
+            <span style="font-size:12px;color:var(--ink2);white-space:nowrap">Oui, je les accepte</span>
           </label>
         </div>
         <div class="rgpd-item">
-          <div>
-            <div class="ri-label">Contacter notre DPO</div>
-            <div class="ri-desc">Pour toute question sur le traitement de vos données : privacy@mailone.app — réponse sous 72h.</div>
-          </div>
+          <div><div class="ri-label">Contacter notre DPO</div><div class="ri-desc">Pour toute question sur le traitement de vos données : privacy@mailone.app — réponse sous 72h.</div></div>
           <a href="mailto:privacy@mailone.app" class="ri-btn">✉️ Contacter</a>
         </div>
       </div>
@@ -365,10 +378,7 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
       </div>
       <div class="sc-body">
         <div class="rgpd-item">
-          <div>
-            <div class="ri-label">Suspendre mon compte</div>
-            <div class="ri-desc">Mettez votre compte en pause. Vos données sont conservées et vous pouvez réactiver à tout moment.</div>
-          </div>
+          <div><div class="ri-label">Suspendre mon compte</div><div class="ri-desc">Mettez votre compte en pause. Vos données sont conservées et vous pouvez réactiver à tout moment.</div></div>
           <button class="ri-btn" onclick="suspendAccount()">⏸ Suspendre</button>
         </div>
         <div class="rgpd-item" style="border-bottom:none;padding-bottom:0">
@@ -388,72 +398,63 @@ input:focus,select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(21,
 <div class="overlay" id="modal-delete">
   <div class="modal">
     <div style="font-size:36px;margin-bottom:14px">⚠️</div>
-    <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:800;margin-bottom:10px;color:var(--red)">Supprimer mon compte ?</div>
+    <div style="font-family:'Space Grotesk',sans-serif;font-size:18px;font-weight:700;margin-bottom:10px;color:var(--red)">Supprimer mon compte ?</div>
     <div style="font-size:13px;color:var(--ink2);line-height:1.65;margin-bottom:20px">Cette action est <strong>irréversible</strong>. Toutes vos données seront supprimées sous 30 jours. Votre abonnement Stripe sera annulé immédiatement.</div>
-    <div style="margin-bottom:18px">
+    <div style="margin-bottom:16px;text-align:left">
       <label style="font-size:12px;font-weight:600;color:var(--ink2);display:block;margin-bottom:5px">Tapez <strong>SUPPRIMER</strong> pour confirmer</label>
       <input type="text" id="delete-confirm" placeholder="SUPPRIMER" style="width:100%;padding:10px 13px;border:1.5px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none">
     </div>
     <div style="display:flex;gap:9px;justify-content:center">
-      <button style="padding:9px 16px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)" onclick="closeDeleteModal()">Annuler</button>
+      <button style="padding:9px 16px;border-radius:8px;border:1.5px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)" onclick="closeDeleteModal()">Annuler</button>
       <button style="padding:9px 16px;border-radius:8px;border:none;background:var(--red);color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700" onclick="deleteAccount()">Supprimer définitivement</button>
     </div>
   </div>
 </div>
 
-<!-- TOAST -->
-<div class="toast" id="toast"><span id="t-ico">✅</span><span id="t-msg"></span></div>
-
 <script>
-// Load user
-const user = JSON.parse(localStorage.getItem('mailone_user') || '{}');
-const plan = localStorage.getItem('mailone_plan') || 'solo';
+const user    = JSON.parse(localStorage.getItem('mailone_user') || '{}');
+const plan    = localStorage.getItem('mailone_plan') || 'solo';
 const billing = localStorage.getItem('mailone_billing') || 'monthly';
 
-if (!Auth.isLoggedIn()) { window.location.href = 'login.html'; }
-// Refresh depuis l'API en arrière-plan
-Auth.refreshUser().then(freshUser => { if (freshUser) { /* déjà géré par setSession */ } });
+if (!Auth.isLoggedIn()) window.location.href = 'login.html';
+Auth.refreshUser().catch(() => {});
 
-// Fill profile
-const initials = user.name?.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase() || '?';
-document.getElementById('av-big').textContent = initials;
-document.getElementById('av-name').textContent = user.name || '';
+const initials = user.name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || '?';
+document.getElementById('av-big').textContent   = initials;
+document.getElementById('av-name').textContent  = user.name || '';
 document.getElementById('av-email').textContent = user.email || '';
 if (user.name) {
   const parts = user.name.split(' ');
-  document.getElementById('f-prenom').value = parts[0] || '';
-  document.getElementById('f-nom').value = parts.slice(1).join(' ') || '';
+  document.getElementById('f-prenom').value  = parts[0] || '';
+  document.getElementById('f-nom').value     = parts.slice(1).join(' ') || '';
 }
-document.getElementById('f-email').value = user.email || '';
+document.getElementById('f-email').value   = user.email || '';
 document.getElementById('f-company').value = user.company || '';
 
-// Fill plan
 const PLANS = {
-  solo:       { label:'⭐ Plan Solo', price:'99€', period: billing==='annual'?'/an':'/mois', renew:billing==='annual'?'Renouvellement : 26 mars 2026 · 990,00€':'Prochain renouvellement : 26 avril 2025 · 99,00€' },
-  team:       { label:'⭐ Plan Équipe', price:'900€', period:billing==='annual'?'/an':'/mois', renew:'Prochain renouvellement : 26 avril 2025' },
-  enterprise: { label:'🏢 Plan Entreprise', price:'1 780€', period:billing==='annual'?'/an':'/mois', renew:'Prochain renouvellement : 26 avril 2025' },
+  solo: { label:'⭐ MailOne Solo', price:'14,99€', annPrice:'149,90€', period:'/mois', annPeriod:'/an', renew:'Prochain renouvellement : 26 avril 2025 · 14,99€', annRenew:'Renouvellement : 26 mars 2026 · 149,90€' },
 };
 const p = PLANS[plan] || PLANS.solo;
-document.getElementById('plan-label').textContent = p.label + (billing==='annual'?' — Annuel':' — Mensuel');
-document.getElementById('plan-price').textContent = billing==='annual'?(plan==='solo'?'990€':plan==='team'?'9 000€':'17 800€'):p.price;
-document.getElementById('plan-period').textContent = p.period;
-document.getElementById('plan-renew').textContent = p.renew;
+const isAnnual = billing === 'annual';
+document.getElementById('plan-label').textContent  = p.label + (isAnnual ? ' — Annuel' : ' — Mensuel');
+document.getElementById('plan-price').textContent  = isAnnual ? p.annPrice : p.price;
+document.getElementById('plan-period').textContent = isAnnual ? p.annPeriod : p.period;
+document.getElementById('plan-renew').textContent  = isAnnual ? p.annRenew  : p.renew;
 
-// Actions
 async function saveProfile() {
-  const prenom = document.getElementById('f-prenom').value.trim();
-  const nom = document.getElementById('f-nom').value.trim();
-  const email = document.getElementById('f-email').value.trim();
+  const prenom  = document.getElementById('f-prenom').value.trim();
+  const nom     = document.getElementById('f-nom').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
   const company = document.getElementById('f-company').value.trim();
-  const tel = document.getElementById('f-tel').value.trim();
-  const sector = document.getElementById('f-sector').value;
+  const tel     = document.getElementById('f-tel').value.trim();
+  const sector  = document.getElementById('f-sector').value;
   if (!prenom || !email) return;
   const btn = document.getElementById('save-profile');
   setButtonLoading(btn, true, '⏳ Enregistrement…');
   try {
     await Auth.updateProfile({ firstName: prenom, lastName: nom, email, company, phone: tel, sector });
-    document.getElementById('av-big').textContent = (prenom[0]+(nom[0]||'')).toUpperCase();
-    document.getElementById('av-name').textContent = prenom+' '+nom;
+    document.getElementById('av-big').textContent   = (prenom[0] + (nom[0] || '')).toUpperCase();
+    document.getElementById('av-name').textContent  = prenom + ' ' + nom;
     document.getElementById('av-email').textContent = email;
     btn.textContent = '✓ Enregistré'; btn.classList.add('success');
     setTimeout(() => { btn.textContent = 'Enregistrer'; btn.classList.remove('success'); setButtonLoading(btn, false); }, 2500);
@@ -464,121 +465,72 @@ async function saveProfile() {
   }
 }
 
-// Stripe URLs — mode statique (remplacer par vos vraies URLs Stripe en production)
 const STRIPE_PORTAL_URL = 'https://billing.stripe.com/p/login/test_eVa3cQ9Fn4Ux9Hy000';
 const STRIPE_PLANS = {
-  solo:       { monthly: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy000', annual: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy001' },
-  team:       { monthly: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy002', annual: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy003' },
-  enterprise: { monthly: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy004', annual: 'https://buy.stripe.com/test_eVa3cQ9Fn4Ux9Hy005' },
+  solo: { monthly: 'https://buy.stripe.com/test_solo_monthly', annual: 'https://buy.stripe.com/test_solo_annual' },
 };
 
 async function openPortal() {
   showToast('💳', 'Redirection vers le portail de facturation Stripe…');
-  try {
-    const data = await API.post('/api/stripe/portal', {});
-    if (data?.url) { window.location.href = data.url; return; }
-  } catch {}
-  // Fallback statique : ouvrir directement le portail Stripe
-  setTimeout(() => { window.open(STRIPE_PORTAL_URL, '_blank'); }, 800);
+  try { const d = await API.post('/api/stripe/portal', {}); if (d?.url) { window.location.href = d.url; return; } } catch {}
+  setTimeout(() => window.open(STRIPE_PORTAL_URL, '_blank'), 800);
 }
-
 async function openChangePlan() {
   showToast('💳', 'Redirection vers le choix de plan…');
-  try {
-    const data = await API.post('/api/stripe/portal', {});
-    if (data?.url) { window.location.href = data.url; return; }
-  } catch {}
+  try { const d = await API.post('/api/stripe/portal', {}); if (d?.url) { window.location.href = d.url; return; } } catch {}
   setTimeout(() => { window.location.href = 'index.html#pricing'; }, 800);
 }
-
 async function openSwitchAnnual() {
   const currentPlan = PlanManager.get() || 'solo';
-  const stripeUrl = STRIPE_PLANS[currentPlan]?.annual || STRIPE_PORTAL_URL;
   showToast('💳', 'Redirection vers l\'offre annuelle…');
-  try {
-    const data = await API.post('/api/stripe/portal', {});
-    if (data?.url) { window.location.href = data.url; return; }
-  } catch {}
-  setTimeout(() => { window.open(stripeUrl, '_blank'); }, 800);
+  try { const d = await API.post('/api/stripe/portal', {}); if (d?.url) { window.location.href = d.url; return; } } catch {}
+  setTimeout(() => window.open(STRIPE_PLANS[currentPlan]?.annual || STRIPE_PORTAL_URL, '_blank'), 800);
 }
 
 function dlInvoice(id) { showToast('📥', `Téléchargement de la facture ${id}…`); }
 
 function showChangePwd() { document.getElementById('change-pwd-form').style.display = 'block'; }
-function hidePwd() { document.getElementById('change-pwd-form').style.display = 'none'; }
+function hidePwd()       { document.getElementById('change-pwd-form').style.display = 'none'; }
 async function savePwd() {
   const n  = document.getElementById('pwd-new').value;
   const cf = document.getElementById('pwd-confirm').value;
   if (!n || n.length < 8) { showToast('⚠️', 'Mot de passe trop court (8 caractères minimum)'); return; }
-  if (n !== cf) { showToast('⚠️', 'Les mots de passe ne correspondent pas'); return; }
-  try {
-    await Auth.updateProfile({ password: n });
-    hidePwd();
-    showToast('✅', 'Mot de passe modifié avec succès');
-  } catch (err) {
-    showToast('⚠️', err.message || 'Erreur lors du changement de mot de passe.');
-  }
+  if (n !== cf)            { showToast('⚠️', 'Les mots de passe ne correspondent pas'); return; }
+  try { await Auth.updateProfile({ password: n }); hidePwd(); showToast('✅', 'Mot de passe modifié avec succès'); }
+  catch (err) { showToast('⚠️', err.message || 'Erreur lors du changement de mot de passe.'); }
 }
 
-function setup2FA() { showToast('🔐', 'Configuration 2FA — bientôt disponible'); }
+function setup2FA()          { showToast('🔐', 'Configuration 2FA — bientôt disponible'); }
 function revokeAllSessions() { showToast('🚪', 'Toutes les sessions ont été révoquées'); }
 function revokeOAuth() {
-  if (confirm('Révoquer l\'accès à votre boîte mail ? MailOne ne pourra plus lire vos mails.')) {
+  if (confirm('Révoquer l\'accès à votre boîte mail ? MailOne ne pourra plus lire vos mails.'))
     showToast('🔓', 'Accès OAuth révoqué. Reconnectez votre boîte dans l\'app.');
-  }
 }
-
 function exportData() {
   const data = { user: Auth.getUser(), plan: PlanManager.get(), billing: PlanManager.getBilling(), exportedAt: new Date().toISOString() };
-  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a'); a.href=url; a.download='mailone-mes-donnees.json'; a.click();
+  const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
+  Object.assign(document.createElement('a'), { href: url, download: 'mailone-mes-donnees.json' }).click();
   showToast('📥', 'Export de vos données en cours…');
 }
-
 function suspendAccount() {
-  if (confirm('Suspendre votre compte ? Votre abonnement sera mis en pause.')) {
+  if (confirm('Suspendre votre compte ? Votre abonnement sera mis en pause.'))
     showToast('⏸', 'Compte suspendu. Réactivez depuis la page de connexion.');
-  }
 }
-
-function openDeleteModal() { document.getElementById('modal-delete').classList.add('open'); }
-function closeDeleteModal() { document.getElementById('modal-delete').classList.remove('open'); document.getElementById('delete-confirm').value=''; }
+function openDeleteModal()  { document.getElementById('modal-delete').classList.add('open'); }
+function closeDeleteModal() { document.getElementById('modal-delete').classList.remove('open'); document.getElementById('delete-confirm').value = ''; }
 async function deleteAccount() {
   if (document.getElementById('delete-confirm').value !== 'SUPPRIMER') {
-    document.getElementById('delete-confirm').style.borderColor = 'var(--red)';
-    return;
+    document.getElementById('delete-confirm').style.borderColor = 'var(--red)'; return;
   }
-  const btn = document.querySelector('#modal-delete .ri-btn.danger');
-  setButtonLoading(btn, true, '⏳ Suppression…');
-  try {
-    await Auth.deleteAccount(); // redirige automatiquement
-  } catch (err) {
-    setButtonLoading(btn, false);
-    showToast('⚠️', err.message || 'Erreur lors de la suppression.');
-  }
+  try { await Auth.deleteAccount(); } catch (err) { showToast('⚠️', err.message || 'Erreur lors de la suppression.'); }
 }
-
 function confirmLogout() { Auth.logout(); }
-
 function scrollTo(id) {
-  document.getElementById(id)?.scrollIntoView({behavior:'smooth', block:'start'});
-  document.querySelectorAll('.sn-item').forEach(i=>i.classList.remove('active'));
+  document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.querySelectorAll('.sn-item').forEach(i => i.classList.remove('active'));
   event?.target?.classList?.add('active');
 }
-
-function showToast(ico, msg) {
-  document.getElementById('t-ico').textContent = ico;
-  document.getElementById('t-msg').textContent = msg;
-  const t = document.getElementById('toast');
-  t.classList.add('on');
-  setTimeout(() => t.classList.remove('on'), 3200);
-}
-
-// Close modal on overlay click
-document.getElementById('modal-delete').addEventListener('click', e => {
-  if (e.target.id === 'modal-delete') closeDeleteModal();
-});
+document.getElementById('modal-delete').addEventListener('click', e => { if (e.target.id === 'modal-delete') closeDeleteModal(); });
 </script>
 <script src="support.js"></script>
 </body>
