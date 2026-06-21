@@ -413,6 +413,24 @@ input.error { border-color: var(--red); }
 .skip-link { display: block; text-align: center; font-size: 12px; color: var(--ink4); margin-top: 14px; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
 .skip-link:hover { color: var(--ink3); }
 
+/* Provider grid */
+.prov-section-label { font-size: 10px; font-weight: 700; color: var(--ink4); text-transform: uppercase; letter-spacing: .07em; margin: 14px 0 8px; }
+.prov-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 6px; }
+.prov-card {
+  display: flex; flex-direction: column; align-items: center; gap: 5px;
+  padding: 10px 4px 9px;
+  border: 1.5px solid var(--bdr); border-radius: 10px;
+  background: var(--sur); cursor: pointer;
+  font-size: 9.5px; font-weight: 700; color: var(--ink2); text-align: center;
+  transition: border-color var(--dur) var(--ease), background var(--dur) var(--ease);
+  -webkit-tap-highlight-color: transparent; line-height: 1.2;
+}
+.prov-card:hover  { border-color: var(--bdr2); background: var(--bg); }
+.prov-card.active { border-color: var(--grn); background: var(--grn-l); color: var(--grn-d); }
+.prov-card-ico { width: 28px; height: 28px; border-radius: 7px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; color: #fff; flex-shrink: 0; }
+.prov-card-wide { grid-column: span 4; flex-direction: row; padding: 10px 14px; font-size: 12px; justify-content: flex-start; gap: 10px; }
+.prov-card-wide .prov-card-ico { font-size: 16px; }
+
 /* ROI preview in step 2 */
 #roi-preview {
   background: var(--grn-l);
@@ -706,6 +724,9 @@ input.error { border-color: var(--red); }
           </div>
           <div class="step-label" id="step-mail-label">Dernière étape — Connexion boîte mail</div>
 
+          <!-- OAuth — 1 clic -->
+          <div class="prov-section-label">Connexion automatique OAuth</div>
+
           <button class="mail-provider-btn" type="button" onclick="connectProvider('gmail')">
             <div class="prov-ico" style="background:#FEF2F2">
               <svg width="18" height="18" viewBox="0 0 48 48" fill="none"><path d="M44 24c0-1.2-.1-2.4-.3-3.5H24v6.6h11.3c-.5 2.6-2 4.8-4.2 6.2v5.1h6.8C41.8 35.1 44 29.9 44 24z" fill="#4285F4"/><path d="M24 44c5.6 0 10.4-1.9 13.8-5.1l-6.8-5.1c-1.9 1.3-4.3 2-7 2-5.4 0-9.9-3.6-11.5-8.4H5.5v5.3C8.9 39.6 16 44 24 44z" fill="#34A853"/><path d="M12.5 27.4A12.2 12.2 0 0112.5 20.6V15.3H5.5a20 20 0 000 17.4l7-5.3z" fill="#FBBC05"/><path d="M24 11.8c3 0 5.7 1 7.8 3l5.8-5.8C34.4 5.8 29.5 4 24 4 16 4 8.9 8.4 5.5 15.3l7 5.3c1.6-4.8 6.1-8.8 11.5-8.8z" fill="#EA4335"/></svg>
@@ -722,10 +743,51 @@ input.error { border-color: var(--red); }
             <span class="prov-badge">OAuth 2.0 — 1 clic</span>
           </button>
 
-          <button class="mail-provider-btn" type="button" onclick="connectProvider('other')" id="btn-imap">
-            <div class="prov-ico" style="background:var(--bg2)">⚙️</div>
-            <span class="prov-name">Autre messagerie (OVH, Orange, SFR…)</span>
-          </button>
+          <!-- IMAP — autres fournisseurs -->
+          <div class="prov-section-label">Connexion IMAP — choisissez votre messagerie</div>
+
+          <div class="prov-grid" id="prov-grid">
+            <div class="prov-card" data-provider="ovh" onclick="connectProvider('ovh')">
+              <div class="prov-card-ico" style="background:#FF6600">OVH</div>OVH Mail
+            </div>
+            <div class="prov-card" data-provider="orange" onclick="connectProvider('orange')">
+              <div class="prov-card-ico" style="background:#FF7900">@</div>Orange
+            </div>
+            <div class="prov-card" data-provider="sfr" onclick="connectProvider('sfr')">
+              <div class="prov-card-ico" style="background:#E2001A">SFR</div>SFR Mail
+            </div>
+            <div class="prov-card" data-provider="free" onclick="connectProvider('free')">
+              <div class="prov-card-ico" style="background:#CD0066">F</div>Free Mail
+            </div>
+            <div class="prov-card" data-provider="yahoo" onclick="connectProvider('yahoo')">
+              <div class="prov-card-ico" style="background:#6001D2">Y!</div>Yahoo
+            </div>
+            <div class="prov-card" data-provider="icloud" onclick="connectProvider('icloud')">
+              <div class="prov-card-ico" style="background:#1C8EF9">☁</div>iCloud
+            </div>
+            <div class="prov-card" data-provider="infomaniak" onclick="connectProvider('infomaniak')">
+              <div class="prov-card-ico" style="background:#05C46B">ik</div>Infomaniak
+            </div>
+            <div class="prov-card" data-provider="ionos" onclick="connectProvider('ionos')">
+              <div class="prov-card-ico" style="background:#003D8F">1&1</div>IONOS
+            </div>
+            <div class="prov-card" data-provider="gandi" onclick="connectProvider('gandi')">
+              <div class="prov-card-ico" style="background:#B5163C">G</div>Gandi
+            </div>
+            <div class="prov-card" data-provider="laposte" onclick="connectProvider('laposte')">
+              <div class="prov-card-ico" style="background:#FFCD00;color:#1A1A1A">📮</div>La Poste
+            </div>
+            <div class="prov-card" data-provider="zoho" onclick="connectProvider('zoho')">
+              <div class="prov-card-ico" style="background:#E42527">Z</div>Zoho Mail
+            </div>
+            <div class="prov-card" data-provider="protonmail" onclick="connectProvider('protonmail')">
+              <div class="prov-card-ico" style="background:#6D4AFF">P</div>ProtonMail
+            </div>
+            <div class="prov-card prov-card-wide" data-provider="other" onclick="connectProvider('other')">
+              <div class="prov-card-ico" style="background:var(--ink3)">⚙</div>
+              <span>Autre messagerie (Bouygues, Bbox, domaine perso…)</span>
+            </div>
+          </div>
 
           <div class="imap-form" id="imap-form">
             <div id="imap-provider-note" style="display:none;padding:10px 12px;border-radius:8px;font-size:12px;line-height:1.6;margin-bottom:10px"></div>
@@ -738,11 +800,11 @@ input.error { border-color: var(--red); }
               <div class="form-group"><label>Sécurité</label><input type="text" id="imap-ssl" placeholder="SSL/TLS"></div>
             </div>
             <div class="form-group">
-              <label>Email de connexion</label>
+              <label>Adresse email</label>
               <input type="email" id="imap-email" placeholder="vous@exemple.fr" autocomplete="email">
             </div>
             <div class="form-group">
-              <label id="imap-pwd-label">Mot de passe (application)</label>
+              <label id="imap-pwd-label">Mot de passe</label>
               <input type="password" id="imap-pwd" placeholder="••••••••" autocomplete="new-password">
             </div>
             <button class="submit-btn" type="button" onclick="connectImap()" style="margin-top:4px">
@@ -959,19 +1021,91 @@ const IMAP_PRESETS = {
   gmail: {
     host: 'imap.gmail.com', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe d\'application Google',
-    note: '<strong>Gmail :</strong> activez l\'accès IMAP dans Gmail → Paramètres → Voir tous les paramètres → Transfert et POP/IMAP → Activer IMAP.<br>Ensuite, créez un <strong>mot de passe d\'application</strong> sur <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener" style="color:var(--grn)">myaccount.google.com/apppasswords</a> (compte Google → Sécurité → Connexion → Mots de passe des applications).',
+    note: '<strong>Gmail :</strong> activez IMAP dans Gmail → Paramètres → Voir tous les paramètres → Transfert et POP/IMAP → Activer IMAP.<br>Ensuite créez un <strong>mot de passe d\'application</strong> sur <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener" style="color:var(--grn)">myaccount.google.com/apppasswords</a>.',
     noteBg: '#FEF2F2', noteBdr: '#FECACA', noteColor: '#991B1B',
   },
   outlook: {
     host: 'outlook.office365.com', port: 993, ssl: 'SSL/TLS',
-    pwdLabel: 'Mot de passe Microsoft (ou mot de passe d\'application)',
-    note: '<strong>Outlook / Microsoft 365 :</strong> activez l\'accès IMAP dans Outlook → Paramètres → Courrier → Synchronisation du courrier → Activer IMAP.<br>Si vous avez la <strong>double authentification</strong> activée, créez un mot de passe d\'application dans votre compte Microsoft → Sécurité.',
+    pwdLabel: 'Mot de passe Microsoft',
+    note: '<strong>Outlook / Microsoft 365 :</strong> activez IMAP dans Outlook → Paramètres → Courrier → Synchronisation du courrier → Activer IMAP.<br>Avec la double authentification, créez un mot de passe d\'application dans votre compte Microsoft → Sécurité.',
     noteBg: '#EFF6FF', noteBdr: '#BFDBFE', noteColor: '#1E3A5F',
+  },
+  ovh: {
+    host: 'ssl0.ovh.net', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe OVH',
+    note: '<strong>OVH Mail :</strong> utilisez votre adresse email OVH et votre mot de passe OVH habituel. Serveur : ssl0.ovh.net · port 993.<br>Si la connexion échoue, vérifiez que votre compte email OVH est bien activé dans l\'espace client OVH → Emails.',
+    noteBg: '#FFF7ED', noteBdr: '#FED7AA', noteColor: '#92400E',
+  },
+  orange: {
+    host: 'imap.orange.fr', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe Orange',
+    note: '<strong>Orange Mail :</strong> utilisez votre adresse @orange.fr et votre mot de passe Orange habituel.<br>⚠️ Si vous avez activé la double authentification, créez un <strong>mot de passe dédié</strong> sur orange.fr → Mon compte → Sécurité.',
+    noteBg: '#FFF7ED', noteBdr: '#FED7AA', noteColor: '#C2410C',
+  },
+  sfr: {
+    host: 'imap.sfr.fr', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe SFR',
+    note: '<strong>SFR Mail :</strong> utilisez votre adresse @sfr.fr (ou @neuf.fr, @cegetel.net) et votre mot de passe SFR.<br>Si nécessaire, activez IMAP dans les paramètres de votre webmail SFR → Options → Paramètres → Accès par protocoles.',
+    noteBg: '#FEF2F2', noteBdr: '#FECACA', noteColor: '#991B1B',
+  },
+  free: {
+    host: 'imap.free.fr', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe Free',
+    note: '<strong>Free Mail :</strong> utilisez votre adresse @free.fr et votre mot de passe Free. Le login est votre identifiant Freebox (sans @free.fr).<br>Serveur : imap.free.fr · port 993.',
+    noteBg: '#F5F3FF', noteBdr: '#DDD6FE', noteColor: '#5B21B6',
+  },
+  yahoo: {
+    host: 'imap.mail.yahoo.com', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe d\'application Yahoo',
+    note: '<strong>Yahoo Mail :</strong> vous devez créer un <strong>mot de passe d\'application</strong> — votre mot de passe habituel ne fonctionnera pas.<br>Yahoo → Infos du compte → Sécurité → Générer un mot de passe d\'application.',
+    noteBg: '#FAF5FF', noteBdr: '#E9D5FF', noteColor: '#7E22CE',
+  },
+  icloud: {
+    host: 'imap.mail.me.com', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe d\'app iCloud',
+    note: '<strong>iCloud Mail :</strong> activez iCloud Mail sur <a href="https://icloud.com" target="_blank" rel="noopener" style="color:var(--grn)">icloud.com</a> → Paramètres → iCloud Mail.<br>Créez ensuite un <strong>mot de passe d\'app</strong> sur <a href="https://appleid.apple.com" target="_blank" rel="noopener" style="color:var(--grn)">appleid.apple.com</a> → Connexion et sécurité → Mots de passe pour les apps.',
+    noteBg: '#EFF6FF', noteBdr: '#BFDBFE', noteColor: '#1D4ED8',
+  },
+  infomaniak: {
+    host: 'mail.infomaniak.com', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe Infomaniak',
+    note: '<strong>Infomaniak kMail :</strong> utilisez votre adresse email Infomaniak et votre mot de passe habituel.<br>Si votre compte utilise la double authentification, créez un mot de passe d\'application dans Manager Infomaniak → Profil → Sécurité.',
+    noteBg: '#F0FDF4', noteBdr: '#BBF7D0', noteColor: '#15803D',
+  },
+  ionos: {
+    host: 'imap.ionos.fr', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe IONOS',
+    note: '<strong>IONOS / 1&1 :</strong> utilisez votre adresse email IONOS et votre mot de passe habituel. Serveur : imap.ionos.fr · port 993.<br>Vous pouvez vérifier vos paramètres dans l\'espace client IONOS → Email → Paramètres.',
+    noteBg: '#EFF6FF', noteBdr: '#BFDBFE', noteColor: '#1E40AF',
+  },
+  gandi: {
+    host: 'mail.gandi.net', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe Gandi',
+    note: '<strong>Gandi Mail :</strong> utilisez votre adresse email Gandi et votre mot de passe de boîte mail (différent du mot de passe de votre compte Gandi).<br>Gérez vos boîtes sur admin.gandi.net → Domaines → Email.',
+    noteBg: '#FFF1F2', noteBdr: '#FECDD3', noteColor: '#9F1239',
+  },
+  laposte: {
+    host: 'imap.laposte.net', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe La Poste',
+    note: '<strong>La Poste Mail :</strong> utilisez votre adresse @laposte.net et votre mot de passe habituel.<br>Activez l\'accès IMAP si nécessaire : webmail La Poste → Paramètres → Accès POP / IMAP → Activer IMAP.',
+    noteBg: '#FEFCE8', noteBdr: '#FEF08A', noteColor: '#713F12',
+  },
+  zoho: {
+    host: 'imap.zoho.eu', port: 993, ssl: 'SSL/TLS',
+    pwdLabel: 'Mot de passe Zoho',
+    note: '<strong>Zoho Mail (EU) :</strong> activez IMAP dans Zoho Mail → Paramètres → Accès mail → IMAP.<br>Créez un <strong>mot de passe d\'application</strong> si vous utilisez l\'authentification à deux facteurs : Zoho → Mon compte → Sécurité → Mots de passe d\'application.',
+    noteBg: '#FFF7ED', noteBdr: '#FED7AA', noteColor: '#C2410C',
+  },
+  protonmail: {
+    host: '127.0.0.1', port: 1143, ssl: 'Aucune (Bridge)',
+    pwdLabel: 'Mot de passe Bridge ProtonMail',
+    note: '<strong>ProtonMail :</strong> nécessite <a href="https://proton.me/mail/bridge" target="_blank" rel="noopener" style="color:var(--grn)">ProtonMail Bridge</a> installé sur votre ordinateur.<br>Une fois Bridge lancé, activez IMAP et copiez les identifiants affichés dans l\'app Bridge. ⚠️ Fonctionne uniquement depuis votre machine locale.',
+    noteBg: '#FAF5FF', noteBdr: '#E9D5FF', noteColor: '#7E22CE',
   },
   other: {
     host: '', port: 993, ssl: 'SSL/TLS',
-    pwdLabel: 'Mot de passe (ou mot de passe d\'application)',
-    note: '<strong>OVH :</strong> ssl0.ovh.net · port 993<br><strong>Orange :</strong> imap.orange.fr · port 993<br><strong>SFR :</strong> imap.sfr.fr · port 993<br><strong>Free :</strong> imap.free.fr · port 993',
+    pwdLabel: 'Mot de passe',
+    note: '<strong>Paramètres IMAP courants :</strong><br>Bbox / Bouygues : imap.bbox.fr · 993<br>Wanadoo / Orange : imap.orange.fr · 993<br>Alice / Telecom : imap.aliceadsl.fr · 993<br>Club-Internet : imap.club-internet.fr · 993<br>Domaine perso : contactez votre hébergeur pour les paramètres IMAP.',
     noteBg: '#F8F7F5', noteBdr: '#E3DFD7', noteColor: '#3C3C3A',
   },
 };
@@ -985,7 +1119,7 @@ function connectProvider(provider) {
     openOAuthPopup(provider);
     return;
   }
-  // 'other' — open IMAP form
+  // IMAP provider — open form with preset
   const preset = IMAP_PRESETS[provider];
   if (!preset) return;
   const serverEl = document.getElementById('imap-server');
@@ -1004,12 +1138,12 @@ function connectProvider(provider) {
     noteEl.style.color      = preset.noteColor;
     noteEl.innerHTML        = preset.note;
   }
-  const form = document.getElementById('imap-form');
-  if (form) form.classList.add('open');
+  document.getElementById('imap-form').classList.add('open');
+  // Mark active grid card
+  document.querySelectorAll('.prov-card').forEach(c => c.classList.remove('active'));
+  const activeCard = document.querySelector(`.prov-card[data-provider="${provider}"]`);
+  if (activeCard) activeCard.classList.add('active');
   setTimeout(() => document.getElementById('imap-email')?.focus(), 80);
-  document.querySelectorAll('.mail-provider-btn').forEach(btn => btn.style.borderColor = '');
-  const activeBtn = document.querySelector(`.mail-provider-btn[onclick*="${provider}"]`);
-  if (activeBtn) activeBtn.style.borderColor = 'var(--grn)';
 }
 
 function openOAuthPopup(provider) {
@@ -1069,10 +1203,12 @@ function showOAuthConnecting(provider) {
   const sub = document.getElementById('step-mail-sub');
   if (sub) sub.innerHTML = `<strong style="color:var(--ink2)">Connexion ${label} en cours…</strong><br>Autorisez l'accès dans la fenêtre qui vient de s'ouvrir.`;
   document.querySelectorAll('.mail-provider-btn').forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+  document.querySelectorAll('.prov-card').forEach(b => { b.style.pointerEvents = 'none'; b.style.opacity = '0.4'; });
 }
 
 function resetOAuthUI() {
   document.querySelectorAll('.mail-provider-btn').forEach(b => { b.disabled = false; b.style.opacity = ''; });
+  document.querySelectorAll('.prov-card').forEach(b => { b.style.pointerEvents = ''; b.style.opacity = ''; });
   const sub = document.getElementById('step-mail-sub');
   if (sub) sub.textContent = 'Choisissez comment synchroniser vos emails avec MailOne.';
 }
