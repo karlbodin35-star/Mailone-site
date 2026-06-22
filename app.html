@@ -850,6 +850,21 @@ const planPillTxts = {solo:'✨ Solo', team:'⭐ Équipe', enterprise:'🏢 Entr
 document.getElementById('sb-plan-pill').textContent = planPillTxts[plan] || planPillTxts.solo;
 
 // ════════════════════════════════════════════════════════════════
+// FETCH AUTHENTIFIÉ — wrapper global utilisé par toutes les routes
+// ════════════════════════════════════════════════════════════════
+async function tfetch(path, opts = {}) {
+  const token   = localStorage.getItem('mailone_token');
+  const headers = {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(opts.headers || {}),
+  };
+  const r    = await fetch(CONFIG.API_URL + path, { ...opts, headers });
+  const json = await r.json().catch(() => ({}));
+  return { ok: r.ok, status: r.status, data: json };
+}
+
+// ════════════════════════════════════════════════════════════════
 // MAILS DATA — chargé depuis IMAP
 // ════════════════════════════════════════════════════════════════
 let MAILS = [];
