@@ -952,7 +952,7 @@ async function handleLogin() {
   clearFieldError('login-email'); clearFieldError('login-pwd');
   try {
     await Auth.login({ email, password: pwd });
-    showMailConnectStep('login');
+    window.location.href = redirect;
   } catch (err) {
     setButtonLoading(btn, false);
     if (err.status === 401)        showFieldError('login-pwd', 'Email ou mot de passe incorrect.');
@@ -981,7 +981,7 @@ async function handleSignup() {
   try {
     const referralCode = Referral.getCodeFromURL();
     await Auth.register({ firstName: prenom, lastName: nom, email, password: pwd, company, plan: selectedPlan, billing: localStorage.getItem('mailone_billing') || 'monthly', marketing: document.getElementById('chk-marketing').checked, referralCode, sector: selectedActivity, mailVolume: selectedMailCount, timeOnMails: selectedTimeSpent });
-    showMailConnectStep('signup');
+    window.location.href = 'success.html';
   } catch (err) {
     setButtonLoading(btn, false);
     if (err.status === 409) showToast('⚠️', 'Un compte existe déjà avec cet email. Connectez-vous →');
