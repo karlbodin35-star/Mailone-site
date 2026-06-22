@@ -48,6 +48,32 @@ p  { font-size: 13px; color: #6B6B67; line-height: 1.6; }
 
 <script>
 (function () {
+  // ── Google auth: JWT delivered via hash fragment ──────────
+  const hash = new URLSearchParams(window.location.hash.slice(1));
+  const gt   = hash.get('gt');
+  if (gt) {
+    try {
+      localStorage.setItem('mailone_token', gt);
+      const uRaw = hash.get('u');
+      if (uRaw) {
+        const user = JSON.parse(uRaw);
+        localStorage.setItem('mailone_user',    JSON.stringify(user));
+        localStorage.setItem('mailone_plan',    user.plan    || 'solo');
+        if (user.billing) localStorage.setItem('mailone_billing', user.billing);
+      }
+    } catch (_) {}
+    history.replaceState(null, '', window.location.pathname + window.location.search);
+    const spinner = document.getElementById('spinner');
+    const card    = document.getElementById('card');
+    spinner.style.display = 'none';
+    card.insertAdjacentHTML('afterbegin', '<div class="icon">✅</div>');
+    document.getElementById('title').textContent = 'Connexion réussie !';
+    document.getElementById('desc').textContent  = 'Bienvenue sur MailOne…';
+    setTimeout(() => { window.location.href = 'app.html'; }, 1000);
+    return;
+  }
+
+  // ── Email OAuth: success/error via query params ────────────
   const params   = new URLSearchParams(window.location.search);
   const success  = params.get('success') === '1';
   const provider = params.get('provider') || '';
