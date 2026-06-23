@@ -1005,6 +1005,7 @@ async function syncEmails() {
       console.error('[MailOne] Sync error:', status, data);
       return;
     }
+    console.log('[MailOne] sync OK — source:', data.source, '| emails:', (data.emails || []).length, '| raw:', data);
     MAILS.length = 0;
     (data.emails || []).forEach((e, i) => {
       const ctx = AGENT.extract(e);
