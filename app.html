@@ -989,10 +989,24 @@ async function syncEmails() {
   const list = document.getElementById('mail-list');
   list.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink4);font-size:12px">⏳ Synchronisation…</div>';
   try {
-    const { ok, data } = await tfetch('/api/emails/sync');
-    if (!ok) throw new Error(data.error);
+    const { ok, data, status } = await tfetch('/api/emails/sync');
+    if (!ok) {
+      const msg = data?.error || `Erreur ${status}`;
+      if (status === 401 || data?.code === 'OAUTH_EXPIRED') {
+        list.innerHTML = `<div style="padding:24px 16px;text-align:center">
+          <div style="font-size:28px;margin-bottom:10px">🔄</div>
+          <div style="font-size:13px;font-weight:600;color:var(--ink2);margin-bottom:6px">Session Gmail expirée</div>
+          <div style="font-size:12px;color:var(--ink4);margin-bottom:14px">Reconnectez votre boîte pour reprendre la synchronisation.</div>
+          <button onclick="document.getElementById('setup-overlay').style.display='flex'" style="padding:9px 18px;border-radius:9px;border:none;background:var(--grn);color:#fff;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer">Reconnecter Gmail</button>
+        </div>`;
+      } else {
+        list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--urgent);font-size:12px">❌ ${msg}</div>`;
+      }
+      console.error('[MailOne] Sync error:', status, data);
+      return;
+    }
     MAILS.length = 0;
-    data.emails.forEach((e, i) => {
+    (data.emails || []).forEach((e, i) => {
       const ctx = AGENT.extract(e);
       let cat = 'quote';
       if (AGENT.s.urgent.test(e.subject + ' ' + e.body)) cat = 'urgent';
@@ -1004,8 +1018,9 @@ async function syncEmails() {
       MAILS.push({ ...e, id: i, cat, follow: ctx.hasFollow });
     });
     renderList(); updateStats(); updateBadges();
-    showToast('📬', `${MAILS.length} email(s) chargé(s)`);
+    if (MAILS.length > 0) showToast('📬', `${MAILS.length} email(s) chargé(s)`);
   } catch(e) {
+    console.error('[MailOne] syncEmails exception:', e);
     list.innerHTML = `<div style="padding:20px;text-align:center;color:var(--urgent);font-size:12px">❌ ${e.message}</div>`;
   }
 }
@@ -1013,12 +1028,16 @@ async function syncEmails() {
 async function checkEmailAccount() {
   try {
     const { ok, data } = await tfetch('/api/emails/account');
+    console.log('[MailOne] account check:', ok, data);
     if (ok && data.account) {
       await syncEmails();
     } else {
       document.getElementById('setup-overlay').style.display = 'flex';
     }
-  } catch { /* silencieux */ }
+  } catch(e) {
+    console.error('[MailOne] checkEmailAccount error:', e);
+    document.getElementById('setup-overlay').style.display = 'flex';
+  }
 }
 
 // ════════════════════════════════════════════════════════════════
