@@ -865,7 +865,7 @@ const API_URL = (window.location.hostname === 'localhost' || window.location.hos
 const params = new URLSearchParams(window.location.search);
 const action = params.get('action');
 const planParam = params.get('plan');
-const redirect = params.get('redirect') || 'app.html';
+const redirect = params.get('redirect') || 'dashboard.html';
 
 Auth.redirectIfLoggedIn(redirect);
 
