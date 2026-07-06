@@ -21,31 +21,31 @@
 :root {
   /* Couleurs */
   --bg:     #F8F7F5;
-  --bg2:    #EFECE6;
+  --bg2:    #0C1018;
   --sur:    #FFFFFF;
-  --bdr:    #E3DFD7;
-  --bdr2:   #CBC7BE;
-  --ink:    #111110;
-  --ink2:   #3C3C3A;
-  --ink3:   #6B6B67;
-  --ink4:   #9E9E9A;
+  --bdr:    rgba(255,255,255,.08);
+  --bdr2:   rgba(255,255,255,.16);
+  --ink:    #EDF0F5;
+  --ink2:   #C6CCD8;
+  --ink3:   #8B93A5;
+  --ink4:   #7C8496;
 
-  --grn:    #2A7A50;
-  --grn-d:  #1E5C3C;
-  --grn-l:  #EBF5EF;
-  --grn-m:  #3E9E6A;
+  --grn:    #5B8CFF;
+  --grn-d:  #4E79E8;
+  --grn-l:  rgba(91,140,255,.12);
+  --grn-m:  #7FA8FF;
 
-  --drk:    #131210;
-  --drk2:   #1C1B19;
+  --drk:    #0C1018;
+  --drk2:   #101623;
   --drk-bdr:rgba(255,255,255,.08);
   --drk-txt:rgba(255,255,255,.45);
 
-  --red:    #C0392B;
-  --red-l:  #FEF0EE;
-  --amber:  #B45309;
-  --amber-l:#FEF9EC;
-  --blue:   #1D4ED8;
-  --blue-l: #EFF4FF;
+  --red:    #FF5C5C;
+  --red-l:  rgba(255,92,92,.12);
+  --amber:  #FFC46B;
+  --amber-l:rgba(255,196,107,.12);
+  --blue:   #7FA8FF;
+  --blue-l: rgba(91,140,255,.14);
 
   /* Espacements */
   --px: clamp(20px, 5vw, 72px);
@@ -537,8 +537,8 @@ nav {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background: rgba(192,57,43,.12);
-  border: 1px solid rgba(192,57,43,.25);
+  background: rgba(255,92,92,.12);
+  border: 1px solid rgba(255,92,92,.25);
   border-radius: 100px;
   padding: 3px 12px;
   font-size: 11px;
@@ -563,8 +563,8 @@ nav {
   max-width: 460px;
 }
 .pain-after {
-  background: rgba(42,122,80,.12);
-  border: 1px solid rgba(42,122,80,.22);
+  background: rgba(91,140,255,.12);
+  border: 1px solid rgba(91,140,255,.22);
   border-radius: var(--r);
   padding: 20px 22px;
   flex-shrink: 0;
@@ -729,7 +729,7 @@ nav {
 }
 .tier-all { background: var(--grn-l); color: var(--grn-d); }
 .tier-team { background: var(--amber-l); color: var(--amber); }
-.tier-ent { background: #F3EEFF; color: #6D28D9; }
+.tier-ent { background: #F3EEFF; color: #9F7BFF; }
 @media (min-width: 600px) { .feat-grid { grid-template-columns: 1fr 1fr; } }
 @media (min-width: 900px) { .feat-grid { grid-template-columns: repeat(3,1fr); } }
 
@@ -752,7 +752,7 @@ nav {
 }
 .testi-card.featured {
   border-color: var(--grn);
-  box-shadow: 0 0 0 1px var(--grn), 0 8px 32px rgba(42,122,80,.12);
+  box-shadow: 0 0 0 1px var(--grn), 0 8px 32px rgba(91,140,255,.12);
 }
 .testi-stars { color: #F59E0B; font-size: 14px; letter-spacing: 2px; margin-bottom: 16px; }
 .testi-text {
@@ -831,7 +831,7 @@ nav {
   border-radius: 50%;
   background: var(--grn);
   cursor: pointer;
-  box-shadow: 0 0 0 4px rgba(42,122,80,.25);
+  box-shadow: 0 0 0 4px rgba(91,140,255,.25);
 }
 .roi-range::-moz-range-thumb {
   width: 20px; height: 20px;
@@ -839,7 +839,7 @@ nav {
   background: var(--grn);
   cursor: pointer;
   border: none;
-  box-shadow: 0 0 0 4px rgba(42,122,80,.25);
+  box-shadow: 0 0 0 4px rgba(91,140,255,.25);
 }
 .roi-range-hints {
   display: flex;
@@ -858,13 +858,13 @@ nav {
   border-radius: var(--r);
   padding: 20px;
 }
-.roi-result-cell.red { background: rgba(192,57,43,.08); border: 1px solid rgba(192,57,43,.18); }
-.roi-result-cell.blue { background: rgba(29,78,216,.08); border: 1px solid rgba(29,78,216,.18); }
-.roi-result-cell.grn { background: rgba(42,122,80,.08); border: 1px solid rgba(42,122,80,.18); grid-column: span 2; }
+.roi-result-cell.red { background: rgba(255,92,92,.08); border: 1px solid rgba(255,92,92,.18); }
+.roi-result-cell.blue { background: rgba(91,140,255,.08); border: 1px solid rgba(91,140,255,.18); }
+.roi-result-cell.grn { background: rgba(91,140,255,.08); border: 1px solid rgba(91,140,255,.18); grid-column: span 2; }
 .roi-result-lbl { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px; }
 .roi-result-cell.red .roi-result-lbl { color: rgba(241,148,138,.6); }
 .roi-result-cell.blue .roi-result-lbl { color: rgba(129,140,248,.6); }
-.roi-result-cell.grn .roi-result-lbl { color: rgba(62,158,106,.6); }
+.roi-result-cell.grn .roi-result-lbl { color: rgba(127,168,255,.6); }
 .roi-result-val {
   font-family: 'Space Grotesk', sans-serif;
   font-size: clamp(22px, 3vw, 30px);
@@ -996,7 +996,7 @@ nav {
   font-weight: 600;
   text-align: center;
 }
-.plan:not(.featured) .plan-save { background: rgba(42,122,80,.12); border: 1px solid rgba(42,122,80,.2); color: #6EE7A8; }
+.plan:not(.featured) .plan-save { background: rgba(91,140,255,.12); border: 1px solid rgba(91,140,255,.2); color: #6EE7A8; }
 .plan.featured .plan-save { background: var(--grn-l); border: 1px solid #C5E3D2; color: var(--grn-d); }
 .plan-divider { height: 1px; margin-bottom: 20px; }
 .plan:not(.featured) .plan-divider { background: rgba(255,255,255,.07); }
@@ -1015,7 +1015,7 @@ nav {
   flex-shrink: 0;
   margin-top: 2px;
 }
-.plan:not(.featured) .plan-check { background: rgba(42,122,80,.15); color: var(--grn-m); }
+.plan:not(.featured) .plan-check { background: rgba(91,140,255,.15); color: var(--grn-m); }
 .plan.featured .plan-check { background: var(--grn-l); color: var(--grn); }
 .plan-cta {
   width: 100%;
@@ -1108,7 +1108,7 @@ nav {
 .ref-btn {
   display: inline-block;
   padding: 14px 30px;
-  background: #fff;
+  background:rgba(255,255,255,.05);
   color: var(--grn-d);
   border-radius: var(--r-lg);
   font-family: 'Space Grotesk', sans-serif;
@@ -1222,6 +1222,7 @@ footer {
 @keyframes roiPulse { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
 </style>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 
@@ -1486,13 +1487,13 @@ footer {
         <span class="feat-tier tier-all">Tous les plans</span>
       </div>
       <div class="feat-card reveal reveal-delay-1">
-        <div class="feat-ico" style="background:#F3EEFF;color:#6D28D9">👥</div>
+        <div class="feat-ico" style="background:#F3EEFF;color:#9F7BFF">👥</div>
         <div class="feat-t">Tableau de bord équipe</div>
         <div class="feat-d">Vision globale. Assignation, suivi et rapports hebdomadaires.</div>
         <span class="feat-tier tier-all">Tous les plans</span>
       </div>
       <div class="feat-card reveal reveal-delay-2">
-        <div class="feat-ico" style="background:#F3EEFF;color:#6D28D9">🔌</div>
+        <div class="feat-ico" style="background:#F3EEFF;color:#9F7BFF">🔌</div>
         <div class="feat-t">API & intégrations</div>
         <div class="feat-d">CRM, Zapier, outils existants. SSO et sécurité avancée.</div>
         <span class="feat-tier tier-all">Tous les plans</span>
@@ -1518,7 +1519,7 @@ footer {
 <section class="sec sec-dark">
   <div class="roi-wrap">
     <div class="sec-center" style="margin-bottom:44px">
-      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(42,122,80,.15);border:1px solid rgba(42,122,80,.25);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:700;color:var(--grn-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:20px" class="reveal">
+      <div style="display:inline-flex;align-items:center;gap:8px;background:rgba(91,140,255,.15);border:1px solid rgba(91,140,255,.25);border-radius:100px;padding:5px 16px;font-size:11px;font-weight:700;color:var(--grn-m);letter-spacing:.07em;text-transform:uppercase;margin-bottom:20px" class="reveal">
         <span style="width:6px;height:6px;border-radius:50%;background:var(--grn-m);display:inline-block;animation:roiPulse 2s ease-in-out infinite" aria-hidden="true"></span>
         Calculateur ROI
       </div>
@@ -1587,7 +1588,7 @@ footer {
       <p class="sec-sub reveal reveal-delay-2">IA MailOne Pro incluse dans chaque offre. 14 jours gratuits. Sans carte bancaire.</p>
     </div>
     <div style="display:flex;justify-content:center;margin:28px 0 0" class="reveal">
-      <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(42,122,80,.1);border:1px solid rgba(42,122,80,.2);border-radius:100px;padding:5px 16px;font-size:12px;font-weight:600;color:var(--grn-m)">
+      <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(91,140,255,.1);border:1px solid rgba(91,140,255,.2);border-radius:100px;padding:5px 16px;font-size:12px;font-weight:600;color:var(--grn-m)">
         <span class="pulse" style="color:var(--grn-m)" aria-hidden="true"></span>IA MailOne Pro incluse · 14 jours gratuits · Sans carte bancaire
       </div>
     </div>

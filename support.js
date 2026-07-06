@@ -18,25 +18,25 @@
     #max-btn {
       position:fixed; bottom:22px; right:22px; z-index:9000;
       width:54px; height:54px; border-radius:50%; border:none;
-      background:linear-gradient(135deg,#0d9373,#0a7a5e);
+      background:linear-gradient(135deg,#5B8CFF,#7B6CFF);
       color:#fff; font-size:22px; cursor:pointer;
-      box-shadow:0 4px 20px rgba(13,147,115,.45);
+      box-shadow:0 4px 20px rgba(91,140,255,.45);
       display:flex; align-items:center; justify-content:center;
       transition:transform .2s, box-shadow .2s;
     }
-    #max-btn:hover { transform:scale(1.08); box-shadow:0 6px 28px rgba(13,147,115,.55); }
+    #max-btn:hover { transform:scale(1.08); box-shadow:0 6px 28px rgba(91,140,255,.55); }
     #max-btn .max-notif {
       position:absolute; top:-3px; right:-3px;
       width:16px; height:16px; border-radius:50%;
-      background:#ef4444; border:2px solid #fff;
+      background:#ef4444; border:2px solid #07090F;
       font-size:9px; font-weight:800; color:#fff;
       display:flex; align-items:center; justify-content:center;
     }
     #max-panel {
       position:fixed; bottom:86px; right:22px; z-index:9000;
       width:340px; max-height:520px; border-radius:18px;
-      background:#fff; border:1px solid #e4e4e7;
-      box-shadow:0 16px 60px rgba(0,0,0,.14);
+      background:rgba(12,16,24,.96); border:1px solid rgba(255,255,255,.10);
+      box-shadow:0 16px 60px rgba(0,0,0,.5);
       display:flex; flex-direction:column; overflow:hidden;
       transform:scale(.92) translateY(12px); opacity:0;
       pointer-events:none;
@@ -44,7 +44,7 @@
     }
     #max-panel.open { transform:scale(1) translateY(0); opacity:1; pointer-events:all; }
     .max-header {
-      background:linear-gradient(135deg,#0d9373,#0a7a5e);
+      background:linear-gradient(135deg,#5B8CFF,#7B6CFF);
       padding:14px 16px; display:flex; align-items:center; gap:10px; flex-shrink:0;
     }
     .max-av {
@@ -55,7 +55,7 @@
     .max-hinfo { flex:1 }
     .max-hname { font-family:'Space Grotesk',Arial,sans-serif; font-size:14px; font-weight:800; color:#fff }
     .max-hstatus { font-size:11px; color:rgba(255,255,255,.7); display:flex; align-items:center; gap:4px }
-    .max-dot { width:6px; height:6px; border-radius:50%; background:#4ade80; flex-shrink:0 }
+    .max-dot { width:6px; height:6px; border-radius:50%; background:#3DD68C; flex-shrink:0 }
     .max-close {
       width:28px; height:28px; border-radius:8px; border:none;
       background:rgba(255,255,255,.15); color:#fff; cursor:pointer;
@@ -73,12 +73,12 @@
       padding:9px 12px; border-radius:12px; font-size:13px; line-height:1.55;
       font-family:'DM Sans',Arial,sans-serif;
     }
-    .max-msg.bot .max-bubble { background:#f4f4f5; color:#18181b; border-bottom-left-radius:3px }
-    .max-msg.usr .max-bubble { background:#0d9373; color:#fff; border-bottom-right-radius:3px }
-    .max-meta { font-size:10px; color:#a1a1aa }
+    .max-msg.bot .max-bubble { background:rgba(255,255,255,.07); color:#EDF0F5; border-bottom-left-radius:3px }
+    .max-msg.usr .max-bubble { background:#5B8CFF; color:#fff; border-bottom-right-radius:3px }
+    .max-meta { font-size:10px; color:#8B93A5 }
     .max-typing .max-bubble { display:flex; align-items:center; gap:4px; min-width:44px }
     .max-typing .max-bubble span {
-      width:6px; height:6px; border-radius:50%; background:#a1a1aa;
+      width:6px; height:6px; border-radius:50%; background:#8B93A5;
       animation:maxBounce 1.1s infinite;
     }
     .max-typing .max-bubble span:nth-child(2) { animation-delay:.18s }
@@ -86,32 +86,32 @@
     @keyframes maxBounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
     .max-faqs {
       padding:8px 14px; display:flex; flex-wrap:wrap; gap:5px; flex-shrink:0;
-      border-top:1px solid #f4f4f5;
+      border-top:1px solid rgba(255,255,255,.07);
     }
     .max-faq {
-      padding:4px 10px; border-radius:20px; border:1px solid #e4e4e7;
-      background:#fafafa; font-size:11px; font-family:'DM Sans',Arial,sans-serif;
-      color:#52525b; cursor:pointer; transition:all .15s; white-space:nowrap;
+      padding:4px 10px; border-radius:20px; border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05); font-size:11px; font-family:'DM Sans',Arial,sans-serif;
+      color:#C6CCD8; cursor:pointer; transition:all .15s; white-space:nowrap;
     }
-    .max-faq:hover { background:#0d9373; color:#fff; border-color:#0d9373 }
+    .max-faq:hover { background:#5B8CFF; color:#fff; border-color:#5B8CFF }
     .max-input-row {
-      padding:10px 12px; border-top:1px solid #e4e4e7; display:flex; gap:7px;
-      align-items:center; flex-shrink:0; background:#fff;
+      padding:10px 12px; border-top:1px solid rgba(255,255,255,.12); display:flex; gap:7px;
+      align-items:center; flex-shrink:0; background:transparent;
     }
     .max-inp {
-      flex:1; padding:8px 11px; border:1px solid #e4e4e7; border-radius:10px;
-      font-family:'DM Sans',Arial,sans-serif; font-size:13px; color:#18181b;
-      background:#fafafa; outline:none; transition:border-color .15s;
+      flex:1; padding:8px 11px; border:1px solid rgba(255,255,255,.12); border-radius:10px;
+      font-family:'DM Sans',Arial,sans-serif; font-size:13px; color:#EDF0F5;
+      background:rgba(255,255,255,.05); outline:none; transition:border-color .15s;
     }
-    .max-inp:focus { border-color:#0d9373; background:#fff }
+    .max-inp:focus { border-color:#5B8CFF; background:rgba(255,255,255,.08) }
     .max-send {
       width:34px; height:34px; border-radius:10px; border:none;
-      background:#0d9373; color:#fff; cursor:pointer; font-size:15px;
+      background:#5B8CFF; color:#fff; cursor:pointer; font-size:15px;
       display:flex; align-items:center; justify-content:center;
       flex-shrink:0; transition:background .15s;
     }
-    .max-send:hover { background:#0a7a5e }
-    .max-send:disabled { background:#d4d4d8; cursor:default }
+    .max-send:hover { background:#7B6CFF }
+    .max-send:disabled { background:rgba(255,255,255,.15); cursor:default }
     @media (max-width:400px) {
       #max-panel { width:calc(100vw - 20px); right:10px; bottom:80px }
     }

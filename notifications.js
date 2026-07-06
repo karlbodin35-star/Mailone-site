@@ -155,7 +155,7 @@ function injectNotifButton() {
     btn.textContent = PushManager.isEnabled() ? '🔔' : '🔕';
     btn.title = PushManager.isEnabled() ? 'Notifications activées' : 'Activer les notifications';
     btn.style.color = PushManager.isEnabled()
-      ? 'rgba(94,234,212,.8)'
+      ? 'rgba(91,140,255,.8)'
       : 'rgba(255,255,255,.35)';
   };
 
@@ -205,8 +205,8 @@ function showNotifPrompt() {
     bottom: 24px;
     left: 50%;
     transform: translateX(-50%);
-    background: #1e1c18;
-    border: 1px solid rgba(94,234,212,.2);
+    background: #0C1018;
+    border: 1px solid rgba(91,140,255,.2);
     border-radius: 16px;
     padding: 18px 22px;
     max-width: 360px;
@@ -220,17 +220,17 @@ function showNotifPrompt() {
     <div style="display:flex;align-items:flex-start;gap:12px">
       <span style="font-size:28px;flex-shrink:0">🔔</span>
       <div>
-        <div style="font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:#fff;margin-bottom:5px">
+        <div style="font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:800;color:#fff;margin-bottom:5px">
           Recevez les alertes urgences
         </div>
         <div style="font-size:12px;color:rgba(255,255,255,.5);line-height:1.55;margin-bottom:14px">
           Activez les notifications pour être alerté instantanément quand une urgence arrive — même quand MailOne n'est pas ouvert.
         </div>
         <div style="display:flex;gap:8px">
-          <button onclick="PushManager.enable().then(() => this.closest('div').parentElement.parentElement.remove())" style="padding:8px 16px;background:rgba(94,234,212,.15);color:#5eead4;border:1px solid rgba(94,234,212,.25);border-radius:8px;cursor:pointer;font-family:'Instrument Sans',sans-serif;font-size:12px;font-weight:700">
+          <button onclick="PushManager.enable().then(() => this.closest('div').parentElement.parentElement.remove())" style="padding:8px 16px;background:rgba(91,140,255,.15);color:#7FA8FF;border:1px solid rgba(91,140,255,.25);border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:700">
             🔔 Activer
           </button>
-          <button onclick="this.closest('div').parentElement.parentElement.remove()" style="padding:8px 16px;background:transparent;color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.1);border-radius:8px;cursor:pointer;font-family:'Instrument Sans',sans-serif;font-size:12px">
+          <button onclick="this.closest('div').parentElement.parentElement.remove()" style="padding:8px 16px;background:transparent;color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.1);border-radius:8px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px">
             Plus tard
           </button>
         </div>

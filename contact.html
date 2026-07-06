@@ -11,20 +11,20 @@
 <style>
 :root {
   --bg:    #F8F7F5;
-  --bg2:   #EFECE6;
+  --bg2:   #0C1018;
   --sur:   #FFFFFF;
-  --bdr:   #E3DFD7;
-  --bdr2:  #CBC7BE;
-  --ink:   #111110;
-  --ink2:  #3C3C3A;
-  --ink3:  #6B6B67;
-  --ink4:  #9E9E9A;
-  --grn:   #2A7A50;
-  --grn-d: #1E5C3C;
-  --grn-l: #EBF5EF;
-  --grn-m: #3E9E6A;
-  --red:   #C0392B;
-  --red-l: #FEF0EE;
+  --bdr:   rgba(255,255,255,.08);
+  --bdr2:  rgba(255,255,255,.16);
+  --ink:   #EDF0F5;
+  --ink2:  #C6CCD8;
+  --ink3:  #8B93A5;
+  --ink4:  #7C8496;
+  --grn:   #5B8CFF;
+  --grn-d: #4E79E8;
+  --grn-l: rgba(91,140,255,.12);
+  --grn-m: #7FA8FF;
+  --red:   #FF5C5C;
+  --red-l: rgba(255,92,92,.12);
   --px: clamp(20px, 5vw, 72px);
   --r: 12px;
   --ease: cubic-bezier(0.25, 0, 0, 1);
@@ -54,7 +54,7 @@ nav {
 .nav-links { display: flex; align-items: center; gap: 20px; }
 .nav-links a { font-size: 13px; font-weight: 500; color: var(--ink3); text-decoration: none; transition: color var(--dur) var(--ease); }
 .nav-links a:hover { color: var(--ink); }
-.nav-cta { padding: 8px 16px; background: var(--ink); color: #fff !important; border-radius: 8px; font-weight: 600 !important; }
+.nav-cta { padding: 8px 16px; background: linear-gradient(90deg,#5B8CFF,#7B6CFF); color: #fff !important; border-radius: 8px; font-weight: 600 !important; }
 .nav-cta:hover { background: var(--grn) !important; color: #fff !important; }
 
 /* ── PAGE ─────────────────────────────────────── */
@@ -155,7 +155,7 @@ input, select, textarea {
   outline: none;
   transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
-input:focus, select:focus, textarea:focus { border-color: var(--grn); box-shadow: 0 0 0 3px rgba(42,122,80,.12); background: var(--sur); }
+input:focus, select:focus, textarea:focus { border-color: var(--grn); box-shadow: 0 0 0 3px rgba(91,140,255,.12); background: var(--sur); }
 input::placeholder, textarea::placeholder { color: var(--ink4); }
 textarea { resize: vertical; min-height: 120px; }
 input.field-error { border-color: var(--red); }
@@ -212,6 +212,7 @@ footer a:hover { color: var(--ink); }
 }
 </style>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 

@@ -9,14 +9,14 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#F8F7F5;--bg2:#EFECE6;--sur:#FFFFFF;--bdr:#E3DFD7;--bdr2:#CBC7BE;
-  --ink:#111110;--ink2:#3C3C3A;--ink3:#6B6B67;--ink4:#9E9E9A;
-  --green:#2A7A50;--green-l:#EBF5EF;
-  --teal:#2A7A50;--teal-l:#EBF5EF;
-  --purple:#6D28D9;--purple-l:#F5F3FF;
-  --amber:#B45309;--amber-l:#FEF9EC;
-  --red:#C0392B;--red-l:#FEF0EE;
-  --blue:#1D4ED8;--blue-l:#EFF4FF;
+  --bg:#F8F7F5;--bg2:#0C1018;--sur:#FFFFFF;--bdr:rgba(255,255,255,.08);--bdr2:rgba(255,255,255,.16);
+  --ink:#EDF0F5;--ink2:#C6CCD8;--ink3:#8B93A5;--ink4:#7C8496;
+  --green:#5B8CFF;--green-l:rgba(91,140,255,.12);
+  --teal:#5B8CFF;--teal-l:rgba(91,140,255,.12);
+  --purple:#9F7BFF;--purple-l:rgba(159,123,255,.14);
+  --amber:#FFC46B;--amber-l:rgba(255,196,107,.12);
+  --red:#FF5C5C;--red-l:rgba(255,92,92,.12);
+  --blue:#7FA8FF;--blue-l:rgba(91,140,255,.14);
   --ai-bg:#18181b;--ai-sur:#242018;--ai-bdr:#2e2b24;
 }
 html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
@@ -26,8 +26,8 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .sidebar{width:234px;background:var(--ai-bg);display:flex;flex-direction:column;flex-shrink:0}
 .sb-logo-zone{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sb-logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.5px;display:flex;align-items:center;gap:7px;text-decoration:none}
-.sb-logo-dot{width:8px;height:8px;border-radius:50%;background:#3E9E6A}
-.sb-ai-badge{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:rgba(109,40,217,.2);border:1px solid rgba(109,40,217,.3);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:.07em}
+.sb-logo-dot{width:8px;height:8px;border-radius:50%;background:#7FA8FF}
+.sb-ai-badge{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:rgba(159,123,255,.2);border:1px solid rgba(159,123,255,.3);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:800;color:#a78bfa;text-transform:uppercase;letter-spacing:.07em}
 .sb-user{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sb-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#f97316,#dc2626)}
 .sb-name{font-size:12px;font-weight:600;color:#fff}
@@ -36,7 +36,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .sb-lbl{font-size:9px;font-weight:800;letter-spacing:.14em;color:rgba(255,255,255,.38);text-transform:uppercase;padding:0 7px;margin-bottom:5px}
 .sb-item{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:500;color:rgba(255,255,255,.46);transition:all .15s;margin-bottom:1px;text-decoration:none}
 .sb-item:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.8)}
-.sb-item.active{background:rgba(109,40,217,.2);color:#a78bfa}
+.sb-item.active{background:rgba(159,123,255,.2);color:#a78bfa}
 .sb-ico{font-size:14px;width:18px;text-align:center;flex-shrink:0}
 .sb-div{height:1px;background:rgba(255,255,255,.06);margin:5px 12px}
 .sb-bottom{margin-top:auto;padding:12px 14px;border-top:1px solid rgba(255,255,255,.06)}
@@ -45,7 +45,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .conv-list{padding:8px 12px;overflow-y:auto;flex:1}
 .conv-item{padding:8px 9px;border-radius:8px;cursor:pointer;transition:all .15s;margin-bottom:2px}
 .conv-item:hover{background:rgba(255,255,255,.05)}
-.conv-item.active{background:rgba(109,40,217,.15);border:1px solid rgba(109,40,217,.2)}
+.conv-item.active{background:rgba(159,123,255,.15);border:1px solid rgba(159,123,255,.2)}
 .conv-title{font-size:12px;font-weight:600;color:rgba(255,255,255,.6);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px}
 .conv-item.active .conv-title{color:#c4b5fd}
 .conv-time{font-size:10px;color:rgba(255,255,255,.42)}
@@ -59,7 +59,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .chat-header{height:56px;background:var(--sur);border-bottom:1px solid var(--bdr);display:flex;align-items:center;padding:0 24px;gap:12px;flex-shrink:0}
 .ch-title{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:800;flex:1}
 .ch-sub{font-size:11px;color:var(--ink3)}
-.ch-badge{display:flex;align-items:center;gap:5px;background:var(--purple-l);border:1px solid #ddd6fe;border-radius:20px;padding:4px 11px;font-size:10px;font-weight:700;color:var(--purple)}
+.ch-badge{display:flex;align-items:center;gap:5px;background:var(--purple-l);border:1px solid rgba(159,123,255,.35);border-radius:20px;padding:4px 11px;font-size:10px;font-weight:700;color:var(--purple)}
 .ch-pulse{width:5px;height:5px;border-radius:50%;background:var(--purple);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .ch-right{margin-left:auto;display:flex;gap:8px;align-items:center}
@@ -75,7 +75,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .mem-chip.quo{background:var(--blue-l);color:var(--blue);border-color:#a5c4f7}
 .mem-chip.apt{background:var(--green-l);color:var(--green);border-color:#A8D5BA}
 .mem-chip.inv{background:var(--amber-l);color:var(--amber);border-color:#f0c878}
-.mem-chip.fol{background:var(--purple-l);color:var(--purple);border-color:#ddd6fe}
+.mem-chip.fol{background:var(--purple-l);color:var(--purple);border-color:rgba(159,123,255,.35)}
 .mem-lbl{font-size:10px;font-weight:600;color:var(--ink4);flex-shrink:0}
 
 /* Chat area */
@@ -88,11 +88,11 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 @keyframes msgIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .msg.user{flex-direction:row-reverse}
 .msg-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;margin-top:2px}
-.msg-av.ai{background:linear-gradient(135deg,#6d28d9,#4f46e5);font-size:14px}
+.msg-av.ai{background:linear-gradient(135deg,#9F7BFF,#4f46e5);font-size:14px}
 .msg-av.user{background:linear-gradient(135deg,#f97316,#dc2626);font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;color:#fff}
 .msg-bubble{max-width:78%;padding:12px 16px;border-radius:14px;font-size:13px;line-height:1.68}
 .msg.ai .msg-bubble{background:var(--sur);border:1px solid var(--bdr);color:var(--ink2);border-radius:4px 14px 14px 14px}
-.msg.user .msg-bubble{background:var(--ink);color:rgba(255,255,255,.88);border-radius:14px 4px 14px 14px}
+.msg.user .msg-bubble{background:linear-gradient(90deg,#5B8CFF,#7B6CFF);color:#fff;border-radius:14px 4px 14px 14px}
 .msg-bubble strong{color:var(--ink);font-weight:700}
 .msg.user .msg-bubble strong{color:#fff}
 .msg-bubble .mail-ref{display:inline-flex;align-items:center;gap:5px;background:var(--bg);border:1px solid var(--bdr);border-radius:6px;padding:3px 8px;font-size:11px;color:var(--ink2);margin:4px 2px;cursor:pointer;transition:all .15s}
@@ -132,17 +132,17 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 /* Input area */
 .input-area{background:var(--sur);border-top:1px solid var(--bdr);padding:14px 20px;flex-shrink:0}
 .input-wrap{display:flex;gap:10px;align-items:flex-end;background:var(--bg);border:1.5px solid var(--bdr);border-radius:14px;padding:10px 14px;transition:border-color .2s,box-shadow .2s}
-.input-wrap:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(109,40,217,.1)}
+.input-wrap:focus-within{border-color:var(--purple);box-shadow:0 0 0 3px rgba(159,123,255,.1)}
 .chat-input{flex:1;background:none;border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--ink);resize:none;max-height:120px;line-height:1.5}
 .chat-input::placeholder{color:var(--ink4)}
-.send-btn{width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--bg);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:opacity .15s}
+.send-btn{width:34px;height:34px;border-radius:9px;background:linear-gradient(90deg,#5B8CFF,#7B6CFF);color:#fff;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;transition:opacity .15s}
 .send-btn:hover{opacity:.84}
 .send-btn:disabled{opacity:.35;cursor:not-allowed}
 .input-hint{font-size:10px;color:var(--ink4);margin-top:7px;text-align:center}
 
 /* Welcome state */
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:40px 20px;text-align:center}
-.welcome-ico{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#6d28d9,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 8px 24px rgba(109,40,217,.3)}
+.welcome-ico{width:64px;height:64px;border-radius:18px;background:linear-gradient(135deg,#9F7BFF,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 8px 24px rgba(159,123,255,.3)}
 .welcome-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:var(--ink)}
 .welcome-sub{font-size:13px;color:var(--ink3);max-width:420px;line-height:1.65}
 .welcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:480px;margin-top:8px}
@@ -160,6 +160,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 <script src="mailone.js"></script>
 <meta property="og:title" content="Assistant IA — MailOne">
 <meta property="og:description" content="Assistant IA MailOne.">
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 <div class="app">
@@ -621,7 +622,7 @@ function renderMemoryBar() {
     <div class="mem-chip apt" onclick="askQuestion('Mes rendez-vous ?')">📅 ${s.appts} RDV</div>
     <div class="mem-chip inv" onclick="askQuestion('Mes factures ?')">💰 ${s.pendingAmount.toLocaleString('fr-FR')}€ en attente</div>
     ${s.followups>0?`<div class="mem-chip fol" onclick="askQuestion('Qui dois-je relancer ?')">🔔 ${s.followups} relance${s.followups>1?'s':''}</div>`:''}
-    <div class="mem-chip" onclick="askQuestion('Bilan général ?')" style="background:var(--purple-l);color:var(--purple);border-color:#ddd6fe">🧠 ${MEMORY.mails.length} mails mémorisés</div>`;
+    <div class="mem-chip" onclick="askQuestion('Bilan général ?')" style="background:var(--purple-l);color:var(--purple);border-color:rgba(159,123,255,.35)">🧠 ${MEMORY.mails.length} mails mémorisés</div>`;
 }
 
 function showWelcome() {
@@ -721,7 +722,7 @@ function showTyping() {
   div.className = 'typing';
   div.id = 'typing-indicator';
   div.innerHTML = `
-    <div class="msg-av ai" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#6d28d9,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px">✨</div>
+    <div class="msg-av ai" style="width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#9F7BFF,#4f46e5);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px">✨</div>
     <div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>`;
   chatArea.appendChild(div);
   chatArea.scrollTop = chatArea.scrollHeight;

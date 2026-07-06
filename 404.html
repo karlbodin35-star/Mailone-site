@@ -10,17 +10,17 @@
 <style>
 :root {
   --bg:    #F8F7F5;
-  --bg2:   #EFECE6;
+  --bg2:   #0C1018;
   --sur:   #FFFFFF;
-  --bdr:   #E3DFD7;
-  --ink:   #111110;
-  --ink2:  #3C3C3A;
-  --ink3:  #6B6B67;
-  --ink4:  #9E9E9A;
-  --grn:   #2A7A50;
-  --grn-d: #1E5C3C;
-  --grn-l: #EBF5EF;
-  --drk:   #131210;
+  --bdr:   rgba(255,255,255,.08);
+  --ink:   #EDF0F5;
+  --ink2:  #C6CCD8;
+  --ink3:  #8B93A5;
+  --ink4:  #7C8496;
+  --grn:   #5B8CFF;
+  --grn-d: #4E79E8;
+  --grn-l: rgba(91,140,255,.12);
+  --drk:   #0C1018;
   --ease: cubic-bezier(0.25, 0, 0, 1);
   --dur: 250ms;
 }
@@ -48,7 +48,7 @@ body { min-height: 100vh; display: flex; flex-direction: column; align-items: ce
   letter-spacing: -.06em;
   line-height: 1;
   color: var(--bg2);
-  -webkit-text-stroke: 2px var(--bdr2, #CBC7BE);
+  -webkit-text-stroke: 2px var(--bdr2, rgba(255,255,255,.16));
   margin-bottom: 16px;
   user-select: none;
 }
@@ -104,6 +104,7 @@ p { font-size: 15px; color: var(--ink3); line-height: 1.65; max-width: 440px; ma
 }
 .logo-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--grn); margin-left: 3px; vertical-align: middle; }
 </style>
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 

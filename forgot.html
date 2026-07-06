@@ -10,18 +10,18 @@
 <style>
 :root {
   --bg:    #F8F7F5;
-  --bg2:   #EFECE6;
+  --bg2:   #0C1018;
   --sur:   #FFFFFF;
-  --bdr:   #E3DFD7;
-  --bdr2:  #CBC7BE;
-  --ink:   #111110;
-  --ink2:  #3C3C3A;
-  --ink3:  #6B6B67;
-  --ink4:  #9E9E9A;
-  --grn:   #2A7A50;
-  --grn-d: #1E5C3C;
-  --grn-l: #EBF5EF;
-  --red:   #C0392B;
+  --bdr:   rgba(255,255,255,.08);
+  --bdr2:  rgba(255,255,255,.16);
+  --ink:   #EDF0F5;
+  --ink2:  #C6CCD8;
+  --ink3:  #8B93A5;
+  --ink4:  #7C8496;
+  --grn:   #5B8CFF;
+  --grn-d: #4E79E8;
+  --grn-l: rgba(91,140,255,.12);
+  --red:   #FF5C5C;
   --ease: cubic-bezier(0.25, 0, 0, 1);
   --dur: 250ms;
 }
@@ -101,9 +101,9 @@ input[type=email] {
   outline: none;
   transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
-input[type=email]:focus { border-color: var(--grn); box-shadow: 0 0 0 3px rgba(42,122,80,.12); background: var(--sur); }
+input[type=email]:focus { border-color: var(--grn); box-shadow: 0 0 0 3px rgba(91,140,255,.12); background: var(--sur); }
 input::placeholder { color: var(--ink4); }
-input.field-error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(192,57,43,.1); }
+input.field-error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(255,92,92,.1); }
 
 .btn {
   width: 100%;
@@ -157,6 +157,7 @@ input.field-error { border-color: var(--red); box-shadow: 0 0 0 3px rgba(192,57,
 }
 </style>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 

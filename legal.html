@@ -19,20 +19,20 @@
 <style>
 :root {
   --bg:    #F8F7F5;
-  --bg2:   #EFECE6;
+  --bg2:   #0C1018;
   --sur:   #FFFFFF;
-  --bdr:   #E3DFD7;
-  --bdr2:  #CBC7BE;
-  --ink:   #111110;
-  --ink2:  #3C3C3A;
-  --ink3:  #6B6B67;
-  --ink4:  #9E9E9A;
-  --grn:   #2A7A50;
-  --grn-l: #EBF5EF;
-  --grn-d: #1E5C3C;
-  --amber: #B45309;
-  --amber-l: #FEF9EC;
-  --blue:  #1D4ED8;
+  --bdr:   rgba(255,255,255,.08);
+  --bdr2:  rgba(255,255,255,.16);
+  --ink:   #EDF0F5;
+  --ink2:  #C6CCD8;
+  --ink3:  #8B93A5;
+  --ink4:  #7C8496;
+  --grn:   #5B8CFF;
+  --grn-l: rgba(91,140,255,.12);
+  --grn-d: #4E79E8;
+  --amber: #FFC46B;
+  --amber-l: rgba(255,196,107,.12);
+  --blue:  #7FA8FF;
   --ease: cubic-bezier(0.25, 0, 0, 1);
   --dur: 250ms;
 }
@@ -45,7 +45,7 @@ body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 /* NAV */
 nav {
   position: sticky; top: 0; z-index: 100;
-  height: 58px; background: rgba(248,247,245,.92);
+  height: 58px; background: rgba(7,9,15,.92);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--bdr);
   display: flex; align-items: center; padding: 0 clamp(20px,5vw,60px); gap: 12px;
@@ -71,7 +71,7 @@ nav {
 .action-banner {
   background: #FEF9C3; border-bottom: 1px solid #FDE047;
   padding: 10px clamp(20px,5vw,60px); text-align: center;
-  font-size: 13px; font-weight: 600; color: #713F12;
+  font-size: 13px; font-weight: 600; color: #FDE68A;
 }
 
 /* HERO */
@@ -115,7 +115,7 @@ nav {
 .doc-header { margin-bottom: 24px; }
 .doc-badge {
   display: inline-flex; align-items: center; gap: 6px;
-  background: var(--grn-l); border: 1px solid rgba(42,122,80,.18);
+  background: var(--grn-l); border: 1px solid rgba(91,140,255,.18);
   border-radius: 20px; padding: 4px 12px;
   font-size: 10px; font-weight: 700; color: var(--grn);
   text-transform: uppercase; letter-spacing: .06em; margin-bottom: 12px;
@@ -127,7 +127,7 @@ nav {
   padding: 4px 10px; display: inline-block; margin-bottom: 8px;
 }
 .doc-highlight {
-  background: var(--amber-l); border: 1px solid rgba(180,83,9,.2);
+  background: var(--amber-l); border: 1px solid rgba(255,196,107,.2);
   border-radius: 10px; padding: 13px 16px;
   font-size: 13px; color: #7C3210; line-height: 1.65;
   margin-bottom: 20px; display: flex; gap: 9px;
@@ -145,17 +145,18 @@ nav {
 .doc-body strong { color: var(--ink); font-weight: 700; }
 .doc-body a { color: var(--blue); }
 .doc-body .info-box {
-  background: var(--grn-l); border: 1px solid rgba(42,122,80,.2);
+  background: var(--grn-l); border: 1px solid rgba(91,140,255,.2);
   border-radius: 8px; padding: 12px 15px; margin: 14px 0;
   font-size: 13px; color: var(--ink2);
 }
 .placeholder {
-  background: #FEF9C3; color: #713F12;
+  background: #FEF9C3; color: #FDE68A;
   padding: 1px 5px; border-radius: 4px; font-weight: 700; font-size: 11px;
 }
 
 @media (max-width: 720px) { .page { grid-template-columns: 1fr; } .toc { display: none; } }
 </style>
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 

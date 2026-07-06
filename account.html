@@ -11,26 +11,26 @@
 <style>
 :root {
   --bg:    #F8F7F5;
-  --bg2:   #EFECE6;
+  --bg2:   #0C1018;
   --sur:   #FFFFFF;
-  --bdr:   #E3DFD7;
-  --bdr2:  #CBC7BE;
-  --ink:   #111110;
-  --ink2:  #3C3C3A;
-  --ink3:  #6B6B67;
-  --ink4:  #9E9E9A;
-  --grn:   #2A7A50;
-  --grn-d: #1E5C3C;
-  --grn-l: #EBF5EF;
-  --grn-m: #3E9E6A;
-  --drk:   #131210;
-  --red:   #C0392B;
-  --red-l: #FEF0EE;
-  --amber: #B45309;
-  --amber-l: #FEF9EC;
-  --blue:  #1D4ED8;
-  --teal:  #0D9488;
-  --teal-l: #F0FDFA;
+  --bdr:   rgba(255,255,255,.08);
+  --bdr2:  rgba(255,255,255,.16);
+  --ink:   #EDF0F5;
+  --ink2:  #C6CCD8;
+  --ink3:  #8B93A5;
+  --ink4:  #7C8496;
+  --grn:   #5B8CFF;
+  --grn-d: #4E79E8;
+  --grn-l: rgba(91,140,255,.12);
+  --grn-m: #7FA8FF;
+  --drk:   #0C1018;
+  --red:   #FF5C5C;
+  --red-l: rgba(255,92,92,.12);
+  --amber: #FFC46B;
+  --amber-l: rgba(255,196,107,.12);
+  --blue:  #7FA8FF;
+  --teal:  #3DD68C;
+  --teal-l: rgba(61,214,140,.12);
   --ease: cubic-bezier(0.25, 0, 0, 1);
   --dur: 250ms;
 }
@@ -43,7 +43,7 @@ html { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--i
 nav {
   position: sticky; top: 0; z-index: 100;
   height: 58px; display: flex; align-items: center; padding: 0 clamp(16px,5vw,48px); gap: 12px;
-  background: rgba(248,247,245,.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: rgba(7,9,15,.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--bdr);
 }
 .logo { font-family: 'Space Grotesk', sans-serif; font-size: 19px; font-weight: 700; color: var(--ink); text-decoration: none; letter-spacing: -.5px; }
@@ -87,7 +87,7 @@ input, select {
   background: var(--bg); outline: none; width: 100%;
   transition: border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
-input:focus, select:focus { border-color: var(--grn); box-shadow: 0 0 0 3px rgba(42,122,80,.1); background: var(--sur); }
+input:focus, select:focus { border-color: var(--grn); box-shadow: 0 0 0 3px rgba(91,140,255,.1); background: var(--sur); }
 input::placeholder { color: var(--ink4); }
 .save-btn {
   padding: 8px 16px; background: var(--grn); color: #fff;
@@ -165,6 +165,7 @@ input::placeholder { color: var(--ink4); }
 }
 </style>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 
@@ -256,7 +257,7 @@ input::placeholder { color: var(--ink4); }
           <button class="action-btn"             onclick="openPortal()">📄 Portail de facturation Stripe</button>
         </div>
 
-        <div style="margin-top:14px;background:var(--teal-l);border:1px solid rgba(13,148,136,.2);border-radius:9px;padding:10px 14px;font-size:11px;color:var(--teal);line-height:1.5">
+        <div style="margin-top:14px;background:var(--teal-l);border:1px solid rgba(61,214,140,.2);border-radius:9px;padding:10px 14px;font-size:11px;color:var(--teal);line-height:1.5">
           🔒 La facturation est gérée de manière sécurisée par <strong>Stripe</strong>. MailOne ne stocke jamais vos coordonnées bancaires.
         </div>
       </div>

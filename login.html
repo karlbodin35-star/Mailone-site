@@ -11,27 +11,27 @@
 <style>
 :root {
   --bg:     #F8F7F5;
-  --bg2:    #EFECE6;
+  --bg2:    #0C1018;
   --sur:    #FFFFFF;
-  --bdr:    #E3DFD7;
-  --bdr2:   #CBC7BE;
-  --ink:    #111110;
-  --ink2:   #3C3C3A;
-  --ink3:   #6B6B67;
-  --ink4:   #9E9E9A;
-  --grn:    #2A7A50;
-  --grn-d:  #1E5C3C;
-  --grn-l:  #EBF5EF;
-  --grn-m:  #3E9E6A;
-  --drk:    #131210;
-  --drk2:   #1C1B19;
-  --red:    #C0392B;
-  --red-l:  #FEF0EE;
-  --amber:  #B45309;
-  --amber-l:#FEF9EC;
-  --blue:   #1D4ED8;
-  --purple: #6D28D9;
-  --teal:   #0D9488;
+  --bdr:    rgba(255,255,255,.08);
+  --bdr2:   rgba(255,255,255,.16);
+  --ink:    #EDF0F5;
+  --ink2:   #C6CCD8;
+  --ink3:   #8B93A5;
+  --ink4:   #7C8496;
+  --grn:    #5B8CFF;
+  --grn-d:  #4E79E8;
+  --grn-l:  rgba(91,140,255,.12);
+  --grn-m:  #7FA8FF;
+  --drk:    #0C1018;
+  --drk2:   #101623;
+  --red:    #FF5C5C;
+  --red-l:  rgba(255,92,92,.12);
+  --amber:  #FFC46B;
+  --amber-l:rgba(255,196,107,.12);
+  --blue:   #7FA8FF;
+  --purple: #9F7BFF;
+  --teal:   #3DD68C;
   --r: 10px;
   --ease: cubic-bezier(0.25, 0, 0, 1);
   --dur: 250ms;
@@ -60,7 +60,7 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
   top: -100px; right: -60px;
   width: 380px; height: 380px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(42,122,80,.1) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(91,140,255,.1) 0%, transparent 70%);
   pointer-events: none;
 }
 .split-left::after {
@@ -69,7 +69,7 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
   bottom: -80px; left: -40px;
   width: 280px; height: 280px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(62,158,106,.07) 0%, transparent 70%);
+  background: radial-gradient(circle, rgba(127,168,255,.07) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -148,7 +148,7 @@ html, body { height: 100%; font-family: 'DM Sans', sans-serif; background: var(-
   border-radius: 50%;
   background: var(--grn);
   cursor: pointer;
-  box-shadow: 0 0 0 3px rgba(42,122,80,.3);
+  box-shadow: 0 0 0 3px rgba(91,140,255,.3);
 }
 .sl-roi-range::-moz-range-thumb {
   width: 17px; height: 17px;
@@ -229,7 +229,7 @@ input, select {
 }
 input:focus, select:focus {
   border-color: var(--grn);
-  box-shadow: 0 0 0 3px rgba(42,122,80,.12);
+  box-shadow: 0 0 0 3px rgba(91,140,255,.12);
   background: var(--sur);
 }
 input::placeholder { color: var(--ink4); }
@@ -300,7 +300,7 @@ input.error { border-color: var(--red); }
 .google-btn {
   width: 100%;
   padding: 12px 16px;
-  background: #fff;
+  background:rgba(255,255,255,.05);
   border: 1.5px solid var(--bdr);
   border-radius: 11px;
   font-family: 'DM Sans', sans-serif;
@@ -472,6 +472,7 @@ input.error { border-color: var(--red); }
 }
 </style>
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 
@@ -504,21 +505,21 @@ input.error { border-color: var(--red); }
       </div>
 
       <div class="sl-roi-row">
-        <div class="sl-roi-cell" style="background:rgba(192,57,43,.08);border:1px solid rgba(192,57,43,.18)">
+        <div class="sl-roi-cell" style="background:rgba(255,92,92,.08);border:1px solid rgba(255,92,92,.18)">
           <span style="font-size:11px;color:rgba(241,148,138,.55)">Coût emails / an</span>
           <span id="sl-cost" style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:#F1948A">19 800€</span>
         </div>
-        <div class="sl-roi-cell" style="background:rgba(42,122,80,.08);border:1px solid rgba(42,122,80,.18)">
-          <span style="font-size:11px;color:rgba(62,158,106,.55)">Économies / an</span>
+        <div class="sl-roi-cell" style="background:rgba(91,140,255,.08);border:1px solid rgba(91,140,255,.18)">
+          <span style="font-size:11px;color:rgba(127,168,255,.55)">Économies / an</span>
           <span id="sl-savings" style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--grn-m)">18 612€</span>
         </div>
-        <div class="sl-roi-cell" style="background:rgba(29,78,216,.08);border:1px solid rgba(29,78,216,.18)">
+        <div class="sl-roi-cell" style="background:rgba(91,140,255,.08);border:1px solid rgba(91,140,255,.18)">
           <span style="font-size:11px;color:rgba(129,140,248,.55)">Temps libéré / an</span>
           <span id="sl-days" style="font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:#818CF8">41 jours</span>
         </div>
       </div>
 
-      <div style="text-align:center;padding:13px;background:rgba(42,122,80,.1);border:1px solid rgba(42,122,80,.22);border-radius:10px;font-size:13px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:-.01em">
+      <div style="text-align:center;padding:13px;background:rgba(91,140,255,.1);border:1px solid rgba(91,140,255,.22);border-radius:10px;font-size:13px;font-weight:700;color:rgba(255,255,255,.85);letter-spacing:-.01em">
         Rentabilisé dès le premier mois.
       </div>
     </div>
@@ -772,7 +773,7 @@ input.error { border-color: var(--red); }
           </button>
 
           <button class="mail-provider-btn" type="button" onclick="connectProvider('outlook')">
-            <div class="prov-ico" style="background:#EFF6FF">
+            <div class="prov-ico" style="background:rgba(91,140,255,.14)">
               <svg width="18" height="18" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="6" fill="#0078D4"/><text x="8" y="34" font-size="28" font-family="Arial" fill="white" font-weight="bold">O</text></svg>
             </div>
             <span class="prov-name">Connecter Outlook / Microsoft 365</span>
@@ -1077,19 +1078,19 @@ const IMAP_PRESETS = {
     host: 'outlook.office365.com', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe Microsoft',
     note: '<strong>Outlook / Microsoft 365 :</strong> activez IMAP dans Outlook → Paramètres → Courrier → Synchronisation du courrier → Activer IMAP.<br>Avec la double authentification, créez un mot de passe d\'application dans votre compte Microsoft → Sécurité.',
-    noteBg: '#EFF6FF', noteBdr: '#BFDBFE', noteColor: '#1E3A5F',
+    noteBg: 'rgba(91,140,255,.14)', noteBdr: 'rgba(91,140,255,.35)', noteColor: '#1E3A5F',
   },
   ovh: {
     host: 'ssl0.ovh.net', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe OVH',
     note: '<strong>OVH Mail :</strong> utilisez votre adresse email OVH et votre mot de passe OVH habituel. Serveur : ssl0.ovh.net · port 993.<br>Si la connexion échoue, vérifiez que votre compte email OVH est bien activé dans l\'espace client OVH → Emails.',
-    noteBg: '#FFF7ED', noteBdr: '#FED7AA', noteColor: '#92400E',
+    noteBg: 'rgba(255,196,107,.12)', noteBdr: 'rgba(253,186,116,.30)', noteColor: '#92400E',
   },
   orange: {
     host: 'imap.orange.fr', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe Orange',
     note: '<strong>Orange Mail :</strong> utilisez votre adresse @orange.fr et votre mot de passe Orange habituel.<br>⚠️ Si vous avez activé la double authentification, créez un <strong>mot de passe dédié</strong> sur orange.fr → Mon compte → Sécurité.',
-    noteBg: '#FFF7ED', noteBdr: '#FED7AA', noteColor: '#C2410C',
+    noteBg: 'rgba(255,196,107,.12)', noteBdr: 'rgba(253,186,116,.30)', noteColor: '#FDBA74',
   },
   sfr: {
     host: 'imap.sfr.fr', port: 993, ssl: 'SSL/TLS',
@@ -1101,61 +1102,61 @@ const IMAP_PRESETS = {
     host: 'imap.free.fr', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe Free',
     note: '<strong>Free Mail :</strong> utilisez votre adresse @free.fr et votre mot de passe Free. Le login est votre identifiant Freebox (sans @free.fr).<br>Serveur : imap.free.fr · port 993.',
-    noteBg: '#F5F3FF', noteBdr: '#DDD6FE', noteColor: '#5B21B6',
+    noteBg: 'rgba(159,123,255,.14)', noteBdr: 'rgba(159,123,255,.35)', noteColor: '#C4B5FD',
   },
   yahoo: {
     host: 'imap.mail.yahoo.com', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe d\'application Yahoo',
     note: '<strong>Yahoo Mail :</strong> vous devez créer un <strong>mot de passe d\'application</strong> — votre mot de passe habituel ne fonctionnera pas.<br>Yahoo → Infos du compte → Sécurité → Générer un mot de passe d\'application.',
-    noteBg: '#FAF5FF', noteBdr: '#E9D5FF', noteColor: '#7E22CE',
+    noteBg: 'rgba(159,123,255,.14)', noteBdr: 'rgba(216,180,254,.35)', noteColor: '#D8B4FE',
   },
   icloud: {
     host: 'imap.mail.me.com', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe d\'app iCloud',
     note: '<strong>iCloud Mail :</strong> activez iCloud Mail sur <a href="https://icloud.com" target="_blank" rel="noopener" style="color:var(--grn)">icloud.com</a> → Paramètres → iCloud Mail.<br>Créez ensuite un <strong>mot de passe d\'app</strong> sur <a href="https://appleid.apple.com" target="_blank" rel="noopener" style="color:var(--grn)">appleid.apple.com</a> → Connexion et sécurité → Mots de passe pour les apps.',
-    noteBg: '#EFF6FF', noteBdr: '#BFDBFE', noteColor: '#1D4ED8',
+    noteBg: 'rgba(91,140,255,.14)', noteBdr: 'rgba(91,140,255,.35)', noteColor: '#7FA8FF',
   },
   infomaniak: {
     host: 'mail.infomaniak.com', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe Infomaniak',
     note: '<strong>Infomaniak kMail :</strong> utilisez votre adresse email Infomaniak et votre mot de passe habituel.<br>Si votre compte utilise la double authentification, créez un mot de passe d\'application dans Manager Infomaniak → Profil → Sécurité.',
-    noteBg: '#F0FDF4', noteBdr: '#BBF7D0', noteColor: '#15803D',
+    noteBg: 'rgba(61,214,140,.12)', noteBdr: 'rgba(61,214,140,.35)', noteColor: '#6EE7A8',
   },
   ionos: {
     host: 'imap.ionos.fr', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe IONOS',
     note: '<strong>IONOS / 1&1 :</strong> utilisez votre adresse email IONOS et votre mot de passe habituel. Serveur : imap.ionos.fr · port 993.<br>Vous pouvez vérifier vos paramètres dans l\'espace client IONOS → Email → Paramètres.',
-    noteBg: '#EFF6FF', noteBdr: '#BFDBFE', noteColor: '#1E40AF',
+    noteBg: 'rgba(91,140,255,.14)', noteBdr: 'rgba(91,140,255,.35)', noteColor: '#93B4FF',
   },
   gandi: {
     host: 'mail.gandi.net', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe Gandi',
     note: '<strong>Gandi Mail :</strong> utilisez votre adresse email Gandi et votre mot de passe de boîte mail (différent du mot de passe de votre compte Gandi).<br>Gérez vos boîtes sur admin.gandi.net → Domaines → Email.',
-    noteBg: '#FFF1F2', noteBdr: '#FECDD3', noteColor: '#9F1239',
+    noteBg: 'rgba(255,92,92,.10)', noteBdr: 'rgba(255,92,92,.30)', noteColor: '#FDA4AF',
   },
   laposte: {
     host: 'imap.laposte.net', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe La Poste',
     note: '<strong>La Poste Mail :</strong> utilisez votre adresse @laposte.net et votre mot de passe habituel.<br>Activez l\'accès IMAP si nécessaire : webmail La Poste → Paramètres → Accès POP / IMAP → Activer IMAP.',
-    noteBg: '#FEFCE8', noteBdr: '#FEF08A', noteColor: '#713F12',
+    noteBg: 'rgba(255,196,107,.10)', noteBdr: 'rgba(253,224,71,.30)', noteColor: '#FDE68A',
   },
   zoho: {
     host: 'imap.zoho.eu', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe Zoho',
     note: '<strong>Zoho Mail (EU) :</strong> activez IMAP dans Zoho Mail → Paramètres → Accès mail → IMAP.<br>Créez un <strong>mot de passe d\'application</strong> si vous utilisez l\'authentification à deux facteurs : Zoho → Mon compte → Sécurité → Mots de passe d\'application.',
-    noteBg: '#FFF7ED', noteBdr: '#FED7AA', noteColor: '#C2410C',
+    noteBg: 'rgba(255,196,107,.12)', noteBdr: 'rgba(253,186,116,.30)', noteColor: '#FDBA74',
   },
   protonmail: {
     host: '127.0.0.1', port: 1143, ssl: 'Aucune (Bridge)',
     pwdLabel: 'Mot de passe Bridge ProtonMail',
     note: '<strong>ProtonMail :</strong> nécessite <a href="https://proton.me/mail/bridge" target="_blank" rel="noopener" style="color:var(--grn)">ProtonMail Bridge</a> installé sur votre ordinateur.<br>Une fois Bridge lancé, activez IMAP et copiez les identifiants affichés dans l\'app Bridge. ⚠️ Fonctionne uniquement depuis votre machine locale.',
-    noteBg: '#FAF5FF', noteBdr: '#E9D5FF', noteColor: '#7E22CE',
+    noteBg: 'rgba(159,123,255,.14)', noteBdr: 'rgba(216,180,254,.35)', noteColor: '#D8B4FE',
   },
   other: {
     host: '', port: 993, ssl: 'SSL/TLS',
     pwdLabel: 'Mot de passe',
     note: '<strong>Paramètres IMAP courants :</strong><br>Bbox / Bouygues : imap.bbox.fr · 993<br>Wanadoo / Orange : imap.orange.fr · 993<br>Alice / Telecom : imap.aliceadsl.fr · 993<br>Club-Internet : imap.club-internet.fr · 993<br>Domaine perso : contactez votre hébergeur pour les paramètres IMAP.',
-    noteBg: '#F8F7F5', noteBdr: '#E3DFD7', noteColor: '#3C3C3A',
+    noteBg: '#F8F7F5', noteBdr: 'rgba(255,255,255,.08)', noteColor: '#C6CCD8',
   },
 };
 

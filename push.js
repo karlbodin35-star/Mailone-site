@@ -61,7 +61,7 @@
     banner.id = 'push-banner';
     banner.style.cssText = `
       position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-      background:#18181b;color:#fff;border-radius:14px;padding:14px 18px;
+      background:#0C1018;color:#fff;border-radius:14px;padding:14px 18px;
       display:flex;align-items:center;gap:14px;z-index:9999;
       box-shadow:0 8px 32px rgba(0,0,0,.3);max-width:420px;width:calc(100% - 32px);
       border:1px solid rgba(255,255,255,.08);animation:slideUp .3s ease;
@@ -72,7 +72,7 @@
         <div style="font-size:13px;font-weight:700;margin-bottom:2px">Activer les notifications</div>
         <div style="font-size:11px;color:rgba(255,255,255,.5)">Soyez alerté de vos nouveaux emails importants.</div>
       </div>
-      <button id="push-accept" style="padding:8px 14px;background:#22c55e;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0">Activer</button>
+      <button id="push-accept" style="padding:8px 14px;background:#5B8CFF;color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;flex-shrink:0">Activer</button>
       <button id="push-dismiss" style="width:28px;height:28px;background:rgba(255,255,255,.08);border:none;border-radius:7px;color:#fff;cursor:pointer;font-size:14px;flex-shrink:0">✕</button>
     `;
 

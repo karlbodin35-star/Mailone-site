@@ -1,0 +1,92 @@
+/* ══════════════════════════════════════════════════════════════
+   MAILONE — Nouvelle direction artistique (sombre / futuriste)
+   Chargée APRÈS le <style> de chaque page : les variables ci-dessous
+   remplacent l'ancienne palette claire sur tout le site.
+   Référence : design system du dashboard (bleu électrique + violet,
+   glassmorphism, fond nuit avec orbes et grille).
+   ══════════════════════════════════════════════════════════════ */
+:root{
+  /* ── Fonds ─────────────────────────────────────────────── */
+  --bg:  #07090F;
+  --bg2: #0C1018;
+  --bg3: #101623;
+  --sur: rgba(255,255,255,.04);
+  --bdr: rgba(255,255,255,.08);
+  --bdr2:rgba(255,255,255,.16);
+
+  /* ── Texte ─────────────────────────────────────────────── */
+  --ink: #EDF0F5;
+  --ink2:#C6CCD8;
+  --ink3:#8B93A5;
+  --ink4:#626B7F;
+
+  /* ── Accent principal (ex-vert → bleu électrique) ──────── */
+  --grn:   #5B8CFF;
+  --grn-d: #7B6CFF;   /* hover : glisse vers le violet (dégradé DA) */
+  --grn-m: #7FA8FF;
+  --grn-l: rgba(91,140,255,.12);
+  --green:   #5B8CFF;
+  --green-l: rgba(91,140,255,.12);
+
+  /* ── Sections sombres des anciennes pages claires ──────── */
+  --drk:  #0C1018;
+  --drk2: #101623;
+  --drk-bdr:rgba(255,255,255,.08);
+  --drk-txt:rgba(237,240,245,.5);
+
+  /* ── Couleurs sémantiques ──────────────────────────────── */
+  --red:    #FF5C5C;  --red-l:    rgba(255,92,92,.12);
+  --amber:  #FFC46B;  --amber-l:  rgba(255,196,107,.12);
+  --blue:   #7FA8FF;  --blue-l:   rgba(91,140,255,.14);
+  --purple: #9F7BFF;  --purple-l: rgba(159,123,255,.14);
+  --teal:   #3DD68C;  --teal-l:   rgba(61,214,140,.12);
+
+  /* ── Catégories mails (app.html) ───────────────────────── */
+  --urgent: #FF5C5C;  --urgent-bg: rgba(255,92,92,.12);
+  --quote:  #7FA8FF;  --quote-bg:  rgba(91,140,255,.14);
+  --appt:   #3DD68C;  --appt-bg:   rgba(61,214,140,.12);
+  --invoice:#FFC46B;  --invoice-bg:rgba(255,196,107,.12);
+
+  /* ── Panneau IA (assistant.html) ───────────────────────── */
+  --ai-bg: #0C1018;
+  --ai-sur:#101623;
+  --ai-bdr:rgba(255,255,255,.08);
+
+  /* ── Tokens DA officiels (disponibles partout) ─────────── */
+  --glass:rgba(255,255,255,.04);
+  --glass-border:rgba(255,255,255,.08);
+  --glass-hover:rgba(255,255,255,.07);
+  --text:#EDF0F5;
+  --text-dim:#8B93A5;
+  --accent:#5B8CFF;
+  --accent-2:#9F7BFF;
+  --accent-glow:rgba(91,140,255,.35);
+  --urgent-glow:rgba(255,92,92,.25);
+  --ok:#3DD68C;
+}
+
+/* ── Fond nuit : orbes bleu/violet + grille subtile ────────── */
+body{
+  background:
+    radial-gradient(620px 620px at -80px -100px,  rgba(30,58,138,.38), transparent 70%),
+    radial-gradient(560px 560px at calc(100% + 60px) calc(100% + 80px), rgba(76,29,149,.35), transparent 70%),
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+    var(--bg);
+  background-size:auto, auto, 48px 48px, 48px 48px, auto;
+  background-attachment:fixed;
+  color:var(--ink);
+}
+
+/* ── Détails globaux ───────────────────────────────────────── */
+::selection{background:rgba(91,140,255,.35);color:#fff}
+*{scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.14) transparent}
+*::-webkit-scrollbar{width:9px;height:9px}
+*::-webkit-scrollbar-thumb{background:rgba(255,255,255,.14);border-radius:5px}
+*::-webkit-scrollbar-track{background:transparent}
+
+input,select,textarea{color-scheme:dark}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}

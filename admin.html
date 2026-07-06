@@ -8,7 +8,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0F0E0C;--bg2:#19181A;--bg3:#242018;--sur:#1E1C18;--bdr:#2E2B24;--bdr2:#3C3830;--ink:#F8F7F5;--ink2:#C8C3BB;--ink3:#6B6B67;--ink4:#5A5650;--green:#2A7A50;--green-l:rgba(42,122,80,.15);--amber:#B45309;--amber-l:rgba(180,83,9,.15);--red:#C0392B;--red-l:rgba(192,57,43,.15);--blue:#1D4ED8;--blue-l:rgba(29,78,216,.15);--teal:#2A7A50;--purple:#6D28D9}
+:root{--bg:#0F0E0C;--bg2:#19181A;--bg3:#242018;--sur:#1E1C18;--bdr:#2E2B24;--bdr2:#3C3830;--ink:#F8F7F5;--ink2:#C8C3BB;--ink3:#8B93A5;--ink4:#5A5650;--green:#5B8CFF;--green-l:rgba(91,140,255,.15);--amber:#FFC46B;--amber-l:rgba(255,196,107,.15);--red:#FF5C5C;--red-l:rgba(255,92,92,.15);--blue:#7FA8FF;--blue-l:rgba(91,140,255,.15);--teal:#5B8CFF;--purple:#9F7BFF}
 html,body{min-height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
 .app{display:flex;min-height:100vh}
 
@@ -102,7 +102,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 @media(max-width:900px){.kpis{grid-template-columns:1fr 1fr}.two-cols{grid-template-columns:1fr}.sidebar{width:180px}.main{margin-left:180px}}
 
 /* admin is natively dark — light mode override */
-[data-theme="light"]{--bg:#F8F7F5;--bg2:#FFFFFF;--bg3:#EFECE6;--sur:#FFFFFF;--bdr:#E3DFD7;--bdr2:#CBC7BE;--ink:#111110;--ink2:#3C3C3A;--ink3:#6B6B67;--ink4:#9E9E9A;--green-l:rgba(42,122,80,.12);--amber-l:rgba(180,83,9,.12);--red-l:rgba(192,57,43,.12);--blue-l:rgba(29,78,216,.12)}
+[data-theme="light"]{--bg:#F8F7F5;--bg2:#FFFFFF;--bg3:#0C1018;--sur:#FFFFFF;--bdr:rgba(255,255,255,.08);--bdr2:rgba(255,255,255,.16);--ink:#EDF0F5;--ink2:#C6CCD8;--ink3:#8B93A5;--ink4:#7C8496;--green-l:rgba(91,140,255,.12);--amber-l:rgba(255,196,107,.12);--red-l:rgba(255,92,92,.12);--blue-l:rgba(91,140,255,.12)}
 [data-theme="light"] body{background:var(--bg);color:var(--ink)}
 [data-theme="light"] .sidebar{background:var(--bg2);border-right-color:var(--bdr)}
 [data-theme="light"] .sb-logo,[data-theme="light"] .sb-item,[data-theme="light"] .sb-lbl,[data-theme="light"] .sb-logout{color:var(--ink3)}
@@ -129,6 +129,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 <meta name="twitter:description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
 <meta name="description" content="MailOne trie, résume et répond à vos mails. Pour artisans et PME.">
 <link rel="stylesheet" href="shared.css">
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 <div class="app">
@@ -280,7 +281,7 @@ async function loadStats() {
     });
 
     if (res.status === 403) {
-      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;flex-direction:column;gap:12px"><div style="font-size:48px">🔒</div><div style="font-size:18px;font-weight:700">Accès réservé aux administrateurs</div><a href="app.html" style="color:#0d9373">← Retour à l\'app</a></div>';
+      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;flex-direction:column;gap:12px"><div style="font-size:48px">🔒</div><div style="font-size:18px;font-weight:700">Accès réservé aux administrateurs</div><a href="app.html" style="color:#5B8CFF">← Retour à l\'app</a></div>';
       return;
     }
 

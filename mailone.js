@@ -139,7 +139,7 @@ function showToast(ico, msg, duration = 3200) {
   let t = document.getElementById('global-toast');
   if (!t) {
     t = document.createElement('div'); t.id = 'global-toast';
-    t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#1a1814;color:#f5f3ef;border-radius:10px;padding:11px 16px;font-size:12px;font-family:\'Instrument Sans\',sans-serif;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9998;max-width:320px;border:1px solid rgba(255,255,255,.08)';
+    t.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#0C1018;color:#EDF0F5;border-radius:10px;padding:11px 16px;font-size:12px;font-family:\'DM Sans\',sans-serif;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9998;max-width:320px;border:1px solid rgba(255,255,255,.08)';
     document.body.appendChild(t);
   }
   t.innerHTML = `<span>${ico}</span><span>${msg}</span>`;
@@ -155,9 +155,9 @@ function setButtonLoading(btn, loading, text = 'Chargement…') {
 
 function showFieldError(id, msg) {
   const el = document.getElementById(id); if (!el) return;
-  el.style.borderColor = '#d93a28'; el.style.boxShadow = '0 0 0 3px rgba(217,58,40,.1)';
+  el.style.borderColor = '#FF5C5C'; el.style.boxShadow = '0 0 0 3px rgba(217,58,40,.1)';
   let err = el.parentElement.querySelector('.field-error');
-  if (!err) { err = document.createElement('div'); err.className = 'field-error'; err.style.cssText = 'font-size:11px;color:#d93a28;margin-top:4px'; el.parentElement.appendChild(err); }
+  if (!err) { err = document.createElement('div'); err.className = 'field-error'; err.style.cssText = 'font-size:11px;color:#FF5C5C;margin-top:4px'; el.parentElement.appendChild(err); }
   err.textContent = msg;
 }
 

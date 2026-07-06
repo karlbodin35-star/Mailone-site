@@ -21,20 +21,20 @@
 <style>
 :root {
   --bg:    #F8F7F5;
-  --bg2:   #EFECE6;
+  --bg2:   #0C1018;
   --sur:   #FFFFFF;
-  --bdr:   #E3DFD7;
-  --bdr2:  #CBC7BE;
-  --ink:   #111110;
-  --ink2:  #3C3C3A;
-  --ink3:  #6B6B67;
-  --ink4:  #9E9E9A;
-  --grn:   #2A7A50;
-  --grn-m: #3E9E6A;
-  --grn-d: #1E5C3C;
-  --grn-l: #EBF5EF;
-  --amber: #B45309;
-  --amber-l: #FEF9EC;
+  --bdr:   rgba(255,255,255,.08);
+  --bdr2:  rgba(255,255,255,.16);
+  --ink:   #EDF0F5;
+  --ink2:  #C6CCD8;
+  --ink3:  #8B93A5;
+  --ink4:  #7C8496;
+  --grn:   #5B8CFF;
+  --grn-m: #7FA8FF;
+  --grn-d: #4E79E8;
+  --grn-l: rgba(91,140,255,.12);
+  --amber: #FFC46B;
+  --amber-l: rgba(255,196,107,.12);
   --ease: cubic-bezier(0.25, 0, 0, 1);
   --dur: 250ms;
 }
@@ -47,7 +47,7 @@ body { overflow-x: hidden; -webkit-font-smoothing: antialiased; }
 /* NAV */
 nav {
   position: sticky; top: 0; z-index: 100;
-  height: 60px; background: rgba(248,247,245,.92);
+  height: 60px; background: rgba(7,9,15,.92);
   backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--bdr);
   display: flex; align-items: center; padding: 0 clamp(20px,5vw,60px); gap: 12px;
@@ -95,7 +95,7 @@ nav {
 }
 .featured-article:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,.08); }
 .fa-img {
-  height: 196px; background: linear-gradient(135deg, #131210 0%, #2A3D2E 100%);
+  height: 196px; background: linear-gradient(135deg, #0C1018 0%, #2A3D2E 100%);
   display: flex; align-items: center; justify-content: center; font-size: 64px;
   position: relative; overflow: hidden;
 }
@@ -149,7 +149,7 @@ nav {
 }
 .newsletter-input:focus { border-color: var(--grn); }
 .newsletter-btn {
-  width: 100%; padding: 10px; background: var(--ink); color: var(--bg);
+  width: 100%; padding: 10px; background: linear-gradient(90deg,#5B8CFF,#7B6CFF); color: #fff;
   border: none; border-radius: 9px; font-family: 'Space Grotesk', sans-serif;
   font-size: 13px; font-weight: 700; cursor: pointer;
   transition: opacity var(--dur) var(--ease);
@@ -163,7 +163,7 @@ nav {
 
 /* CTA CARD */
 .sidebar-cta {
-  background: var(--ink); border-radius: 14px; padding: 20px; text-align: center;
+  background: var(--bg2); border-radius: 14px; padding: 20px; text-align: center; border:1px solid rgba(255,255,255,.08);
 }
 .cta-ico { font-size: 26px; margin-bottom: 10px; }
 .cta-title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px; }
@@ -176,9 +176,9 @@ nav {
 .cta-link:hover { background: var(--grn-d); }
 
 /* FOOTER */
-footer { background: var(--ink); padding: 40px clamp(20px,5vw,60px) 24px; }
+footer { background: var(--bg2); padding: 40px clamp(20px,5vw,60px) 24px; }
 .foot-in { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; }
-.foot-logo { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: rgba(248,247,245,.9); letter-spacing: -.5px; display: flex; align-items: center; gap: 5px; text-decoration: none; }
+.foot-logo { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; color: rgba(7,9,15,.9); letter-spacing: -.5px; display: flex; align-items: center; gap: 5px; text-decoration: none; }
 .foot-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--grn-m); margin-left: 3px; }
 .foot-links { display: flex; gap: 18px; flex-wrap: wrap; }
 .foot-links a { font-size: 12px; color: rgba(255,255,255,.38); text-decoration: none; transition: color var(--dur) var(--ease); }
@@ -191,6 +191,7 @@ footer { background: var(--ink); padding: 40px clamp(20px,5vw,60px) 24px; }
   .articles-grid { grid-template-columns: 1fr; }
 }
 </style>
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 
@@ -267,7 +268,7 @@ footer { background: var(--ink); padding: 40px clamp(20px,5vw,60px) 24px; }
       </article>
 
       <article class="article-card" onclick="openArticle('urgences')" role="button" tabindex="0">
-        <div class="ac-img" style="background:#FEF0EE" aria-hidden="true">🚨</div>
+        <div class="ac-img" style="background:rgba(255,92,92,.12)" aria-hidden="true">🚨</div>
         <div class="ac-body">
           <div class="ac-cat">Urgences</div>
           <h3 class="ac-title">Chaudière en panne à 23h : comment répondre à une urgence en 30 secondes</h3>
@@ -277,7 +278,7 @@ footer { background: var(--ink); padding: 40px clamp(20px,5vw,60px) 24px; }
       </article>
 
       <article class="article-card" onclick="openArticle('ia-artisan')" role="button" tabindex="0">
-        <div class="ac-img" style="background:#F5F3FF" aria-hidden="true">🤖</div>
+        <div class="ac-img" style="background:rgba(159,123,255,.14)" aria-hidden="true">🤖</div>
         <div class="ac-body">
           <div class="ac-cat">Intelligence artificielle</div>
           <h3 class="ac-title">L'IA pour les artisans : démystifier la technologie sans blabla</h3>
@@ -287,7 +288,7 @@ footer { background: var(--ink); padding: 40px clamp(20px,5vw,60px) 24px; }
       </article>
 
       <article class="article-card" onclick="openArticle('gmail-pro')" role="button" tabindex="0">
-        <div class="ac-img" style="background:#FEF0EE" aria-hidden="true">📧</div>
+        <div class="ac-img" style="background:rgba(255,92,92,.12)" aria-hidden="true">📧</div>
         <div class="ac-body">
           <div class="ac-cat">Outils</div>
           <h3 class="ac-title">5 réglages Gmail que tout artisan devrait activer aujourd'hui</h3>
@@ -297,7 +298,7 @@ footer { background: var(--ink); padding: 40px clamp(20px,5vw,60px) 24px; }
       </article>
 
       <article class="article-card" onclick="openArticle('facturation')" role="button" tabindex="0">
-        <div class="ac-img" style="background:#FEF9EC" aria-hidden="true">💰</div>
+        <div class="ac-img" style="background:rgba(255,196,107,.12)" aria-hidden="true">💰</div>
         <div class="ac-body">
           <div class="ac-cat">Trésorerie</div>
           <h3 class="ac-title">Pourquoi vos factures ne sont pas payées (et comment l'éviter)</h3>

@@ -13,20 +13,20 @@
 <style>
 :root {
   --bg:    #F8F7F5;
-  --bg2:   #EFECE6;
+  --bg2:   #0C1018;
   --sur:   #FFFFFF;
-  --bdr:   #E3DFD7;
-  --bdr2:  #CBC7BE;
-  --ink:   #111110;
-  --ink2:  #3C3C3A;
-  --ink3:  #6B6B67;
-  --ink4:  #9E9E9A;
-  --grn:   #2A7A50;
-  --grn-d: #1E5C3C;
-  --grn-l: #EBF5EF;
-  --grn-m: #3E9E6A;
-  --drk:   #131210;
-  --drk2:  #1C1B19;
+  --bdr:   rgba(255,255,255,.08);
+  --bdr2:  rgba(255,255,255,.16);
+  --ink:   #EDF0F5;
+  --ink2:  #C6CCD8;
+  --ink3:  #8B93A5;
+  --ink4:  #7C8496;
+  --grn:   #5B8CFF;
+  --grn-d: #4E79E8;
+  --grn-l: rgba(91,140,255,.12);
+  --grn-m: #7FA8FF;
+  --drk:   #0C1018;
+  --drk2:  #101623;
   --px: clamp(20px, 5vw, 72px);
   --r: 12px;
   --ease: cubic-bezier(0.25, 0, 0, 1);
@@ -42,7 +42,7 @@ nav {
   position: sticky; top: 0; z-index: 100;
   display: flex; align-items: center; gap: 12px;
   padding: 14px var(--px);
-  background: rgba(248,247,245,.94);
+  background: rgba(7,9,15,.94);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--bdr);
 }
@@ -145,7 +145,7 @@ nav {
   transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
 .mail-item:hover { background: rgba(255,255,255,.05); }
-.mail-item.active { background: rgba(62,158,106,.08); border-color: rgba(62,158,106,.25); }
+.mail-item.active { background: rgba(127,168,255,.08); border-color: rgba(127,168,255,.25); }
 .mi-row { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
 .mi-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 .mi-sender { font-size: 11px; font-weight: 700; color: #fff; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -214,7 +214,7 @@ nav {
 /* Summary */
 .ai-summary-wrap { margin-bottom: 12px; opacity: 0; transform: translateY(6px); transition: opacity .3s ease .1s, transform .3s ease .1s; }
 .ai-summary-wrap.show { opacity: 1; transform: translateY(0); }
-.ai-summary-label { font-size: 9px; font-weight: 800; color: rgba(62,158,106,.7); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 5px; }
+.ai-summary-label { font-size: 9px; font-weight: 800; color: rgba(127,168,255,.7); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 5px; }
 .ai-summary-text { font-size: 12px; color: rgba(255,255,255,.7); font-style: italic; line-height: 1.5; }
 
 /* Reply */
@@ -246,7 +246,7 @@ nav {
   transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
 }
 .copy-btn:hover { background: rgba(255,255,255,.13); color: #fff; }
-.copy-btn.copied { background: rgba(62,158,106,.18); border-color: rgba(62,158,106,.3); color: var(--grn-m); }
+.copy-btn.copied { background: rgba(127,168,255,.18); border-color: rgba(127,168,255,.3); color: var(--grn-m); }
 .try-btn {
   padding: 9px 16px; border-radius: 8px;
   background: var(--grn); border: none;
@@ -258,7 +258,7 @@ nav {
 .try-btn:hover { background: var(--grn-d); }
 
 /* Error */
-.ai-error { padding: 12px 14px; background: rgba(192,57,43,.12); border: 1px solid rgba(192,57,43,.25); border-radius: 9px; font-size: 11px; color: #FCA5A5; line-height: 1.6; }
+.ai-error { padding: 12px 14px; background: rgba(255,92,92,.12); border: 1px solid rgba(255,92,92,.25); border-radius: 9px; font-size: 11px; color: #FCA5A5; line-height: 1.6; }
 
 /* ── STATS ── */
 .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 28px; }
@@ -298,6 +298,7 @@ nav {
 </style>
 <link rel="stylesheet" href="shared.css">
 <script src="mailone.js"></script>
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 
@@ -439,8 +440,8 @@ const SCENARIOS = {
         email: 'b.talon@orange.fr',
         subject: 'URGENT — Chaudière en panne, pas de chauffage',
         date: 'Aujourd\'hui, 07h48',
-        color: '#C0392B',
-        tagBg: 'rgba(192,57,43,.18)', tagColor: '#FCA5A5', tag: '🚨 Urgent',
+        color: '#FF5C5C',
+        tagBg: 'rgba(255,92,92,.18)', tagColor: '#FCA5A5', tag: '🚨 Urgent',
         body: `Bonjour,
 
 Ma chaudière est tombée en panne cette nuit vers 3h du matin. Le code erreur E3 s'affiche sur l'écran. Il fait 12°C dans la maison et j'ai deux enfants en bas âge à la maison.
@@ -455,8 +456,8 @@ Bernard Talon — 06 12 34 56 78`,
         email: 's.leclerc@gmail.com',
         subject: 'Re : Devis — Rénovation SDB 12m² — Relance',
         date: 'Aujourd\'hui, 09h15',
-        color: '#1D4ED8',
-        tagBg: 'rgba(29,78,216,.18)', tagColor: '#93C5FD', tag: '📋 Devis',
+        color: '#7FA8FF',
+        tagBg: 'rgba(91,140,255,.18)', tagColor: '#93C5FD', tag: '📋 Devis',
         body: `Bonjour,
 
 Je vous avais contacté il y a 2 semaines concernant un devis pour la rénovation complète de ma salle de bain (12m², remplacement baignoire par douche à l'italienne, nouveau meuble vasque, carrelage sol et murs).
@@ -473,8 +474,8 @@ Sandrine Leclerc`,
         email: 'contact@agence-bellevue.fr',
         subject: 'RDV diagnostic plomberie — 14 rue des Lilas',
         date: 'Hier, 16h30',
-        color: '#2A7A50',
-        tagBg: 'rgba(42,122,80,.18)', tagColor: '#6EE7B7', tag: '📅 RDV',
+        color: '#5B8CFF',
+        tagBg: 'rgba(91,140,255,.18)', tagColor: '#6EE7B7', tag: '📅 RDV',
         body: `Bonjour,
 
 Nous gérons la vente du bien situé au 14 rue des Lilas. Un diagnostic plomberie est requis avant la signature du compromis.
@@ -496,8 +497,8 @@ Agence Bellevue Immobilier`,
         email: 'syndic@lespins.fr',
         subject: 'URGENT — Panne électrique partielle immeuble',
         date: 'Aujourd\'hui, 08h12',
-        color: '#C0392B',
-        tagBg: 'rgba(192,57,43,.18)', tagColor: '#FCA5A5', tag: '🚨 Urgent',
+        color: '#FF5C5C',
+        tagBg: 'rgba(255,92,92,.18)', tagColor: '#FCA5A5', tag: '🚨 Urgent',
         body: `Bonjour,
 
 Je suis le syndic de la Résidence Les Pins, 8 avenue du Parc. Depuis ce matin 7h, quatre appartements (n°3, 5, 7 et 9) sont complètement sans courant.
@@ -513,8 +514,8 @@ Contactez-moi sur mon portable : 06 45 67 89 01`,
         email: 'm.fontaine@sfr.fr',
         subject: 'Devis mise aux normes tableau électrique — Maison 1970',
         date: 'Aujourd\'hui, 10h30',
-        color: '#1D4ED8',
-        tagBg: 'rgba(29,78,216,.18)', tagColor: '#93C5FD', tag: '📋 Devis',
+        color: '#7FA8FF',
+        tagBg: 'rgba(91,140,255,.18)', tagColor: '#93C5FD', tag: '📋 Devis',
         body: `Bonjour,
 
 Je mets en vente ma maison construite en 1970. Le notaire m'informe qu'un diagnostic électrique obligatoire révèle que le tableau est non conforme : pas de disjoncteur différentiel 30mA, pas de protection de terre sur les circuits.
@@ -530,8 +531,8 @@ Michel Fontaine — 06 98 76 54 32`,
         email: 'compta@immosud.fr',
         subject: 'Règlement intervention N°2024-156 — Besoin de votre RIB',
         date: 'Lundi, 11h05',
-        color: '#B45309',
-        tagBg: 'rgba(180,83,9,.18)', tagColor: '#FCD34D', tag: '💰 Facture',
+        color: '#FFC46B',
+        tagBg: 'rgba(255,196,107,.18)', tagColor: '#FCD34D', tag: '💰 Facture',
         body: `Bonjour,
 
 Notre service comptabilité a validé votre facture n°2024-156 de 1 840€ TTC correspondant à votre intervention du 12 mars dernier.
@@ -553,8 +554,8 @@ Cabinet IMMO SUD — Service comptabilité`,
         email: 'jp.duchamp@duchamp-sas.fr',
         subject: 'RÉCLAMATION — Livraison incorrecte — Commande 4521',
         date: 'Aujourd\'hui, 09h05',
-        color: '#C0392B',
-        tagBg: 'rgba(192,57,43,.18)', tagColor: '#FCA5A5', tag: '🚨 Urgent',
+        color: '#FF5C5C',
+        tagBg: 'rgba(255,92,92,.18)', tagColor: '#FCA5A5', tag: '🚨 Urgent',
         body: `Madame, Monsieur,
 
 Nous avons réceptionné ce matin la commande n°4521 passée le 15 mars. Malheureusement, les articles livrés ne correspondent pas à notre commande : nous avons reçu des cartouches HP noires (réf. CE278A) au lieu des cartouches Epson couleur que nous avions commandées.
@@ -570,8 +571,8 @@ Jean-Paul Duchamp, Directeur — Duchamp SAS`,
         email: 'marches@villefranche.fr',
         subject: 'Appel d\'offres — Fournitures de bureau 2025-2026',
         date: 'Hier, 14h20',
-        color: '#1D4ED8',
-        tagBg: 'rgba(29,78,216,.18)', tagColor: '#93C5FD', tag: '📋 Devis',
+        color: '#7FA8FF',
+        tagBg: 'rgba(91,140,255,.18)', tagColor: '#93C5FD', tag: '📋 Devis',
         body: `Madame, Monsieur,
 
 La Mairie de Villefranche-sur-Mer lance un appel d'offres pour la fourniture de matériel et consommables de bureau pour les exercices 2025 et 2026.
@@ -587,8 +588,8 @@ Service des marchés publics — Mairie de Villefranche`,
         email: 'm.bernard@meditex.fr',
         subject: 'Visite commerciale — Nouveaux tarifs préférentiels 2025',
         date: 'Vendredi, 16h55',
-        color: '#2A7A50',
-        tagBg: 'rgba(42,122,80,.18)', tagColor: '#6EE7B7', tag: '📅 RDV',
+        color: '#5B8CFF',
+        tagBg: 'rgba(91,140,255,.18)', tagColor: '#6EE7B7', tag: '📅 RDV',
         body: `Bonjour,
 
 Je suis Marc Bernard, représentant commercial chez Méditex. Comme chaque année, je prends contact pour vous présenter notre nouveau catalogue 2025.
@@ -731,7 +732,7 @@ async function analyzeEmail() {
     // ── Render meta + summary skeleton, start reply ──
     aiInner.innerHTML = `
       <div class="ai-meta" id="ai-meta">
-        <span class="ai-chip ai-chip-cat" style="background:${analysis.badgeColor || '#2A7A50'}">${analysis.badge || '✨ Analyse'}</span>
+        <span class="ai-chip ai-chip-cat" style="background:${analysis.badgeColor || '#5B8CFF'}">${analysis.badge || '✨ Analyse'}</span>
         <span class="ai-chip ai-chip-meta">📊 ${analysis.priorite || '—'}</span>
         <span class="ai-chip ai-chip-meta">⏱ ${analysis.delai || '—'}</span>
         <span class="ai-chip ai-chip-meta">✅ ${analysis.action || '—'}</span>

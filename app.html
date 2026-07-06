@@ -9,27 +9,27 @@
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#F8F7F5;--bg2:#EFECE6;--bg3:#E3DFD7;
-  --sur:#FFFFFF;--bdr:#E3DFD7;--bdr2:#CBC7BE;
-  --ink:#111110;--ink2:#3C3C3A;--ink3:#6B6B67;--ink4:#9E9E9A;
-  --urgent:#C0392B;--urgent-bg:#FEF0EE;
-  --quote:#1D4ED8;--quote-bg:#EFF4FF;
-  --appt:#2A7A50;--appt-bg:#EBF5EF;
-  --invoice:#B45309;--invoice-bg:#FEF9EC;
-  --teal:#2A7A50;--teal-l:#EBF5EF;
-  --green:#2A7A50;--green-l:#EBF5EF;
-  --purple:#6D28D9;--purple-l:#F5F3FF;
-  --amber:#B45309;--amber-l:#FEF9EC;
+  --bg:#F8F7F5;--bg2:#0C1018;--bg3:rgba(255,255,255,.08);
+  --sur:#FFFFFF;--bdr:rgba(255,255,255,.08);--bdr2:rgba(255,255,255,.16);
+  --ink:#EDF0F5;--ink2:#C6CCD8;--ink3:#8B93A5;--ink4:#7C8496;
+  --urgent:#FF5C5C;--urgent-bg:rgba(255,92,92,.12);
+  --quote:#7FA8FF;--quote-bg:rgba(91,140,255,.14);
+  --appt:#5B8CFF;--appt-bg:rgba(91,140,255,.12);
+  --invoice:#FFC46B;--invoice-bg:rgba(255,196,107,.12);
+  --teal:#5B8CFF;--teal-l:rgba(91,140,255,.12);
+  --green:#5B8CFF;--green-l:rgba(91,140,255,.12);
+  --purple:#9F7BFF;--purple-l:rgba(159,123,255,.14);
+  --amber:#FFC46B;--amber-l:rgba(255,196,107,.12);
 }
 html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--ink);overflow:hidden}
 .app{display:flex;height:100vh}
 
 /* ── SIDEBAR ── */
-.sidebar{width:234px;background:var(--ink);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.sidebar{width:234px;background:var(--bg2);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
 .sb-logo-zone{padding:20px 18px 16px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sb-logo{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.5px;display:flex;align-items:center;gap:7px;text-decoration:none}
-.sb-logo-dot{width:8px;height:8px;border-radius:50%;background:#3E9E6A}
-.sb-plan-pill{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:rgba(42,122,80,.12);border:1px solid rgba(42,122,80,.22);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:800;color:#3E9E6A;text-transform:uppercase;letter-spacing:.07em}
+.sb-logo-dot{width:8px;height:8px;border-radius:50%;background:#7FA8FF}
+.sb-plan-pill{display:inline-flex;align-items:center;gap:5px;margin-top:7px;background:rgba(91,140,255,.12);border:1px solid rgba(91,140,255,.22);border-radius:20px;padding:3px 9px;font-size:9px;font-weight:800;color:#7FA8FF;text-transform:uppercase;letter-spacing:.07em}
 .sb-user{display:flex;align-items:center;gap:10px;padding:12px 18px;border-bottom:1px solid rgba(255,255,255,.06)}
 .sb-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;background:linear-gradient(135deg,#f97316,#dc2626)}
 .sb-uname{font-size:12px;font-weight:600;color:#fff;line-height:1.3}
@@ -45,7 +45,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .sb-div{height:1px;background:rgba(255,255,255,.06);margin:5px 12px}
 .sb-bottom{margin-top:auto;padding:12px 14px;border-top:1px solid rgba(255,255,255,.06)}
 .sb-bar{height:3px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;margin:4px 0 2px}
-.sb-fill{height:100%;width:28%;background:linear-gradient(90deg,#3E9E6A,#3b82f6);border-radius:3px}
+.sb-fill{height:100%;width:28%;background:linear-gradient(90deg,#7FA8FF,#3b82f6);border-radius:3px}
 .sb-logout{display:flex;align-items:center;gap:7px;font-size:11px;color:rgba(255,255,255,.28);cursor:pointer;margin-top:8px;padding:5px;border-radius:6px;transition:all .15s}
 .sb-logout:hover{background:rgba(255,255,255,.06);color:rgba(255,255,255,.6)}
 
@@ -53,12 +53,12 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0;position:relative}
 
 /* ── SETUP OVERLAY (no email connected) ── */
-#setup-overlay{position:absolute;inset:0;background:rgba(248,247,245,.97);backdrop-filter:blur(3px);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px}
+#setup-overlay{position:absolute;inset:0;background:rgba(7,9,15,.97);backdrop-filter:blur(3px);z-index:300;display:flex;align-items:center;justify-content:center;padding:24px}
 .setup-card{width:100%;max-width:440px;background:var(--sur);border:1.5px solid var(--bdr);border-radius:16px;padding:32px 28px;box-shadow:0 8px 40px rgba(0,0,0,.08)}
 .setup-prov-btn{display:flex;align-items:center;gap:12px;width:100%;padding:13px 16px;border:1.5px solid var(--bdr);border-radius:11px;background:var(--bg);cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--ink);transition:all .15s;margin-bottom:8px;text-align:left}
 .setup-prov-btn:hover{border-color:var(--teal);background:var(--sur);box-shadow:0 2px 8px rgba(0,0,0,.05)}
 .setup-prov-btn .sp-ico{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.setup-prov-btn .sp-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--teal-l);color:var(--teal);border:1px solid rgba(42,122,80,.2);white-space:nowrap}
+.setup-prov-btn .sp-badge{margin-left:auto;font-size:9px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--teal-l);color:var(--teal);border:1px solid rgba(91,140,255,.2);white-space:nowrap}
 .setup-imap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:10px 0 12px}
 .setup-imap-chip{padding:7px 4px;border:1.5px solid var(--bdr);border-radius:8px;background:var(--bg);cursor:pointer;font-size:9px;font-weight:700;color:var(--ink2);text-align:center;transition:all .15s}
 .setup-imap-chip:hover{border-color:var(--bdr2);background:var(--sur)}
@@ -100,7 +100,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .ftabs{display:flex;gap:3px;padding:7px 11px;background:var(--sur);border-bottom:1px solid var(--bdr);overflow-x:auto}
 .ftabs::-webkit-scrollbar{display:none}
 .ftab{padding:3px 9px;border-radius:20px;font-size:10px;font-weight:600;cursor:pointer;border:1px solid var(--bdr);background:transparent;color:var(--ink2);white-space:nowrap;transition:all .15s;font-family:'DM Sans',sans-serif}
-.ftab.all{background:var(--ink);color:#fff;border-color:var(--ink)}
+.ftab.all{background:linear-gradient(90deg,#5B8CFF,#7B6CFF);color:#fff;border-color:transparent}
 .ftab.urg{background:var(--urgent-bg);color:var(--urgent);border-color:#fca99b}
 .ftab.quo{background:var(--quote-bg);color:var(--quote);border-color:#a5c4f7}
 .ftab.apt{background:var(--appt-bg);color:var(--appt);border-color:#a5d9c2}
@@ -136,7 +136,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .mv-ai-bar{margin:12px 22px 0;background:var(--bg);border:1px solid var(--bdr);border-left:3px solid var(--teal);border-radius:0 8px 8px 0;padding:9px 13px;display:flex;gap:9px;align-items:flex-start;flex-shrink:0}
 .mv-ai-lbl{font-size:9px;font-weight:800;color:var(--teal);text-transform:uppercase;letter-spacing:.09em;margin-bottom:2px}
 .mv-ai-txt{font-size:12px;color:var(--ink2);line-height:1.6}
-.mv-follow-bar{margin:8px 22px 0;background:var(--purple-l);border:1px solid #ddd6fe;border-radius:8px;padding:8px 13px;display:none;align-items:center;gap:8px;font-size:12px;color:var(--purple);flex-shrink:0}
+.mv-follow-bar{margin:8px 22px 0;background:var(--purple-l);border:1px solid rgba(159,123,255,.35);border-radius:8px;padding:8px 13px;display:none;align-items:center;gap:8px;font-size:12px;color:var(--purple);flex-shrink:0}
 .mv-follow-bar.on{display:flex}
 .mv-body{flex:1;overflow-y:auto;padding:16px 22px;font-size:13px;color:var(--ink2);line-height:1.78}
 .mv-body p{margin-bottom:9px}
@@ -164,7 +164,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .ap-reply:focus{border-color:var(--teal)}
 .gen-ind{display:none;align-items:center;gap:6px;font-size:11px;color:var(--purple);padding:5px 0;font-weight:600}
 .gen-ind.on{display:flex}
-.gen-spin{width:13px;height:13px;border-radius:50%;border:2px solid rgba(109,40,217,.18);border-top-color:var(--purple);animation:spin .7s linear infinite;flex-shrink:0}
+.gen-spin{width:13px;height:13px;border-radius:50%;border:2px solid rgba(159,123,255,.18);border-top-color:var(--purple);animation:spin .7s linear infinite;flex-shrink:0}
 @keyframes spin{to{transform:rotate(360deg)}}
 .skel{background:linear-gradient(90deg,var(--bg2) 25%,var(--bdr) 50%,var(--bg2) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:5px;height:10px;margin-bottom:6px}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
@@ -174,7 +174,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .ap-footer.on{display:flex}
 .warn-note{background:var(--amber-l,#fffbeb);border:1px solid #fde68a;border-radius:7px;padding:7px 10px;font-size:10px;color:#92400e;line-height:1.5;display:flex;gap:6px}
 .btns-row{display:flex;gap:6px}
-.btn-send{flex:1;padding:10px;background:var(--ink);color:var(--bg);border:none;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
+.btn-send{flex:1;padding:10px;background:linear-gradient(90deg,#5B8CFF,#7B6CFF);color:#fff;border:none;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:opacity .15s}
 .btn-send:hover{opacity:.84}
 .btn-disc{padding:10px 12px;background:transparent;color:var(--ink2);border:1px solid var(--bdr);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;cursor:pointer;transition:background .15s}
 .btn-disc:hover{background:var(--bg)}
@@ -288,17 +288,17 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 .cal-event-sub{font-size:9px;font-weight:500;opacity:.75;margin-top:1px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* ── SUGGESTION CALENDRIER ── */
-.cal-suggest{background:#edf8f2;border:1px solid #bbf7d0;border-radius:10px;padding:11px;margin-bottom:7px}
+.cal-suggest{background:#edf8f2;border:1px solid rgba(61,214,140,.35);border-radius:10px;padding:11px;margin-bottom:7px}
 .cal-suggest-title{font-size:9px;font-weight:800;color:var(--appt);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;display:flex;align-items:center;gap:5px}
-.cal-suggest-preview{background:#fff;border:1px solid #bbf7d0;border-radius:7px;padding:8px 10px;margin-bottom:9px}
+.cal-suggest-preview{background:rgba(255,255,255,.05);border:1px solid rgba(61,214,140,.35);border-radius:7px;padding:8px 10px;margin-bottom:9px}
 .cal-suggest-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;font-size:11px;color:var(--ink2)}
 .cal-suggest-row:last-child{margin-bottom:0}
-.cal-suggest-row input{border:1px solid #bbf7d0;border-radius:5px;padding:3px 7px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--ink);background:#fff;outline:none;width:100%}
+.cal-suggest-row input{border:1px solid rgba(61,214,140,.35);border-radius:5px;padding:3px 7px;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--ink);background:rgba(255,255,255,.05);outline:none;width:100%}
 .cal-suggest-row input:focus{border-color:var(--appt)}
 .cal-suggest-btns{display:flex;gap:6px}
 .cal-suggest-ok{flex:1;padding:7px;border:none;background:var(--appt);color:#fff;border-radius:7px;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:opacity .15s}
 .cal-suggest-ok:hover{opacity:.85}
-.cal-suggest-no{padding:7px 10px;border:1px solid #bbf7d0;background:transparent;color:var(--appt);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:background .15s}
+.cal-suggest-no{padding:7px 10px;border:1px solid rgba(61,214,140,.35);background:transparent;color:var(--appt);border-radius:7px;font-family:'DM Sans',sans-serif;font-size:11px;cursor:pointer;transition:background .15s}
 .cal-suggest-no:hover{background:#d1fae5}
 
 /* Team view */
@@ -329,13 +329,13 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 @keyframes popIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
 
 /* Toast */
-.toast{position:fixed;bottom:18px;right:18px;background:var(--ink);color:var(--bg);border-radius:10px;padding:10px 15px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:400}
+.toast{position:fixed;bottom:18px;right:18px;background:var(--bg2);color:var(--ink);border-radius:10px;padding:10px 15px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:400}
 .toast.on{transform:translateY(0);opacity:1}
 
 /* Perf badge */
-.perf-badge{position:fixed;bottom:18px;left:18px;background:var(--ink);border:1px solid rgba(42,122,80,.25);border-radius:9px;padding:7px 12px;display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.4);z-index:200;transform:translateY(60px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
+.perf-badge{position:fixed;bottom:18px;left:18px;background:var(--bg2);border:1px solid rgba(91,140,255,.25);border-radius:9px;padding:7px 12px;display:flex;align-items:center;gap:6px;font-size:11px;color:rgba(255,255,255,.4);z-index:200;transform:translateY(60px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1)}
 .perf-badge.on{transform:translateY(0);opacity:1}
-.perf-ms{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#3E9E6A}
+.perf-ms{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:800;color:#7FA8FF}
 
 /* SKELETON LOADING */
 .skeleton{background:linear-gradient(90deg,var(--bg) 25%,var(--bdr) 50%,var(--bg) 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:6px}
@@ -350,6 +350,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 <link rel="stylesheet" href="shared.css">
 <meta property="og:title" content="Application — MailOne">
 <meta property="og:description" content="Gérez vos emails avec MailOne.">
+<link rel="stylesheet" href="da.css">
 </head>
 <body>
 <div class="app">
@@ -386,7 +387,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     <div class="sb-lbl">Outils Pro</div>
     <div class="sb-item" id="sb-assistante" onclick="showView('assistante');setSb(this)"><span class="sb-ico">🤖</span>Agent IA Pro<span style="margin-left:auto;font-size:9px;background:rgba(13,147,115,.25);color:#5eead4;padding:2px 6px;border-radius:20px;font-weight:700">PRO</span></div>
     <div class="sb-item" id="sb-cal" onclick="showView('cal');setSb(this)"><span class="sb-ico">📅</span>Calendrier</div>
-    <div class="sb-item" id="sb-team" onclick="showView('team');setSb(this)" style="display:none"><span class="sb-ico">👥</span>Mon Équipe<span class="sb-badge" id="sb-team-badge" style="background:rgba(109,40,217,.7);display:none">0</span></div>
+    <div class="sb-item" id="sb-team" onclick="showView('team');setSb(this)" style="display:none"><span class="sb-ico">👥</span>Mon Équipe<span class="sb-badge" id="sb-team-badge" style="background:rgba(159,123,255,.7);display:none">0</span></div>
     <div class="sb-item" onclick="filterCat('follow');setSb(this)"><span class="sb-ico">🔔</span>Relances<span class="sb-badge p" id="sb-relances">0</span></div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">🔍</span>Recherche IA</div>
     <div class="sb-item" onclick="setSb(this)"><span class="sb-ico">📊</span>Statistiques</div>
@@ -542,7 +543,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
 <div id="onb-overlay" class="onb-overlay" style="display:none">
   <div class="onb-modal">
     <div class="onb-head">
-      <div class="onb-logo">MailOne<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#3E9E6A;margin-left:3px;vertical-align:middle"></span></div>
+      <div class="onb-logo">MailOne<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#7FA8FF;margin-left:3px;vertical-align:middle"></span></div>
       <div class="onb-title" id="onb-title">Bienvenue ! Quel est votre métier ?</div>
       <div class="onb-sub" id="onb-sub">MailOne va configurer les catégories de tri adaptées à votre activité pour vous faire gagner un maximum de temps.</div>
       <div class="onb-detected" id="onb-detected" style="display:none"></div>
@@ -673,7 +674,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     </button>
 
     <button class="setup-prov-btn" onclick="appConnectOAuth('outlook')">
-      <div class="sp-ico" style="background:#EFF6FF">
+      <div class="sp-ico" style="background:rgba(91,140,255,.14)">
         <svg width="18" height="18" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="6" fill="#0078D4"/><text x="8" y="34" font-size="28" font-family="Arial" fill="white" font-weight="bold">O</text></svg>
       </div>
       <span style="flex:1">Connecter Outlook / Microsoft 365</span>
@@ -818,7 +819,7 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end">
       <button onclick="closeCompose()" style="padding:9px 16px;border-radius:8px;border:1px solid var(--bdr);background:transparent;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;color:var(--ink2)">Annuler</button>
-      <button onclick="sendCompose()" style="padding:9px 18px;border-radius:8px;border:none;background:var(--ink);color:var(--bg);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px">📤 Envoyer</button>
+      <button onclick="sendCompose()" style="padding:9px 18px;border-radius:8px;border:none;background:linear-gradient(90deg,#5B8CFF,#7B6CFF);color:#fff;cursor:pointer;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px">📤 Envoyer</button>
     </div>
   </div>
 </div>
@@ -894,18 +895,18 @@ function setProvider(key) {
 
 // ── Setup overlay helpers ─────────────────────────────────────
 const IMAP_APP_NOTES = {
-  ovh:        { note: '<strong>OVH :</strong> utilisez votre mot de passe OVH habituel.', bg:'#FFF7ED', bdr:'#FED7AA', col:'#92400E', pwd:'Mot de passe OVH' },
-  orange:     { note: '<strong>Orange :</strong> si double auth activée, créez un mot de passe dédié sur orange.fr → Mon compte → Sécurité.', bg:'#FFF7ED', bdr:'#FED7AA', col:'#C2410C', pwd:'Mot de passe Orange' },
+  ovh:        { note: '<strong>OVH :</strong> utilisez votre mot de passe OVH habituel.', bg:'rgba(255,196,107,.12)', bdr:'rgba(253,186,116,.30)', col:'#92400E', pwd:'Mot de passe OVH' },
+  orange:     { note: '<strong>Orange :</strong> si double auth activée, créez un mot de passe dédié sur orange.fr → Mon compte → Sécurité.', bg:'rgba(255,196,107,.12)', bdr:'rgba(253,186,116,.30)', col:'#FDBA74', pwd:'Mot de passe Orange' },
   sfr:        { note: '<strong>SFR :</strong> activez IMAP dans webmail SFR → Options → Paramètres → Accès par protocoles.', bg:'#FEF2F2', bdr:'#FECACA', col:'#991B1B', pwd:'Mot de passe SFR' },
-  free:       { note: '<strong>Free :</strong> le login est votre identifiant Freebox (sans @free.fr).', bg:'#F5F3FF', bdr:'#DDD6FE', col:'#5B21B6', pwd:'Mot de passe Free' },
-  yahoo:      { note: '<strong>Yahoo :</strong> créez un <strong>mot de passe d\'application</strong> — Yahoo → Infos du compte → Sécurité → Mots de passe d\'application.', bg:'#FAF5FF', bdr:'#E9D5FF', col:'#7E22CE', pwd:'Mot de passe d\'application Yahoo' },
-  icloud:     { note: '<strong>iCloud :</strong> créez un mot de passe d\'app sur appleid.apple.com → Connexion et sécurité → Mots de passe pour les apps.', bg:'#EFF6FF', bdr:'#BFDBFE', col:'#1D4ED8', pwd:'Mot de passe d\'app iCloud' },
-  infomaniak: { note: '<strong>Infomaniak :</strong> utilisez votre adresse email et mot de passe Infomaniak.', bg:'#F0FDF4', bdr:'#BBF7D0', col:'#15803D', pwd:'Mot de passe Infomaniak' },
-  ionos:      { note: '<strong>IONOS :</strong> utilisez votre adresse email IONOS et votre mot de passe habituel.', bg:'#EFF6FF', bdr:'#BFDBFE', col:'#1E40AF', pwd:'Mot de passe IONOS' },
-  gandi:      { note: '<strong>Gandi :</strong> mot de passe de la boîte mail (différent du mot de passe de compte Gandi).', bg:'#FFF1F2', bdr:'#FECDD3', col:'#9F1239', pwd:'Mot de passe Gandi Mail' },
-  laposte:    { note: '<strong>La Poste :</strong> activez IMAP dans webmail La Poste → Paramètres → Accès POP/IMAP.', bg:'#FEFCE8', bdr:'#FEF08A', col:'#713F12', pwd:'Mot de passe La Poste' },
-  zoho:       { note: '<strong>Zoho Mail (EU) :</strong> activez IMAP dans Zoho → Paramètres → Accès mail → IMAP.', bg:'#FFF7ED', bdr:'#FED7AA', col:'#C2410C', pwd:'Mot de passe Zoho' },
-  other:      { note: '<strong>Paramètres IMAP :</strong> Bouygues/Bbox : imap.bbox.fr · Free : imap.free.fr · Alice : imap.aliceadsl.fr', bg:'#F8F7F5', bdr:'#E3DFD7', col:'#3C3C3A', pwd:'Mot de passe' },
+  free:       { note: '<strong>Free :</strong> le login est votre identifiant Freebox (sans @free.fr).', bg:'rgba(159,123,255,.14)', bdr:'rgba(159,123,255,.35)', col:'#C4B5FD', pwd:'Mot de passe Free' },
+  yahoo:      { note: '<strong>Yahoo :</strong> créez un <strong>mot de passe d\'application</strong> — Yahoo → Infos du compte → Sécurité → Mots de passe d\'application.', bg:'rgba(159,123,255,.14)', bdr:'rgba(216,180,254,.35)', col:'#D8B4FE', pwd:'Mot de passe d\'application Yahoo' },
+  icloud:     { note: '<strong>iCloud :</strong> créez un mot de passe d\'app sur appleid.apple.com → Connexion et sécurité → Mots de passe pour les apps.', bg:'rgba(91,140,255,.14)', bdr:'rgba(91,140,255,.35)', col:'#7FA8FF', pwd:'Mot de passe d\'app iCloud' },
+  infomaniak: { note: '<strong>Infomaniak :</strong> utilisez votre adresse email et mot de passe Infomaniak.', bg:'rgba(61,214,140,.12)', bdr:'rgba(61,214,140,.35)', col:'#6EE7A8', pwd:'Mot de passe Infomaniak' },
+  ionos:      { note: '<strong>IONOS :</strong> utilisez votre adresse email IONOS et votre mot de passe habituel.', bg:'rgba(91,140,255,.14)', bdr:'rgba(91,140,255,.35)', col:'#93B4FF', pwd:'Mot de passe IONOS' },
+  gandi:      { note: '<strong>Gandi :</strong> mot de passe de la boîte mail (différent du mot de passe de compte Gandi).', bg:'rgba(255,92,92,.10)', bdr:'rgba(255,92,92,.30)', col:'#FDA4AF', pwd:'Mot de passe Gandi Mail' },
+  laposte:    { note: '<strong>La Poste :</strong> activez IMAP dans webmail La Poste → Paramètres → Accès POP/IMAP.', bg:'rgba(255,196,107,.10)', bdr:'rgba(253,224,71,.30)', col:'#FDE68A', pwd:'Mot de passe La Poste' },
+  zoho:       { note: '<strong>Zoho Mail (EU) :</strong> activez IMAP dans Zoho → Paramètres → Accès mail → IMAP.', bg:'rgba(255,196,107,.12)', bdr:'rgba(253,186,116,.30)', col:'#FDBA74', pwd:'Mot de passe Zoho' },
+  other:      { note: '<strong>Paramètres IMAP :</strong> Bouygues/Bbox : imap.bbox.fr · Free : imap.free.fr · Alice : imap.aliceadsl.fr', bg:'rgba(255,255,255,.06)', bdr:'rgba(255,255,255,.08)', col:'#C6CCD8', pwd:'Mot de passe' },
 };
 
 function appSetImapProvider(key, host, port) {
@@ -1155,7 +1156,7 @@ function renderAI(){
       <div class="ap-kv"><span class="ap-kv-k">Action</span><span class="ap-kv-v">${d.action}</span></div>
       <div class="ap-kv"><span class="ap-kv-k">Ton</span><span class="ap-kv-v">${d.tone}</span></div>
     </div>
-    ${m.follow?`<div class="ap-block" style="border-color:#ddd6fe;background:var(--purple-l)"><div class="ap-btitle" style="color:var(--purple)">🔔 Relance</div><div style="font-size:11px;color:var(--purple);line-height:1.5">Ce contact attend depuis plusieurs jours. Agir maintenant pour maintenir la relation.</div></div>`:''}
+    ${m.follow?`<div class="ap-block" style="border-color:rgba(159,123,255,.35);background:var(--purple-l)"><div class="ap-btitle" style="color:var(--purple)">🔔 Relance</div><div style="font-size:11px;color:var(--purple);line-height:1.5">Ce contact attend depuis plusieurs jours. Agir maintenant pour maintenir la relation.</div></div>`:''}
     ${(m.cat==='appt'||ctx.dates.length>0)?buildCalSuggest(m,ctx):''}
     <div class="ap-block">
       <div class="ap-btitle">✨ Réponse IA MailOne Pro <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--ink4)">— modifiable</span></div>
@@ -1665,7 +1666,7 @@ function buildCalSuggest(m, ctx) {
       <div><strong>Créneau déjà occupé</strong> — ${startH}h est pris. Créneaux libres suggérés :<br>
       <div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:6px">
         ${alts.map(s => `<button onclick="selectAlt(${id},'${s.date}','${s.start}','${s.end}')"
-          style="padding:3px 9px;border-radius:20px;border:1px solid #fca99b;background:#fff;color:var(--urgent);font-size:10px;font-weight:700;cursor:pointer"
+          style="padding:3px 9px;border-radius:20px;border:1px solid #fca99b;background:rgba(255,255,255,.05);color:var(--urgent);font-size:10px;font-weight:700;cursor:pointer"
           >${s.label}</button>`).join('')}
       </div>
       ${alts.length ? `<button onclick="proposeAlts(${id})" style="margin-top:7px;padding:4px 10px;border-radius:6px;border:1px solid var(--urgent);background:transparent;color:var(--urgent);font-size:10px;font-weight:700;cursor:pointer;display:block">
@@ -1707,7 +1708,7 @@ function selectAlt(mailId, date, start, end) {
   if (ei) ei.value = end;
   // Retirer le highlight du bloc conflit
   const blk = document.querySelector(`#cal-suggest-${mailId} [style*="fef1ee"]`);
-  if (blk) blk.style.borderColor = '#bbf7d0';
+  if (blk) blk.style.borderColor = 'rgba(61,214,140,.35)';
   showToast('📅', 'Créneau sélectionné — cliquez "Ajouter" pour confirmer');
 }
 
@@ -2341,7 +2342,7 @@ updateBadges();
 ONB.init();
 checkEmailAccount();
 </script>
-<div class="toast" id="toast" style="position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9998;max-width:320px;border:1px solid rgba(255,255,255,.08)"><span id="t-ico"></span><span id="t-msg"></span></div>
+<div class="toast" id="toast" style="position:fixed;bottom:20px;right:20px;background:var(--bg2);color:#fff;border-radius:10px;padding:11px 16px;font-size:12px;display:flex;align-items:center;gap:8px;transform:translateY(70px);opacity:0;transition:all .3s cubic-bezier(.34,1.56,.64,1);z-index:9998;max-width:320px;border:1px solid rgba(255,255,255,.08)"><span id="t-ico"></span><span id="t-msg"></span></div>
 <script src="support.js"></script>
 <script src="push.js"></script>
 </body>
