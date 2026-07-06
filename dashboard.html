@@ -72,49 +72,26 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
   -webkit-backdrop-filter:blur(14px);
 }
 
-/* ── Mail urgent ───────────────────────────────────────────── */
-.section{margin-top:36px}
-.section .label{display:block;margin-bottom:14px}
-.mail-card{
-  position:relative;display:block;width:100%;text-align:left;cursor:pointer;
-  padding:18px 20px;margin-bottom:12px;color:var(--text);
-  border-left:3px solid var(--urgent);
-  transition:background .2s,box-shadow .25s,transform .2s;
+/* ── Liste des mails (une seule, épurée) ───────────────────── */
+.section{margin-top:30px}
+.mrow{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  padding:15px 18px;margin-bottom:9px;color:var(--text);
   font-family:inherit;font-size:inherit;
+  transition:background .2s,box-shadow .25s,transform .2s;
 }
-.mail-card:hover{background:var(--glass-hover);box-shadow:0 0 28px var(--urgent-glow);transform:translateY(-1px)}
-.mail-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.mc-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.mc-from{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px}
-.mc-time{font-family:'Space Grotesk',sans-serif;font-size:11.5px;color:var(--text-dim);margin-left:auto;white-space:nowrap}
-.badge-urgent{
-  font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;
-  color:#fff;background:var(--urgent);border-radius:6px;padding:3px 8px;
-  animation:pulse 1.6s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--urgent-glow)}50%{box-shadow:0 0 0 9px rgba(255,92,92,0)}}
-.mc-subj{font-size:14px;font-weight:500;margin-top:7px}
-.mc-prev{font-size:12.5px;color:var(--text-dim);margin-top:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
-.mc-cta{font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:10px;display:inline-block}
-
-/* ── Mails triés ───────────────────────────────────────────── */
-.sorted-row{
-  display:flex;align-items:center;gap:12px;padding:13px 18px;margin-bottom:8px;
-  opacity:.62;transition:opacity .2s;
-}
-.sorted-row:hover{opacity:.88}
-.sr-from{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:13px;min-width:130px}
-.sr-subj{font-size:13px;color:var(--text-dim);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sr-time{font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--text-dim);white-space:nowrap}
-.chip{
-  font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  padding:3px 9px;border-radius:20px;border:1px solid var(--glass-border);color:var(--text-dim);white-space:nowrap;
-}
-.chip.quote{color:#7FA8FF;border-color:rgba(91,140,255,.35)}
-.chip.appt{color:var(--ok);border-color:rgba(61,214,140,.35)}
-.chip.invoice{color:#FFC46B;border-color:rgba(255,196,107,.35)}
-.chip.urgent{color:var(--urgent);border-color:rgba(255,92,92,.35)}
-.chip.done{color:var(--ok);border-color:rgba(61,214,140,.35)}
+.mrow:hover{background:var(--glass-hover);transform:translateY(-1px)}
+.mrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mrow.urgent{border-left:3px solid var(--urgent)}
+.mrow.urgent:hover{box-shadow:0 0 26px var(--urgent-glow)}
+.mrow.done{opacity:.45}
+.dot{width:9px;height:9px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.14)}
+.dot.urgent{background:var(--urgent);animation:pulse 1.6s ease-in-out infinite}
+.dot.done{background:var(--ok);animation:none}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--urgent-glow)}50%{box-shadow:0 0 0 8px rgba(255,92,92,0)}}
+.m-from{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;flex-shrink:0;max-width:190px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m-subj{font-size:13.5px;color:var(--text-dim);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m-time{font-family:'Space Grotesk',sans-serif;font-size:11.5px;color:var(--text-dim);white-space:nowrap;flex-shrink:0}
 
 /* ── Boutons ───────────────────────────────────────────────── */
 .btn{
@@ -206,8 +183,7 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width:760px){
   .split{grid-template-columns:1fr}
-  .sr-from{min-width:0}
-  .sorted-row{flex-wrap:wrap}
+  .m-from{max-width:120px}
   .ai-actions .btn{flex:1;padding:12px 10px}
 }
 
@@ -238,14 +214,8 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
     <h1 id="greeting">Bonjour</h1>
     <p class="sub" id="summary">Chargement de votre boîte…</p>
 
-    <section class="section" id="sec-urgent">
-      <span class="label">🔴 À traiter maintenant</span>
-      <div id="urgent-list"></div>
-    </section>
-
-    <section class="section" id="sec-sorted">
-      <span class="label">Déjà trié par MailOne</span>
-      <div id="sorted-list"></div>
+    <section class="section">
+      <div id="mail-list"></div>
     </section>
   </main>
 
@@ -317,18 +287,14 @@ function toast(ico, msg, ok = false){
 
 // ── Chargement ───────────────────────────────────────────────
 function showSkeletons(){
-  document.getElementById('urgent-list').innerHTML =
-    '<div class="card skeleton"><div class="sk-line" style="width:38%"></div><div class="sk-line" style="width:70%"></div><div class="sk-line" style="width:52%;margin:0"></div></div>'.repeat(2);
-  document.getElementById('sorted-list').innerHTML =
-    '<div class="card skeleton" style="min-height:44px;padding:13px 18px"><div class="sk-line" style="width:80%;margin:0"></div></div>'.repeat(3);
+  document.getElementById('mail-list').innerHTML =
+    '<div class="card skeleton" style="min-height:50px;padding:15px 18px"><div class="sk-line" style="width:80%;margin:0"></div></div>'.repeat(5);
 }
 
 async function loadDashboard(){
   const u = Auth.getUser();
   document.getElementById('greeting').textContent = `Bonjour ${u?.first_name || u?.firstName || ''}`.trim();
   document.getElementById('summary').textContent  = 'Chargement de votre boîte…';
-  document.getElementById('sec-urgent').style.display = '';
-  document.getElementById('sec-sorted').style.display = '';
   showSkeletons();
 
   try {
@@ -359,10 +325,7 @@ async function loadDashboard(){
 
 function renderFullState(ico, title, text, actionsHtml){
   document.getElementById('summary').textContent = '';
-  document.getElementById('sec-sorted').style.display = 'none';
-  document.getElementById('sec-urgent').style.display = '';
-  document.querySelector('#sec-urgent .label').textContent = '';
-  document.getElementById('urgent-list').innerHTML =
+  document.getElementById('mail-list').innerHTML =
     `<div class="card state rise"><div class="ico">${ico}</div><h2>${esc(title)}</h2><p>${text}</p>${actionsHtml}</div>`;
 }
 
@@ -371,51 +334,35 @@ function renderDashboard(){
   const d = state.data;
   const u = Auth.getUser();
   document.getElementById('greeting').textContent = `Bonjour ${d.user?.firstName || u?.first_name || ''}`.trim();
-  document.getElementById('sec-urgent').style.display = '';
-  document.querySelector('#sec-urgent .label').textContent = '🔴 À traiter maintenant';
 
   const n = d.urgentCount;
   document.getElementById('summary').innerHTML = n > 0
-    ? `<span class="n-urgent">${n} mail${n>1?'s':''} urgent${n>1?'s':''}</span> nécessite${n>1?'nt':''} une réponse — <b>le reste est déjà trié.</b>`
-    : `Tout est sous contrôle — <b>aucun mail urgent.</b> Le reste est déjà trié.`;
+    ? `<span class="n-urgent">${n} mail${n>1?'s':''} urgent${n>1?'s':''}</span> à traiter — cliquez, la réponse est prête.`
+    : `Tout est sous contrôle — <b>aucun mail urgent.</b> Cliquez sur un mail pour voir la réponse proposée.`;
 
-  const ul = document.getElementById('urgent-list');
-  if (n === 0) {
-    ul.innerHTML = `<div class="card state ok rise">
-      <div class="ico">✅</div><h2>Tout est sous contrôle</h2>
-      <p>Aucun mail urgent ne nécessite votre attention. MailOne surveille votre boîte en continu.</p>
+  const list = document.getElementById('mail-list');
+  const mails = d.mails || [];
+  if (!mails.length) {
+    list.innerHTML = `<div class="card state ok rise">
+      <div class="ico">📭</div><h2>Boîte vide</h2>
+      <p>Aucun email pour l'instant. MailOne surveille votre boîte en continu.</p>
     </div>`;
-  } else {
-    ul.innerHTML = d.urgent.map((m, i) => `
-      <button class="mail-card card rise" style="animation-delay:${REDUCED?0:i*50}ms" onclick="openTriage('${esc(String(m.id))}')">
-        <div class="mc-top">
-          <span class="badge-urgent">URGENT</span>
-          <span class="mc-from">${esc(m.from)}</span>
-          <span class="mc-time">${fmtTime(m.receivedAt)}</span>
-        </div>
-        <div class="mc-subj">${esc(m.subject)}</div>
-        <div class="mc-prev">${esc(m.body)}</div>
-        <span class="mc-cta">Voir la réponse proposée →</span>
-      </button>`).join('');
+    return;
   }
 
-  const sl = document.getElementById('sorted-list');
-  if (!d.sorted?.length) {
-    sl.innerHTML = `<div class="card sorted-row" style="opacity:.5"><span class="sr-subj">Rien d'autre pour l'instant.</span></div>`;
-  } else {
-    sl.innerHTML = d.sorted.map((m, i) => `
-      <div class="card sorted-row rise" style="animation-delay:${REDUCED?0:(i+2)*50}ms">
-        <span class="sr-from">${esc(m.from)}</span>
-        <span class="sr-subj">${esc(m.subject)}</span>
-        <span class="chip ${m.status ? 'done' : esc(m.category)}">${m.status ? (m.status === 'handled' ? '✓ Traité' : 'Ignoré') : (CAT_LABEL[m.category] || esc(m.category))}</span>
-        <span class="sr-time">${fmtTime(m.receivedAt)}</span>
-      </div>`).join('');
-  }
+  list.innerHTML = mails.map((m, i) => `
+    <button class="mrow card rise ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"
+            style="animation-delay:${REDUCED?0:Math.min(i,12)*40}ms" onclick="openTriage('${esc(String(m.id))}')">
+      <span class="dot ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"></span>
+      <span class="m-from">${esc(m.from)}</span>
+      <span class="m-subj">${esc(m.subject)}</span>
+      <span class="m-time">${m.status === 'handled' ? '✓ répondu' : m.status === 'dismissed' ? 'ignoré' : fmtTime(m.receivedAt)}</span>
+    </button>`).join('');
 }
 
 // ── Vue triage ───────────────────────────────────────────────
 function openTriage(id){
-  const m = state.data.urgent.find(x => String(x.id) === String(id));
+  const m = (state.data.mails || []).find(x => String(x.id) === String(id));
   if (!m) return;
   state.current = m;
   state.editing = false;
@@ -494,12 +441,11 @@ function getDraftText(){
 }
 
 // ── Actions ──────────────────────────────────────────────────
-function removeCurrentFromUrgent(status){
+function setCurrentStatus(status){
   const m = state.current;
-  state.data.urgent = state.data.urgent.filter(x => String(x.id) !== String(m.id));
-  state.data.urgentCount = state.data.urgent.length;
-  state.data.sorted.unshift({ id: m.id, from: m.from, subject: m.subject, category: 'urgent', status, receivedAt: m.receivedAt });
-  state.data.sorted = state.data.sorted.slice(0, 10);
+  m.status = status;
+  m.urgent = false;
+  state.data.urgentCount = (state.data.mails || []).filter(x => x.urgent).length;
 }
 
 async function sendReply(){
@@ -512,7 +458,7 @@ async function sendReply(){
 
   try {
     await API.post(`/api/mails/${encodeURIComponent(m.id)}/reply`, { content });
-    removeCurrentFromUrgent('handled');
+    setCurrentStatus('handled');
     closeTriage();
     renderDashboard();
     toast('✅', 'Réponse envoyée — mail classé comme traité', true);
@@ -538,7 +484,7 @@ async function dismissMail(){
   btn.disabled = true;
   try {
     await API.post(`/api/mails/${encodeURIComponent(m.id)}/dismiss`, {});
-    removeCurrentFromUrgent('dismissed');
+    setCurrentStatus('dismissed');
     closeTriage();
     renderDashboard();
     toast('🗂️', 'Mail ignoré — il ne réapparaîtra plus en urgent.');
