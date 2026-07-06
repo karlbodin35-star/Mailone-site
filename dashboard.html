@@ -340,7 +340,11 @@ async function loadDashboard(){
     if (err.code === 'NO_ACCOUNT') {
       renderFullState('📮', 'Connectez votre boîte mail',
         'MailOne a besoin d\'accéder à votre boîte pour trier vos emails. La connexion prend une minute.',
-        '<a class="btn btn-primary" href="app.html" style="text-decoration:none;display:inline-block">Connecter ma boîte →</a>');
+        '<button class="btn btn-primary" onclick="reconnectGmail()">Connecter Gmail (2 clics) →</button> <a class="btn btn-ghost" href="app.html" style="text-decoration:none;display:inline-block">Autre boîte (IMAP)</a>');
+    } else if (err.code === 'SCOPE_MISSING') {
+      renderFullState('🔐', 'Autorisation Gmail manquante',
+        'Votre compte Google est bien connecté, mais la case « Consulter vos messages Gmail » n\'a pas été cochée. Recommencez en <b>cochant la case</b> sur l\'écran Google.',
+        '<button class="btn btn-primary" onclick="reconnectGmail()">Autoriser l\'accès Gmail →</button>');
     } else if (err.code === 'OAUTH_EXPIRED' || err.status === 401) {
       renderFullState('🔄', 'Session boîte mail expirée',
         'Reconnectez votre boîte pour reprendre le triage.',
@@ -544,6 +548,20 @@ async function dismissMail(){
     btn.disabled = false;
   }
 }
+
+// ── Reconnexion Gmail (popup OAuth) ──────────────────────────
+function reconnectGmail(){
+  const token = Auth.getToken();
+  if (!token) return;
+  window.open(`${CONFIG.API_URL}/api/oauth/gmail/start?state=${encodeURIComponent(token)}`,
+    'mailone_oauth', 'width=540,height=680,left=200,top=80,menubar=no,toolbar=no,scrollbars=yes');
+  toast('🔗', 'Autorisez l\'accès dans la fenêtre Google — cochez bien la case Gmail.');
+}
+window.addEventListener('message', (e) => {
+  if (e.origin !== window.location.origin) return;
+  if (e.data?.type === 'oauth_success') { toast('✅', 'Gmail autorisé — chargement…', true); loadDashboard(); }
+  else if (e.data?.type === 'oauth_error') toast('❌', 'Connexion Google échouée. Réessayez.');
+});
 
 loadDashboard();
 </script>
