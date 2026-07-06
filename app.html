@@ -1017,7 +1017,15 @@ async function syncEmails() {
       if (apptWords.test(e.subject + ' ' + e.body)) cat = 'appt';
       const invoiceWords = /facture|règlement|paiement|virement|iban/i;
       if (invoiceWords.test(e.subject + ' ' + e.body)) cat = 'invoice';
-      MAILS.push({ ...e, id: i, cat, follow: ctx.hasFollow });
+      const d = new Date(e.date);
+      MAILS.push({
+        ...e, id: i, cat, follow: ctx.hasFollow,
+        email:   e.senderEmail || '',
+        subject: (e.subject && e.subject !== '(sans objet)') ? e.subject : `Message de ${e.sender || 'contact'}`,
+        time:    isNaN(d) ? '' : d.toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' }),
+        date:    isNaN(d) ? '' : d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' }),
+        summary: (e.body || '').replace(/\s+/g, ' ').trim().slice(0, 90) || e.subject || '',
+      });
     });
     renderList(); updateStats(); updateBadges();
     if (MAILS.length > 0) showToast('📬', `${MAILS.length} email(s) chargé(s)`);
