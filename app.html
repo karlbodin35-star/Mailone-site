@@ -437,25 +437,11 @@ html,body{height:100%;font-family:'DM Sans',sans-serif;background:var(--bg);colo
     </div>
   </div>
 
-  <div class="stats-bar">
-    <div class="stat" onclick="filterCat('urgent')"><div class="stat-ico" style="background:var(--urgent-bg)">🚨</div><div><div class="stat-num" id="stat-u">0</div><div class="stat-lbl">Urgences</div><div class="stat-trend t-neu">— En attente de mails</div></div></div>
-    <div class="stat" onclick="filterCat('quote')"><div class="stat-ico" style="background:var(--quote-bg)">📋</div><div><div class="stat-num" id="stat-d">0</div><div class="stat-lbl">Devis</div><div class="stat-trend t-neu">— En attente de mails</div></div></div>
-    <div class="stat" onclick="filterCat('appt')"><div class="stat-ico" style="background:var(--appt-bg)">📅</div><div><div class="stat-num" id="stat-r">0</div><div class="stat-lbl">RDV</div><div class="stat-trend t-neu">— En attente de mails</div></div></div>
-    <div class="stat" onclick="filterCat('invoice')"><div class="stat-ico" style="background:var(--invoice-bg)">💰</div><div><div class="stat-num" id="stat-f">0</div><div class="stat-lbl">Factures</div><div class="stat-trend t-neu">— En attente de mails</div></div></div>
-  </div>
-
   <div class="content" id="content-mail">
     <div class="mail-panel">
       <div class="mp-head">
         <div class="mp-title" id="mp-title">Boîte de réception</div>
         <div class="mp-count" id="mp-count">0 message</div>
-      </div>
-      <div class="ftabs">
-        <button class="ftab all" onclick="setFilter('all',this)">Tous</button>
-        <button class="ftab" onclick="setFilter('urgent',this)">🚨 Urgent</button>
-        <button class="ftab" onclick="setFilter('quote',this)">📋 Devis</button>
-        <button class="ftab" onclick="setFilter('appt',this)">📅 RDV</button>
-        <button class="ftab" onclick="setFilter('invoice',this)">💰 Facture</button>
       </div>
       <div class="mail-list" id="mail-list"></div>
     </div>
@@ -1108,8 +1094,7 @@ function renderList(){
     <div class="mcard ${m.unread?'unread':''} ${current?.id===m.id?'sel':''}" id="mc-${m.id}" onclick="openMail(${m.id})" style="animation-delay:${i*.04}s">
       <div class="mc-row"><div class="mc-dot" style="background:${m.unread?catColor(m.cat):'transparent'};border:${m.unread?'none':'1.5px solid var(--bdr2)'}"></div><div class="mc-sender">${m.sender}</div><div class="mc-time">${m.time}</div></div>
       <div class="mc-subj">${m.subject}</div>
-      <div class="mc-sum">✨ ${m.summary}</div>
-      <div class="mc-foot"><span class="mc-tag ${m.cat}">${catLabel(m.cat)}</span>${m.follow?'<span class="mc-follow">🔔 Relance</span>':''}</div>
+      ${m.follow?'<div class="mc-foot"><span class="mc-follow">🔔 Relance</span></div>':''}
     </div>`).join('');
 }
 
@@ -1130,16 +1115,10 @@ function renderView(){
     <div class="mv-head">
       <div class="mv-subj">${m.subject}</div>
       <div class="mv-meta">
-        <span class="mc-tag ${m.cat}">${catLabel(m.cat)}</span>
         <span class="mv-chip"><b>De :</b> ${m.sender}</span>
         <span class="mv-chip">${m.email}</span>
-        ${m.company?`<span class="mv-chip">${m.company}</span>`:''}
         <span class="mv-chip">${m.date} · ${m.time}</span>
       </div>
-    </div>
-    <div class="mv-ai-bar">
-      <div style="font-size:15px;flex-shrink:0;margin-top:1px">✨</div>
-      <div><div class="mv-ai-lbl">Résumé IA MailOne Pro</div><div class="mv-ai-txt">${m.summary}</div></div>
     </div>
     ${m.follow?`<div class="mv-follow-bar on"><span>🔔</span><strong>Relance détectée</strong> — Ce contact attend depuis plusieurs jours. Répondez maintenant.</div>`:''}
     <div class="mv-body">${m.body.split('\n').map(l=>l.trim()?`<p>${l}</p>`:'<br>').join('')}</div>`;
@@ -1194,13 +1173,9 @@ function handleSearch(val){
   const q=val.toLowerCase();
   const res=MAILS.filter(m=>m.sender.toLowerCase().includes(q)||m.subject.toLowerCase().includes(q)||m.summary.toLowerCase().includes(q)||m.cat.includes(q));
   document.getElementById('mp-count').textContent=res.length+' résultat'+(res.length>1?'s':'');
-  document.getElementById('mail-list').innerHTML=res.map(m=>`<div class="mcard" onclick="openMail(${m.id})"><div class="mc-row"><div class="mc-dot" style="background:${catColor(m.cat)}"></div><div class="mc-sender">${m.sender}</div><div class="mc-time">${m.time}</div></div><div class="mc-subj">${m.subject}</div><div class="mc-sum">✨ ${m.summary}</div><div class="mc-foot"><span class="mc-tag ${m.cat}">${catLabel(m.cat)}</span></div></div>`).join('');
+  document.getElementById('mail-list').innerHTML=res.map(m=>`<div class="mcard" onclick="openMail(${m.id})"><div class="mc-row"><div class="mc-dot" style="background:${catColor(m.cat)}"></div><div class="mc-sender">${m.sender}</div><div class="mc-time">${m.time}</div></div><div class="mc-subj">${m.subject}</div></div>`).join('');
 }
 function updateStats(){
-  document.getElementById('stat-u').textContent=MAILS.filter(m=>m.cat==='urgent').length;
-  document.getElementById('stat-d').textContent=MAILS.filter(m=>m.cat==='quote').length;
-  document.getElementById('stat-r').textContent=MAILS.filter(m=>m.cat==='appt').length;
-  document.getElementById('stat-f').textContent=MAILS.filter(m=>m.cat==='invoice').length;
   ['sb-u','sb-d','sb-r','sb-f'].forEach((id,i)=>{
     const vals=[MAILS.filter(m=>m.cat==='urgent').length,MAILS.filter(m=>m.cat==='quote').length,MAILS.filter(m=>m.cat==='appt').length,MAILS.filter(m=>m.cat==='invoice').length];
     const el=document.getElementById(id);if(el)el.textContent=vals[i]||0;
