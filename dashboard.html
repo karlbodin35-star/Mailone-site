@@ -72,8 +72,29 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
   -webkit-backdrop-filter:blur(14px);
 }
 
+/* ── Colonne latérale (dossiers + agenda) ──────────────────── */
+.layout{display:grid;grid-template-columns:200px 1fr;gap:30px;align-items:start;margin-top:26px}
+.side{position:sticky;top:20px;display:flex;flex-direction:column;gap:4px;padding:14px 10px}
+.side .label{padding:0 12px;margin-bottom:8px}
+.snav{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;cursor:pointer;
+  padding:11px 12px;border-radius:11px;border:none;background:transparent;
+  color:var(--text-dim);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;
+  transition:background .2s,color .2s;
+}
+.snav:hover{background:var(--glass-hover);color:var(--text)}
+.snav.active{background:var(--glass);color:var(--text);box-shadow:inset 3px 0 0 var(--accent)}
+.snav .ic{width:20px;text-align:center;flex-shrink:0}
+.snav .ct{
+  margin-left:auto;font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;
+  min-width:20px;text-align:center;padding:2px 6px;border-radius:20px;
+  background:rgba(255,255,255,.07);color:var(--text-dim);
+}
+.snav .ct.hot{background:rgba(255,92,92,.15);color:var(--urgent)}
+.side-sep{height:1px;background:var(--glass-border);margin:10px 12px}
+
 /* ── Liste des mails (une seule, épurée) ───────────────────── */
-.section{margin-top:30px}
+.section{margin-top:0}
 .mrow{
   display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
   padding:17px 20px;margin-bottom:10px;color:var(--text);
@@ -211,7 +232,29 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 .rise{animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
+/* ── Agenda ────────────────────────────────────────────────── */
+.agenda-row{display:flex;align-items:center;gap:14px;padding:16px 20px;margin-bottom:10px}
+.ag-ico{font-size:20px;flex-shrink:0}
+.ag-main{flex:1;min-width:0}
+.ag-title{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ag-sub{font-size:13px;color:var(--text-dim);margin-top:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ag-date{font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;color:var(--ok);white-space:nowrap;flex-shrink:0}
+.ag-btn{
+  flex-shrink:0;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;
+  padding:8px 13px;border-radius:9px;text-decoration:none;color:var(--accent);
+  border:1px solid rgba(91,140,255,.35);transition:background .2s;
+}
+.ag-btn:hover{background:rgba(91,140,255,.12)}
+
 /* ── Responsive ────────────────────────────────────────────── */
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr;gap:14px}
+  .side{position:static;flex-direction:row;overflow-x:auto;padding:8px;gap:6px;scrollbar-width:none}
+  .side::-webkit-scrollbar{display:none}
+  .side .label,.side-sep{display:none}
+  .snav{white-space:nowrap;padding:9px 13px}
+  .snav.active{box-shadow:inset 0 -2px 0 var(--accent)}
+}
 @media (max-width:760px){
   .split{grid-template-columns:1fr}
   .m-from{max-width:130px}
@@ -239,15 +282,32 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
     </nav>
   </header>
 
-  <!-- ══ VUE LISTE ══════════════════════════════════════════ -->
-  <main id="view-dashboard">
-    <h1 id="greeting">Bonjour</h1>
-    <p class="sub" id="summary">Chargement de votre boîte…</p>
+  <h1 id="greeting">Bonjour</h1>
+  <p class="sub" id="summary">Chargement de votre boîte…</p>
 
-    <section class="section">
-      <div id="mail-list"></div>
-    </section>
-  </main>
+  <div class="layout">
+    <!-- ══ DOSSIERS + AGENDA ════════════════════════════════ -->
+    <aside class="side card">
+      <span class="label">Boîte mail</span>
+      <button class="snav active" data-f="all"     onclick="setFolder('all',this)"><span class="ic">📥</span>Tous les mails<span class="ct" id="ct-all">–</span></button>
+      <button class="snav" data-f="urgent"  onclick="setFolder('urgent',this)"><span class="ic">🚨</span>Urgents<span class="ct" id="ct-urgent">–</span></button>
+      <div class="side-sep"></div>
+      <span class="label">Dossiers</span>
+      <button class="snav" data-f="quote"   onclick="setFolder('quote',this)"><span class="ic">📋</span>Devis<span class="ct" id="ct-quote">–</span></button>
+      <button class="snav" data-f="appt"    onclick="setFolder('appt',this)"><span class="ic">📅</span>Rendez-vous<span class="ct" id="ct-appt">–</span></button>
+      <button class="snav" data-f="invoice" onclick="setFolder('invoice',this)"><span class="ic">💰</span>Factures<span class="ct" id="ct-invoice">–</span></button>
+      <button class="snav" data-f="done"    onclick="setFolder('done',this)"><span class="ic">✅</span>Traités<span class="ct" id="ct-done">–</span></button>
+      <div class="side-sep"></div>
+      <button class="snav" data-f="agenda"  onclick="setFolder('agenda',this)"><span class="ic">🗓️</span>Agenda<span class="ct" id="ct-agenda">–</span></button>
+    </aside>
+
+    <div>
+      <!-- ══ VUE LISTE ════════════════════════════════════════ -->
+      <main id="view-dashboard">
+        <section class="section">
+          <div id="mail-list"></div>
+        </section>
+      </main>
 
   <!-- ══ VUE MAIL + RÉPONSE ═════════════════════════════════ -->
   <main id="view-triage" style="display:none">
@@ -289,6 +349,8 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
       </aside>
     </div>
   </main>
+    </div><!-- /colonne droite -->
+  </div><!-- /layout -->
 </div>
 
 <!-- ══ CONNEXION BOÎTE MAIL ═════════════════════════════════ -->
@@ -336,7 +398,71 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 if (!Auth.requireAuth()) throw new Error('redirect login');
 
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const state = { data:null, current:null, typer:null, editing:false, draftText:'' };
+const state = { data:null, current:null, typer:null, editing:false, draftText:'', folder:'all' };
+
+// ── Dossiers ─────────────────────────────────────────────────
+const FOLDER_EMPTY = {
+  all:     ['📭', 'Boîte vide', 'Aucun email pour l\'instant. MailOne surveille votre boîte en continu.'],
+  urgent:  ['✅', 'Aucune urgence', 'Rien qui presse — MailOne vous alertera dès qu\'un mail urgent arrive.'],
+  quote:   ['📋', 'Aucun devis en attente', 'Les demandes de devis repérées dans vos mails apparaîtront ici.'],
+  appt:    ['📅', 'Aucun rendez-vous en attente', 'Les demandes de rendez-vous repérées dans vos mails apparaîtront ici.'],
+  invoice: ['💰', 'Aucune facture en attente', 'Les mails liés aux paiements et factures apparaîtront ici.'],
+  done:    ['🗂️', 'Aucun mail traité', 'Les mails auxquels vous avez répondu (ou que vous avez ignorés) apparaîtront ici.'],
+  agenda:  ['🗓️', 'Agenda vide', 'Dès qu\'un mail parle de rendez-vous, il apparaîtra ici avec un bouton pour l\'ajouter à votre calendrier.'],
+};
+
+function setFolder(f, el){
+  state.folder = f;
+  document.querySelectorAll('.snav').forEach(b => b.classList.toggle('active', b === el));
+  document.getElementById('view-triage').style.display = 'none';
+  document.getElementById('view-dashboard').style.display = '';
+  if (state.typer) { clearInterval(state.typer); state.typer = null; }
+  state.current = null;
+  renderDashboard();
+}
+
+function folderMails(){
+  const mails = state.data?.mails || [];
+  switch (state.folder) {
+    case 'urgent':  return mails.filter(m => m.urgent);
+    case 'quote':
+    case 'invoice': return mails.filter(m => m.category === state.folder && !m.status);
+    case 'appt':
+    case 'agenda':  return mails.filter(m => m.category === 'appt' && !m.status);
+    case 'done':    return mails.filter(m => m.status);
+    default:        return mails;
+  }
+}
+
+function updateCounts(){
+  const mails = state.data?.mails || [];
+  const counts = {
+    all:     mails.length,
+    urgent:  mails.filter(m => m.urgent).length,
+    quote:   mails.filter(m => m.category === 'quote'   && !m.status).length,
+    appt:    mails.filter(m => m.category === 'appt'    && !m.status).length,
+    invoice: mails.filter(m => m.category === 'invoice' && !m.status).length,
+    done:    mails.filter(m => m.status).length,
+  };
+  counts.agenda = counts.appt;
+  for (const [k, v] of Object.entries(counts)) {
+    const el = document.getElementById('ct-' + k);
+    if (el) { el.textContent = v; el.classList.toggle('hot', k === 'urgent' && v > 0); }
+  }
+}
+
+// Date/heure repérée dans un mail (pour l'agenda)
+function findDateHint(m){
+  const t = `${m.subject || ''} ${m.body || ''}`;
+  const re = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s+\d{1,2}(?:\s+[a-zéû]+)?|\b\d{1,2}\s+(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)|\b\d{1,2}\/\d{1,2}(?:\/\d{2,4})?|\b\d{1,2}\s*h\s*\d{0,2}\b/i;
+  const hit = t.match(re);
+  return hit ? hit[0].trim() : '';
+}
+function gcalLink(m){
+  const text    = encodeURIComponent(`RDV — ${m.from || 'client'}`);
+  const details = encodeURIComponent(`${m.subject || ''}\n\n${(m.body || '').slice(0, 400)}`);
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&details=${details}`;
+}
 
 // ── Utils ────────────────────────────────────────────────────
 function esc(s){
@@ -425,13 +551,30 @@ function renderDashboard(){
     ? `<span class="n-urgent">${n} mail${n>1?'s':''} urgent${n>1?'s':''}</span> à traiter — cliquez, la réponse est prête.`
     : `Tout est sous contrôle — <b>aucun mail urgent.</b> Cliquez sur un mail : la réponse est déjà prête.`;
 
-  const list = document.getElementById('mail-list');
-  const mails = d.mails || [];
+  updateCounts();
+
+  const list  = document.getElementById('mail-list');
+  const mails = folderMails();
   if (!mails.length) {
+    const [ico, title, txt] = FOLDER_EMPTY[state.folder] || FOLDER_EMPTY.all;
     list.innerHTML = `<div class="card state ok rise">
-      <div class="ico">📭</div><h2>Boîte vide</h2>
-      <p>Aucun email pour l'instant. MailOne surveille votre boîte en continu.</p>
+      <div class="ico">${ico}</div><h2>${esc(title)}</h2><p>${esc(txt)}</p>
     </div>`;
+    return;
+  }
+
+  // Vue Agenda : RDV repérés + ajout au calendrier en un clic
+  if (state.folder === 'agenda') {
+    list.innerHTML = mails.map((m, i) => `
+      <div class="agenda-row card rise" style="animation-delay:${REDUCED?0:Math.min(i,12)*40}ms;cursor:pointer" onclick="openTriage('${esc(String(m.id))}')">
+        <span class="ag-ico">📅</span>
+        <span class="ag-main">
+          <span class="ag-title">${esc(m.from || 'Expéditeur inconnu')}</span>
+          <span class="ag-sub" style="display:block">${esc(m.subject)}</span>
+        </span>
+        ${findDateHint(m) ? `<span class="ag-date">${esc(findDateHint(m))}</span>` : ''}
+        <a class="ag-btn" href="${gcalLink(m)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">＋ Google Agenda</a>
+      </div>`).join('');
     return;
   }
 
@@ -439,7 +582,7 @@ function renderDashboard(){
     <button class="mrow card rise ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"
             style="animation-delay:${REDUCED?0:Math.min(i,12)*40}ms" onclick="openTriage('${esc(String(m.id))}')">
       <span class="dot ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"></span>
-      <span class="m-from">${esc(m.from)}</span>
+      <span class="m-from">${esc(m.from || 'Expéditeur inconnu')}</span>
       <span class="m-subj">${esc(m.subject)}</span>
       ${maybeForeign((m.subject || '') + ' ' + (m.body || '')) ? '<span class="m-en">🌍</span>' : ''}
       <span class="m-time">${m.status === 'handled' ? '✓ répondu' : m.status === 'dismissed' ? 'ignoré' : fmtTime(m.receivedAt)}</span>
