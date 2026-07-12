@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard — MailOne</title>
+<title>MailOne — Vos mails</title>
 <meta name="robots" content="noindex">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -52,14 +52,14 @@ body{
 header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 8px}
 .logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:21px;letter-spacing:-.02em;color:#fff;text-decoration:none}
 .logo em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-.hdr-actions{display:flex;align-items:center;gap:14px}
-.hdr-link{font-size:12.5px;color:var(--text-dim);text-decoration:none;transition:color .2s}
+.hdr-actions{display:flex;align-items:center;gap:16px}
+.hdr-link{font-size:13.5px;color:var(--text-dim);text-decoration:none;transition:color .2s}
 .hdr-link:hover{color:var(--text)}
 
 .label{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim)}
 
 h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4vw,36px);letter-spacing:-.02em;margin:34px 0 8px}
-.sub{font-size:15px;color:var(--text-dim);line-height:1.6;max-width:560px}
+.sub{font-size:16px;color:var(--text-dim);line-height:1.6;max-width:600px}
 .sub b{color:var(--text);font-weight:600}
 .sub .n-urgent{color:var(--urgent);font-weight:700}
 
@@ -72,54 +72,32 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
   -webkit-backdrop-filter:blur(14px);
 }
 
-/* ── Mail urgent ───────────────────────────────────────────── */
-.section{margin-top:36px}
-.section .label{display:block;margin-bottom:14px}
-.mail-card{
-  position:relative;display:block;width:100%;text-align:left;cursor:pointer;
-  padding:18px 20px;margin-bottom:12px;color:var(--text);
-  border-left:3px solid var(--urgent);
-  transition:background .2s,box-shadow .25s,transform .2s;
+/* ── Liste des mails (une seule, épurée) ───────────────────── */
+.section{margin-top:30px}
+.mrow{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+  padding:17px 20px;margin-bottom:10px;color:var(--text);
   font-family:inherit;font-size:inherit;
+  transition:background .2s,box-shadow .25s,transform .2s;
 }
-.mail-card:hover{background:var(--glass-hover);box-shadow:0 0 28px var(--urgent-glow);transform:translateY(-1px)}
-.mail-card:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.mc-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-.mc-from{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px}
-.mc-time{font-family:'Space Grotesk',sans-serif;font-size:11.5px;color:var(--text-dim);margin-left:auto;white-space:nowrap}
-.badge-urgent{
-  font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;
-  color:#fff;background:var(--urgent);border-radius:6px;padding:3px 8px;
-  animation:pulse 1.6s ease-in-out infinite;
-}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--urgent-glow)}50%{box-shadow:0 0 0 9px rgba(255,92,92,0)}}
-.mc-subj{font-size:14px;font-weight:500;margin-top:7px}
-.mc-prev{font-size:12.5px;color:var(--text-dim);margin-top:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical}
-.mc-cta{font-family:'Space Grotesk',sans-serif;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-top:10px;display:inline-block}
-
-/* ── Mails triés ───────────────────────────────────────────── */
-.sorted-row{
-  display:flex;align-items:center;gap:12px;padding:13px 18px;margin-bottom:8px;
-  opacity:.62;transition:opacity .2s;
-}
-.sorted-row:hover{opacity:.88}
-.sr-from{font-family:'Space Grotesk',sans-serif;font-weight:500;font-size:13px;min-width:130px}
-.sr-subj{font-size:13px;color:var(--text-dim);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.sr-time{font-family:'Space Grotesk',sans-serif;font-size:11px;color:var(--text-dim);white-space:nowrap}
-.chip{
-  font-family:'Space Grotesk',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
-  padding:3px 9px;border-radius:20px;border:1px solid var(--glass-border);color:var(--text-dim);white-space:nowrap;
-}
-.chip.quote{color:#7FA8FF;border-color:rgba(91,140,255,.35)}
-.chip.appt{color:var(--ok);border-color:rgba(61,214,140,.35)}
-.chip.invoice{color:#FFC46B;border-color:rgba(255,196,107,.35)}
-.chip.urgent{color:var(--urgent);border-color:rgba(255,92,92,.35)}
-.chip.done{color:var(--ok);border-color:rgba(61,214,140,.35)}
+.mrow:hover{background:var(--glass-hover);transform:translateY(-1px)}
+.mrow:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mrow.urgent{border-left:3px solid var(--urgent)}
+.mrow.urgent:hover{box-shadow:0 0 26px var(--urgent-glow)}
+.mrow.done{opacity:.45}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;background:rgba(255,255,255,.14)}
+.dot.urgent{background:var(--urgent);animation:pulse 1.6s ease-in-out infinite}
+.dot.done{background:var(--ok);animation:none}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 var(--urgent-glow)}50%{box-shadow:0 0 0 8px rgba(255,92,92,0)}}
+.m-from{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:15px;flex-shrink:0;max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m-subj{font-size:14.5px;color:var(--text-dim);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.m-time{font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--text-dim);white-space:nowrap;flex-shrink:0}
+.m-en{font-size:11px;flex-shrink:0}
 
 /* ── Boutons ───────────────────────────────────────────────── */
 .btn{
-  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13.5px;
-  border:none;border-radius:11px;padding:12px 22px;cursor:pointer;
+  font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px;
+  border:none;border-radius:12px;padding:14px 24px;cursor:pointer;
   transition:transform .2s,box-shadow .2s,background .2s;color:var(--text);
 }
 .btn:disabled{opacity:.55;cursor:default;transform:none!important}
@@ -132,21 +110,32 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 .btn-ghost:hover:not(:disabled){background:var(--glass-hover)}
 .btn-danger-ghost{background:transparent;border:1px solid rgba(255,92,92,.3);color:var(--urgent)}
 .btn-danger-ghost:hover:not(:disabled){background:rgba(255,92,92,.08)}
+.btn-block{display:block;width:100%;text-align:center;margin-bottom:10px}
 
-/* ── Vue triage split-screen ───────────────────────────────── */
+/* ── Vue mail + réponse ────────────────────────────────────── */
 .back{
   display:inline-flex;align-items:center;gap:7px;margin:26px 0 20px;
-  font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600;color:var(--text-dim);
+  font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:600;color:var(--text-dim);
   background:none;border:none;cursor:pointer;transition:color .2s;
 }
 .back:hover{color:var(--text)}
 .split{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
-.pane{padding:24px}
+.pane{padding:26px}
 .pane .label{display:block;margin-bottom:16px}
-.orig-subj{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:17px;margin-bottom:12px}
+.orig-subj{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:18px;margin-bottom:12px}
 .orig-meta{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
-.meta-chip{font-size:12px;color:var(--text-dim);background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;padding:5px 10px}
-.orig-body{font-size:14px;line-height:1.75;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.meta-chip{font-size:12.5px;color:var(--text-dim);background:var(--glass);border:1px solid var(--glass-border);border-radius:8px;padding:5px 10px}
+.orig-body{font-size:15px;line-height:1.8;color:var(--text);white-space:pre-wrap;word-break:break-word}
+
+/* Traduction (mails en anglais) */
+.trad{
+  margin-top:18px;padding:16px 18px;border-radius:12px;display:none;
+  background:rgba(61,214,140,.07);border:1px solid rgba(61,214,140,.25);
+}
+.trad.on{display:block}
+.trad-lbl{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--ok);margin-bottom:8px}
+.trad-txt{font-size:14.5px;line-height:1.75;color:var(--text);white-space:pre-wrap;word-break:break-word}
+.trad-wait{font-size:13px;color:var(--text-dim)}
 
 .ai-pane{
   background:linear-gradient(135deg,rgba(91,140,255,.10),rgba(159,123,255,.07));
@@ -157,22 +146,20 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 }
 .ai-head{display:flex;align-items:center;gap:9px;margin-bottom:16px}
 .ai-dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(90deg,var(--accent),var(--accent-2));box-shadow:0 0 10px var(--accent-glow)}
-.draft{
-  font-size:14px;line-height:1.75;white-space:pre-wrap;word-break:break-word;min-height:140px;
-}
+.draft{font-size:15px;line-height:1.8;white-space:pre-wrap;word-break:break-word;min-height:120px}
 .caret{display:inline-block;width:8px;height:16px;background:var(--accent);vertical-align:-2px;animation:blink .85s step-end infinite;border-radius:2px}
 @keyframes blink{50%{opacity:0}}
 .draft-edit{
   width:100%;min-height:240px;resize:vertical;display:none;
   background:rgba(7,9,15,.55);border:1px solid rgba(91,140,255,.3);border-radius:12px;
-  color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.7;padding:14px;
+  color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.7;padding:14px;
 }
 .draft-edit:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,140,255,.15)}
 .ai-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
-.gen-label{font-size:12px;color:var(--text-dim);margin-top:12px}
+.gen-label{font-size:13px;color:var(--text-dim);margin-top:12px}
 
 /* ── États : skeleton / vide / erreur ──────────────────────── */
-.skeleton{position:relative;overflow:hidden;padding:18px 20px;margin-bottom:12px;min-height:76px}
+.skeleton{position:relative;overflow:hidden;padding:18px 20px;margin-bottom:12px;min-height:58px}
 .sk-line{height:11px;border-radius:6px;background:rgba(255,255,255,.06);margin-bottom:10px}
 .skeleton::after{
   content:'';position:absolute;inset:0;
@@ -182,16 +169,37 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 @keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 .state{padding:52px 30px;text-align:center}
 .state .ico{font-size:40px;margin-bottom:14px}
-.state h2{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:600;margin-bottom:8px}
-.state p{font-size:13.5px;color:var(--text-dim);line-height:1.65;max-width:380px;margin:0 auto 20px}
+.state h2{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:600;margin-bottom:8px}
+.state p{font-size:14.5px;color:var(--text-dim);line-height:1.65;max-width:400px;margin:0 auto 20px}
 .state.ok .ico{filter:drop-shadow(0 0 18px rgba(61,214,140,.5))}
+
+/* ── Connexion boîte mail (overlay) ────────────────────────── */
+.ov{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.68);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+.ov.on{display:flex}
+.ov-card{max-width:430px;width:100%;padding:32px 30px;background:#0C1018;border:1px solid rgba(255,255,255,.12);border-radius:18px;box-shadow:0 24px 80px rgba(0,0,0,.6);position:relative}
+.ov-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:9px;border:none;background:var(--glass);color:var(--text-dim);cursor:pointer;font-size:15px}
+.ov-close:hover{background:var(--glass-hover);color:var(--text)}
+.ov-title{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;margin-bottom:6px}
+.ov-sub{font-size:14px;color:var(--text-dim);line-height:1.6;margin-bottom:22px}
+.ov-sep{display:flex;align-items:center;gap:10px;margin:18px 0;color:var(--text-dim);font-size:12px}
+.ov-sep::before,.ov-sep::after{content:'';flex:1;height:1px;background:var(--glass-border)}
+.imap-box{display:none;margin-top:6px}
+.imap-box.on{display:block}
+.imap-box label{display:block;font-size:12.5px;color:var(--text-dim);margin:12px 0 5px;font-weight:600}
+.imap-box input,.imap-box select{
+  width:100%;padding:12px 13px;border-radius:10px;border:1px solid rgba(255,255,255,.14);
+  background:rgba(255,255,255,.05);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14.5px;color-scheme:dark;
+}
+.imap-box input:focus,.imap-box select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,140,255,.15)}
+.imap-note{display:none;margin-top:12px;padding:10px 13px;border-radius:9px;font-size:12.5px;line-height:1.55;background:rgba(255,196,107,.1);border:1px solid rgba(255,196,107,.3);color:#FFC46B}
+.imap-err{display:none;margin-top:12px;font-size:13px;color:var(--urgent)}
 
 /* ── Toast ─────────────────────────────────────────────────── */
 .toast{
   position:fixed;bottom:24px;left:50%;transform:translate(-50%,80px);opacity:0;z-index:60;
   display:flex;align-items:center;gap:9px;
   background:var(--bg-2);border:1px solid var(--glass-border);border-radius:12px;
-  padding:13px 20px;font-size:13px;font-weight:500;
+  padding:13px 20px;font-size:13.5px;font-weight:500;
   box-shadow:0 12px 40px rgba(0,0,0,.5);
   transition:transform .35s cubic-bezier(.2,.8,.2,1),opacity .35s;
   max-width:calc(100vw - 40px);
@@ -206,9 +214,8 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 /* ── Responsive ────────────────────────────────────────────── */
 @media (max-width:760px){
   .split{grid-template-columns:1fr}
-  .sr-from{min-width:0}
-  .sorted-row{flex-wrap:wrap}
-  .ai-actions .btn{flex:1;padding:12px 10px}
+  .m-from{max-width:130px}
+  .ai-actions .btn{flex:1;padding:13px 10px}
 }
 
 /* ── Reduced motion ────────────────────────────────────────── */
@@ -227,31 +234,24 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
   <header>
     <a class="logo" href="dashboard.html">Mail<em>One</em></a>
     <nav class="hdr-actions">
-      <a class="hdr-link" href="app.html">Boîte complète</a>
       <a class="hdr-link" href="account.html">Compte</a>
       <a class="hdr-link" href="#" onclick="Auth.logout();return false">Déconnexion</a>
     </nav>
   </header>
 
-  <!-- ══ VUE DASHBOARD ══════════════════════════════════════ -->
+  <!-- ══ VUE LISTE ══════════════════════════════════════════ -->
   <main id="view-dashboard">
     <h1 id="greeting">Bonjour</h1>
     <p class="sub" id="summary">Chargement de votre boîte…</p>
 
-    <section class="section" id="sec-urgent">
-      <span class="label">🔴 À traiter maintenant</span>
-      <div id="urgent-list"></div>
-    </section>
-
-    <section class="section" id="sec-sorted">
-      <span class="label">Déjà trié par MailOne</span>
-      <div id="sorted-list"></div>
+    <section class="section">
+      <div id="mail-list"></div>
     </section>
   </main>
 
-  <!-- ══ VUE TRIAGE ═════════════════════════════════════════ -->
+  <!-- ══ VUE MAIL + RÉPONSE ═════════════════════════════════ -->
   <main id="view-triage" style="display:none">
-    <button class="back" onclick="closeTriage()">← Retour au dashboard</button>
+    <button class="back" onclick="closeTriage()">← Retour à vos mails</button>
     <div class="split">
       <article class="card pane" id="pane-mail">
         <span class="label">Mail reçu</span>
@@ -262,15 +262,23 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
           <span class="meta-chip" id="t-date"></span>
         </div>
         <div class="orig-body" id="t-body"></div>
+        <div class="trad" id="t-trad">
+          <div class="trad-lbl">🇫🇷 Traduction du mail</div>
+          <div class="trad-txt" id="t-trad-txt"></div>
+        </div>
       </article>
 
       <aside class="ai-pane pane">
         <div class="ai-head">
           <span class="ai-dot"></span>
-          <span class="label" style="margin:0">Réponse rédigée par MailOne</span>
+          <span class="label" style="margin:0" id="ai-title">Réponse rédigée par MailOne</span>
         </div>
         <div class="draft" id="t-draft"></div>
         <textarea class="draft-edit" id="t-edit" aria-label="Modifier la réponse"></textarea>
+        <div class="trad" id="t-draft-trad">
+          <div class="trad-lbl">🇫🇷 Ce que dit votre réponse</div>
+          <div class="trad-txt" id="t-draft-trad-txt"></div>
+        </div>
         <div class="gen-label" id="t-gen" style="display:none">MailOne rédige votre réponse…</div>
         <div class="ai-actions" id="t-actions" style="visibility:hidden">
           <button class="btn btn-primary" id="btn-send" onclick="sendReply()">Envoyer la réponse</button>
@@ -283,6 +291,43 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
   </main>
 </div>
 
+<!-- ══ CONNEXION BOÎTE MAIL ═════════════════════════════════ -->
+<div class="ov" id="setup-ov">
+  <div class="ov-card">
+    <button class="ov-close" onclick="hideSetup()">✕</button>
+    <div class="ov-title">Connectez votre boîte mail</div>
+    <div class="ov-sub">MailOne lit vos mails pour les trier et préparer vos réponses. Vos mails ne sont jamais stockés sur nos serveurs.</div>
+    <button class="btn btn-primary btn-block" onclick="connectOAuth('gmail')">Connecter Gmail — 2 clics →</button>
+    <button class="btn btn-ghost btn-block" onclick="connectOAuth('outlook')">Connecter Outlook</button>
+    <div class="ov-sep">ou une autre boîte</div>
+    <button class="btn btn-ghost btn-block" id="imap-toggle" onclick="toggleImap()">Orange, Free, SFR, Yahoo… →</button>
+    <div class="imap-box" id="imap-box">
+      <label for="imap-prov">Votre fournisseur</label>
+      <select id="imap-prov" onchange="provPick()">
+        <option value="imap.orange.fr|993|">Orange / Wanadoo</option>
+        <option value="imap.free.fr|993|Free : le login est votre identifiant Freebox (sans @free.fr).">Free</option>
+        <option value="imap.sfr.fr|993|">SFR</option>
+        <option value="imap.bbox.fr|993|">Bouygues / Bbox</option>
+        <option value="imap.laposte.net|993|La Poste : activez IMAP dans le webmail → Paramètres → Accès POP/IMAP.">La Poste</option>
+        <option value="imap.mail.yahoo.com|993|Yahoo : créez un « mot de passe d'application » — Compte Yahoo → Sécurité → Mots de passe d'application.">Yahoo</option>
+        <option value="imap.mail.me.com|993|iCloud : créez un mot de passe d'app sur appleid.apple.com → Connexion et sécurité.">iCloud</option>
+        <option value="|993|Renseignez le serveur IMAP fourni par votre hébergeur.">Autre…</option>
+      </select>
+      <label for="imap-user">Votre adresse email</label>
+      <input id="imap-user" type="email" placeholder="vous@orange.fr" autocomplete="email">
+      <label for="imap-pass">Mot de passe de la boîte</label>
+      <input id="imap-pass" type="password" placeholder="••••••••" autocomplete="current-password">
+      <div id="imap-custom" style="display:none">
+        <label for="imap-host">Serveur IMAP</label>
+        <input id="imap-host" type="text" placeholder="imap.mondomaine.fr">
+      </div>
+      <div class="imap-note" id="imap-note"></div>
+      <div class="imap-err" id="imap-err"></div>
+      <button class="btn btn-primary btn-block" id="imap-btn" style="margin-top:16px" onclick="connectImap()">Tester & connecter →</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
 <script src="mailone.js"></script>
@@ -291,9 +336,7 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 if (!Auth.requireAuth()) throw new Error('redirect login');
 
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const CAT_LABEL = { urgent:'Urgent', quote:'Devis', appt:'RDV', invoice:'Facture' };
-
-const state = { data:null, current:null, typer:null, editing:false };
+const state = { data:null, current:null, typer:null, editing:false, draftText:'' };
 
 // ── Utils ────────────────────────────────────────────────────
 function esc(s){
@@ -314,21 +357,26 @@ function toast(ico, msg, ok = false){
   clearTimeout(t._h);
   t._h = setTimeout(() => t.classList.remove('on'), 3600);
 }
+// Détection simple d'un mail en anglais
+function isEnglish(t){
+  t = ' ' + String(t).toLowerCase().replace(/[^a-zà-ÿ]+/g, ' ') + ' ';
+  const en = [' the ',' and ',' you ',' your ',' for ',' with ',' this ',' that ',' from ',' will ',' have ',' please ',' hello ',' thanks ',' dear ',' our ',' has ',' ends '];
+  const fr = [' le ',' la ',' les ',' des ',' et ',' vous ',' votre ',' pour ',' avec ',' bonjour ',' merci ',' dans ',' est ',' une ',' nous ',' je ',' pas '];
+  const count = a => a.reduce((s, w) => s + (t.split(w).length - 1), 0);
+  const e = count(en), f = count(fr);
+  return e >= 3 && e > f * 1.5;
+}
 
 // ── Chargement ───────────────────────────────────────────────
 function showSkeletons(){
-  document.getElementById('urgent-list').innerHTML =
-    '<div class="card skeleton"><div class="sk-line" style="width:38%"></div><div class="sk-line" style="width:70%"></div><div class="sk-line" style="width:52%;margin:0"></div></div>'.repeat(2);
-  document.getElementById('sorted-list').innerHTML =
-    '<div class="card skeleton" style="min-height:44px;padding:13px 18px"><div class="sk-line" style="width:80%;margin:0"></div></div>'.repeat(3);
+  document.getElementById('mail-list').innerHTML =
+    '<div class="card skeleton"><div class="sk-line" style="width:80%;margin:0"></div></div>'.repeat(5);
 }
 
 async function loadDashboard(){
   const u = Auth.getUser();
   document.getElementById('greeting').textContent = `Bonjour ${u?.first_name || u?.firstName || ''}`.trim();
   document.getElementById('summary').textContent  = 'Chargement de votre boîte…';
-  document.getElementById('sec-urgent').style.display = '';
-  document.getElementById('sec-sorted').style.display = '';
   showSkeletons();
 
   try {
@@ -339,16 +387,17 @@ async function loadDashboard(){
   } catch (err) {
     if (err.code === 'NO_ACCOUNT') {
       renderFullState('📮', 'Connectez votre boîte mail',
-        'MailOne a besoin d\'accéder à votre boîte pour trier vos emails. La connexion prend une minute.',
-        '<button class="btn btn-primary" onclick="reconnectGmail()">Connecter Gmail (2 clics) →</button> <a class="btn btn-ghost" href="app.html" style="text-decoration:none;display:inline-block">Autre boîte (IMAP)</a>');
+        'MailOne a besoin d\'accéder à votre boîte pour trier vos emails et préparer vos réponses. La connexion prend une minute.',
+        '<button class="btn btn-primary" onclick="showSetup()">Connecter ma boîte →</button>');
+      showSetup();
     } else if (err.code === 'SCOPE_MISSING') {
       renderFullState('🔐', 'Autorisation Gmail manquante',
         'Votre compte Google est bien connecté, mais la case « Consulter vos messages Gmail » n\'a pas été cochée. Recommencez en <b>cochant la case</b> sur l\'écran Google.',
-        '<button class="btn btn-primary" onclick="reconnectGmail()">Autoriser l\'accès Gmail →</button>');
+        '<button class="btn btn-primary" onclick="connectOAuth(\'gmail\')">Autoriser l\'accès Gmail →</button>');
     } else if (err.code === 'OAUTH_EXPIRED' || err.status === 401) {
       renderFullState('🔄', 'Session boîte mail expirée',
-        'Reconnectez votre boîte pour reprendre le triage.',
-        '<a class="btn btn-primary" href="app.html" style="text-decoration:none;display:inline-block">Reconnecter →</a>');
+        'Reconnectez votre boîte pour reprendre le tri.',
+        '<button class="btn btn-primary" onclick="connectOAuth(\'gmail\')">Reconnecter →</button>');
     } else {
       renderFullState('⚠️', 'Impossible de charger vos mails',
         esc(err.message || 'Erreur inconnue.'),
@@ -359,63 +408,45 @@ async function loadDashboard(){
 
 function renderFullState(ico, title, text, actionsHtml){
   document.getElementById('summary').textContent = '';
-  document.getElementById('sec-sorted').style.display = 'none';
-  document.getElementById('sec-urgent').style.display = '';
-  document.querySelector('#sec-urgent .label').textContent = '';
-  document.getElementById('urgent-list').innerHTML =
+  document.getElementById('mail-list').innerHTML =
     `<div class="card state rise"><div class="ico">${ico}</div><h2>${esc(title)}</h2><p>${text}</p>${actionsHtml}</div>`;
 }
 
-// ── Rendu dashboard ──────────────────────────────────────────
+// ── Rendu liste ──────────────────────────────────────────────
 function renderDashboard(){
   const d = state.data;
   const u = Auth.getUser();
   document.getElementById('greeting').textContent = `Bonjour ${d.user?.firstName || u?.first_name || ''}`.trim();
-  document.getElementById('sec-urgent').style.display = '';
-  document.querySelector('#sec-urgent .label').textContent = '🔴 À traiter maintenant';
 
   const n = d.urgentCount;
   document.getElementById('summary').innerHTML = n > 0
-    ? `<span class="n-urgent">${n} mail${n>1?'s':''} urgent${n>1?'s':''}</span> nécessite${n>1?'nt':''} une réponse — <b>le reste est déjà trié.</b>`
-    : `Tout est sous contrôle — <b>aucun mail urgent.</b> Le reste est déjà trié.`;
+    ? `<span class="n-urgent">${n} mail${n>1?'s':''} urgent${n>1?'s':''}</span> à traiter — cliquez, la réponse est prête.`
+    : `Tout est sous contrôle — <b>aucun mail urgent.</b> Cliquez sur un mail : la réponse est déjà prête.`;
 
-  const ul = document.getElementById('urgent-list');
-  if (n === 0) {
-    ul.innerHTML = `<div class="card state ok rise">
-      <div class="ico">✅</div><h2>Tout est sous contrôle</h2>
-      <p>Aucun mail urgent ne nécessite votre attention. MailOne surveille votre boîte en continu.</p>
+  const list = document.getElementById('mail-list');
+  const mails = d.mails || [];
+  if (!mails.length) {
+    list.innerHTML = `<div class="card state ok rise">
+      <div class="ico">📭</div><h2>Boîte vide</h2>
+      <p>Aucun email pour l'instant. MailOne surveille votre boîte en continu.</p>
     </div>`;
-  } else {
-    ul.innerHTML = d.urgent.map((m, i) => `
-      <button class="mail-card card rise" style="animation-delay:${REDUCED?0:i*50}ms" onclick="openTriage('${esc(String(m.id))}')">
-        <div class="mc-top">
-          <span class="badge-urgent">URGENT</span>
-          <span class="mc-from">${esc(m.from)}</span>
-          <span class="mc-time">${fmtTime(m.receivedAt)}</span>
-        </div>
-        <div class="mc-subj">${esc(m.subject)}</div>
-        <div class="mc-prev">${esc(m.body)}</div>
-        <span class="mc-cta">Voir la réponse proposée →</span>
-      </button>`).join('');
+    return;
   }
 
-  const sl = document.getElementById('sorted-list');
-  if (!d.sorted?.length) {
-    sl.innerHTML = `<div class="card sorted-row" style="opacity:.5"><span class="sr-subj">Rien d'autre pour l'instant.</span></div>`;
-  } else {
-    sl.innerHTML = d.sorted.map((m, i) => `
-      <div class="card sorted-row rise" style="animation-delay:${REDUCED?0:(i+2)*50}ms">
-        <span class="sr-from">${esc(m.from)}</span>
-        <span class="sr-subj">${esc(m.subject)}</span>
-        <span class="chip ${m.status ? 'done' : esc(m.category)}">${m.status ? (m.status === 'handled' ? '✓ Traité' : 'Ignoré') : (CAT_LABEL[m.category] || esc(m.category))}</span>
-        <span class="sr-time">${fmtTime(m.receivedAt)}</span>
-      </div>`).join('');
-  }
+  list.innerHTML = mails.map((m, i) => `
+    <button class="mrow card rise ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"
+            style="animation-delay:${REDUCED?0:Math.min(i,12)*40}ms" onclick="openTriage('${esc(String(m.id))}')">
+      <span class="dot ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"></span>
+      <span class="m-from">${esc(m.from)}</span>
+      <span class="m-subj">${esc(m.subject)}</span>
+      ${isEnglish((m.subject || '') + ' ' + (m.body || '')) ? '<span class="m-en">🇬🇧</span>' : ''}
+      <span class="m-time">${m.status === 'handled' ? '✓ répondu' : m.status === 'dismissed' ? 'ignoré' : fmtTime(m.receivedAt)}</span>
+    </button>`).join('');
 }
 
-// ── Vue triage ───────────────────────────────────────────────
+// ── Vue mail + réponse ───────────────────────────────────────
 function openTriage(id){
-  const m = state.data.urgent.find(x => String(x.id) === String(id));
+  const m = (state.data.mails || []).find(x => String(x.id) === String(id));
   if (!m) return;
   state.current = m;
   state.editing = false;
@@ -430,23 +461,89 @@ function openTriage(id){
   document.getElementById('t-date').textContent    = fmtTime(m.receivedAt);
   document.getElementById('t-body').textContent    = m.body || '(aperçu indisponible)';
 
+  // Reset des blocs traduction
+  document.getElementById('t-trad').classList.remove('on');
+  document.getElementById('t-draft-trad').classList.remove('on');
+  document.getElementById('ai-title').textContent = 'Réponse rédigée par MailOne';
+
   toggleEditUI(false);
   document.getElementById('t-actions').style.visibility = 'hidden';
-  typeDraft(m.aiDraft || '');
+
+  if (isEnglish((m.subject || '') + ' ' + (m.body || ''))) {
+    prepareEnglish(m);
+  } else {
+    state.draftText = m.aiDraft || '';
+    typeDraft(state.draftText);
+  }
 }
 
-function typeDraft(text){
+// Mail en anglais : traduction du mail + réponse EN + traduction de la réponse
+async function prepareEnglish(m){
+  const tradBox = document.getElementById('t-trad');
+  const tradTxt = document.getElementById('t-trad-txt');
+  const gen     = document.getElementById('t-gen');
+
+  // Déjà traduit lors d'un clic précédent
+  if (m._en) { applyEnglish(m); return; }
+
+  tradBox.classList.add('on');
+  tradTxt.innerHTML = '<span class="trad-wait">Traduction en cours…</span>';
+  gen.style.display = '';
+  gen.textContent = 'MailOne traduit le mail et rédige votre réponse…';
+
+  try {
+    const r = await API.post('/api/ai/translate-mail', { subject: m.subject, body: m.body, sender: m.from });
+    if (r && r.lang === 'en' && r.reply) {
+      m._en = r;
+      applyEnglish(m);
+      return;
+    }
+    // L'IA juge le mail français → comportement normal
+    tradBox.classList.remove('on');
+    state.draftText = m.aiDraft || '';
+    typeDraft(state.draftText);
+  } catch (err) {
+    // Traduction indisponible (quota, réseau…) → réponse française locale
+    tradBox.classList.remove('on');
+    state.draftText = m.aiDraft || '';
+    typeDraft(state.draftText);
+    toast('🌐', 'Traduction indisponible — réponse proposée en français.');
+  }
+}
+
+function applyEnglish(m){
+  const r = m._en;
+  document.getElementById('t-trad').classList.add('on');
+  document.getElementById('t-trad-txt').textContent = r.mailFr || '';
+  document.getElementById('ai-title').textContent = 'Réponse en anglais — prête à envoyer';
+  state.draftText = r.reply;
+  typeDraft(r.reply, () => {
+    if (r.replyFr) {
+      document.getElementById('t-draft-trad-txt').textContent = r.replyFr;
+      document.getElementById('t-draft-trad').classList.add('on');
+    }
+  });
+}
+
+function typeDraft(text, onDone){
   const el  = document.getElementById('t-draft');
   const gen = document.getElementById('t-gen');
   if (state.typer) { clearInterval(state.typer); state.typer = null; }
 
-  if (REDUCED || !text) {
-    el.textContent = text;
+  const finish = () => {
+    gen.style.display = 'none';
     document.getElementById('t-actions').style.visibility = 'visible';
+    if (onDone) onDone();
+  };
+
+  if (REDUCED || !text) {
+    el.textContent = text || '';
+    finish();
     return;
   }
 
   gen.style.display = '';
+  gen.textContent = 'MailOne rédige votre réponse…';
   el.innerHTML = '<span class="caret"></span>';
   let i = 0;
   state.typer = setInterval(() => {
@@ -458,8 +555,7 @@ function typeDraft(text){
       el.appendChild(caret);
     } else {
       clearInterval(state.typer); state.typer = null;
-      gen.style.display = 'none';
-      document.getElementById('t-actions').style.visibility = 'visible';
+      finish();
     }
   }, 12);
 }
@@ -469,11 +565,12 @@ function closeTriage(){
   document.getElementById('view-triage').style.display = 'none';
   document.getElementById('view-dashboard').style.display = '';
   state.current = null;
+  renderDashboard();
 }
 
 // ── Modifier ─────────────────────────────────────────────────
 function toggleEdit(on){
-  if (state.typer) { clearInterval(state.typer); state.typer = null; document.getElementById('t-gen').style.display = 'none'; }
+  if (state.typer) { clearInterval(state.typer); state.typer = null; document.getElementById('t-gen').style.display = 'none'; document.getElementById('t-draft').textContent = state.draftText; }
   state.editing = on;
   if (on) document.getElementById('t-edit').value = getDraftText();
   toggleEditUI(on);
@@ -490,16 +587,15 @@ function toggleEditUI(on){
 function getDraftText(){
   return state.editing
     ? document.getElementById('t-edit').value
-    : (state.current?.aiDraft || document.getElementById('t-draft').textContent);
+    : (state.draftText || document.getElementById('t-draft').textContent);
 }
 
 // ── Actions ──────────────────────────────────────────────────
-function removeCurrentFromUrgent(status){
+function setCurrentStatus(status){
   const m = state.current;
-  state.data.urgent = state.data.urgent.filter(x => String(x.id) !== String(m.id));
-  state.data.urgentCount = state.data.urgent.length;
-  state.data.sorted.unshift({ id: m.id, from: m.from, subject: m.subject, category: 'urgent', status, receivedAt: m.receivedAt });
-  state.data.sorted = state.data.sorted.slice(0, 10);
+  m.status = status;
+  m.urgent = false;
+  state.data.urgentCount = (state.data.mails || []).filter(x => x.urgent).length;
 }
 
 async function sendReply(){
@@ -512,9 +608,8 @@ async function sendReply(){
 
   try {
     await API.post(`/api/mails/${encodeURIComponent(m.id)}/reply`, { content });
-    removeCurrentFromUrgent('handled');
+    setCurrentStatus('handled');
     closeTriage();
-    renderDashboard();
     toast('✅', 'Réponse envoyée — mail classé comme traité', true);
   } catch (err) {
     if (err.code === 'SEND_UNSUPPORTED') {
@@ -538,9 +633,8 @@ async function dismissMail(){
   btn.disabled = true;
   try {
     await API.post(`/api/mails/${encodeURIComponent(m.id)}/dismiss`, {});
-    removeCurrentFromUrgent('dismissed');
+    setCurrentStatus('dismissed');
     closeTriage();
-    renderDashboard();
     toast('🗂️', 'Mail ignoré — il ne réapparaîtra plus en urgent.');
   } catch (err) {
     toast('⚠️', err.message || 'Action impossible.');
@@ -549,18 +643,58 @@ async function dismissMail(){
   }
 }
 
-// ── Reconnexion Gmail (popup OAuth) ──────────────────────────
-function reconnectGmail(){
+// ── Connexion boîte mail ─────────────────────────────────────
+function showSetup(){ document.getElementById('setup-ov').classList.add('on'); }
+function hideSetup(){ document.getElementById('setup-ov').classList.remove('on'); }
+function toggleImap(){
+  const b = document.getElementById('imap-box');
+  b.classList.toggle('on');
+  if (b.classList.contains('on')) { provPick(); document.getElementById('imap-user').focus(); }
+}
+function provPick(){
+  const [host, port, note] = document.getElementById('imap-prov').value.split('|');
+  document.getElementById('imap-custom').style.display = host ? 'none' : 'block';
+  const n = document.getElementById('imap-note');
+  n.style.display = note ? 'block' : 'none';
+  n.textContent = note || '';
+}
+async function connectImap(){
+  const [selHost, port] = document.getElementById('imap-prov').value.split('|');
+  const host = selHost || document.getElementById('imap-host')?.value.trim();
+  const user = document.getElementById('imap-user').value.trim();
+  const pass = document.getElementById('imap-pass').value;
+  const err  = document.getElementById('imap-err');
+  const btn  = document.getElementById('imap-btn');
+  err.style.display = 'none';
+  if (!host || !user || !pass) { err.textContent = 'Remplissez tous les champs.'; err.style.display = 'block'; return; }
+  btn.disabled = true; btn.textContent = 'Connexion en cours…';
+  try {
+    await API.post('/api/emails/connect', { host, port: parseInt(port) || 993, user, password: pass, tls: true, name: user });
+    hideSetup();
+    toast('✅', 'Boîte connectée — chargement de vos mails…', true);
+    loadDashboard();
+  } catch (e) {
+    err.textContent = e.message || 'Connexion impossible.';
+    err.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Tester & connecter →';
+  }
+}
+
+// OAuth Gmail / Outlook (popup)
+function connectOAuth(provider){
   const token = Auth.getToken();
   if (!token) return;
-  window.open(`${CONFIG.API_URL}/api/oauth/gmail/start?state=${encodeURIComponent(token)}`,
+  window.open(`${CONFIG.API_URL}/api/oauth/${provider}/start?state=${encodeURIComponent(token)}`,
     'mailone_oauth', 'width=540,height=680,left=200,top=80,menubar=no,toolbar=no,scrollbars=yes');
-  toast('🔗', 'Autorisez l\'accès dans la fenêtre Google — cochez bien la case Gmail.');
+  toast('🔗', provider === 'gmail'
+    ? 'Autorisez l\'accès dans la fenêtre Google — cochez bien la case Gmail.'
+    : 'Autorisez l\'accès dans la fenêtre Microsoft.');
 }
 window.addEventListener('message', (e) => {
   if (e.origin !== window.location.origin) return;
-  if (e.data?.type === 'oauth_success') { toast('✅', 'Gmail autorisé — chargement…', true); loadDashboard(); }
-  else if (e.data?.type === 'oauth_error') toast('❌', 'Connexion Google échouée. Réessayez.');
+  if (e.data?.type === 'oauth_success') { hideSetup(); toast('✅', 'Boîte connectée — chargement…', true); loadDashboard(); }
+  else if (e.data?.type === 'oauth_error') toast('❌', 'Connexion échouée. Réessayez.');
 });
 
 loadDashboard();
