@@ -232,6 +232,39 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 .rise{animation:rise .55s cubic-bezier(.2,.8,.2,1) both}
 @keyframes rise{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 
+/* ── Calendrier ────────────────────────────────────────────── */
+.cal-wrap{padding:20px}
+.cal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-title{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;text-transform:capitalize}
+.cal-nav{display:flex;gap:6px;align-items:center}
+.cal-nav button{width:34px;height:34px;border-radius:9px;border:1px solid var(--glass-border);background:var(--glass);color:var(--text);cursor:pointer;font-size:14px;transition:background .15s}
+.cal-nav button:hover{background:var(--glass-hover)}
+.cal-nav .today-btn{width:auto;padding:0 12px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cal-dow{font-family:'Space Grotesk',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--text-dim);text-align:center;text-transform:uppercase;padding:4px 0}
+.cal-cell{min-height:64px;border-radius:10px;padding:7px 8px;cursor:pointer;background:var(--glass);border:1px solid transparent;transition:background .15s,border-color .15s;text-align:left;font-family:inherit;color:var(--text)}
+.cal-cell:hover{background:var(--glass-hover)}
+.cal-cell.out{opacity:.25}
+.cal-cell.today{border-color:rgba(91,140,255,.5)}
+.cal-cell.sel{border-color:var(--accent);background:rgba(91,140,255,.10)}
+.cal-num{font-family:'Space Grotesk',sans-serif;font-size:12.5px;font-weight:600}
+.cal-evts{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.cal-pill{font-size:10px;font-weight:600;padding:2px 5px;border-radius:5px;background:rgba(91,140,255,.18);color:#AFC6FF;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cal-pill.mail{background:rgba(61,214,140,.15);color:var(--ok)}
+.cal-more{font-size:9.5px;color:var(--text-dim)}
+.day-title{font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;margin:20px 0 10px;color:var(--text-dim);text-transform:capitalize}
+.evt-row{display:flex;align-items:center;gap:12px;padding:13px 16px;margin-bottom:8px}
+.evt-row.clickable{cursor:pointer}
+.evt-row.clickable:hover{background:var(--glass-hover)}
+.evt-time{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:13px;color:var(--accent);min-width:50px;flex-shrink:0}
+.evt-title{flex:1;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evt-x{border:none;background:transparent;color:var(--text-dim);cursor:pointer;font-size:14px;padding:4px;flex-shrink:0}
+.evt-x:hover{color:var(--urgent)}
+.add-form{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.add-form input{flex:1;min-width:110px;padding:11px 12px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;color-scheme:dark}
+.add-form input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,140,255,.15)}
+@media (max-width:600px){.cal-cell{min-height:46px;padding:5px 6px}.cal-pill{display:none}.cal-cell.has::after{content:'';display:block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:4px}}
+
 /* ── Agenda ────────────────────────────────────────────────── */
 .agenda-row{display:flex;align-items:center;gap:14px;padding:16px 20px;margin-bottom:10px}
 .ag-ico{font-size:20px;flex-shrink:0}
@@ -398,7 +431,9 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 if (!Auth.requireAuth()) throw new Error('redirect login');
 
 const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-const state = { data:null, current:null, typer:null, editing:false, draftText:'', folder:'all' };
+const state = { data:null, current:null, typer:null, editing:false, draftText:'', folder:'all',
+                cal: { ref: new Date(), selected: dayKeyInit(), events: [], error: null } };
+function dayKeyInit(){ const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
 // ── Dossiers ─────────────────────────────────────────────────
 const FOLDER_EMPTY = {
@@ -444,20 +479,74 @@ function updateCounts(){
     invoice: mails.filter(m => m.category === 'invoice' && !m.status).length,
     done:    mails.filter(m => m.status).length,
   };
-  counts.agenda = counts.appt;
+  counts.agenda = counts.appt + (state.cal.events?.length || 0);
   for (const [k, v] of Object.entries(counts)) {
     const el = document.getElementById('ct-' + k);
     if (el) { el.textContent = v; el.classList.toggle('hot', k === 'urgent' && v > 0); }
   }
 }
 
-// Date/heure repérée dans un mail (pour l'agenda)
-function findDateHint(m){
-  const t = `${m.subject || ''} ${m.body || ''}`;
-  const re = /\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\s+\d{1,2}(?:\s+[a-zéû]+)?|\b\d{1,2}\s+(janvier|février|mars|avril|mai|juin|juillet|août|septembre|octobre|novembre|décembre)|\b\d{1,2}\/\d{1,2}(?:\/\d{2,4})?|\b\d{1,2}\s*h\s*\d{0,2}\b/i;
-  const hit = t.match(re);
-  return hit ? hit[0].trim() : '';
+// ── Calendrier : dates, événements ───────────────────────────
+const FR_MONTHS = {janvier:0,fevrier:1,'février':1,mars:2,avril:3,mai:4,juin:5,juillet:6,aout:7,'août':7,septembre:8,octobre:9,novembre:10,decembre:11,'décembre':11};
+const FR_DAYS   = {dimanche:0,lundi:1,mardi:2,mercredi:3,jeudi:4,vendredi:5,samedi:6};
+function addDays(dt, n){ const d = new Date(dt); d.setDate(d.getDate() + n); return d; }
+function dayKey(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+
+// Devine la date d'un RDV mentionné dans un mail (référence : date de réception)
+function parseMailDate(m){
+  const t = `${m.subject || ''} ${m.body || ''}`.toLowerCase();
+  const base = new Date(m.receivedAt);
+  if (isNaN(base)) return null;
+  let d = null, x;
+
+  if ((x = t.match(/\b(\d{1,2})\/(\d{1,2})(?:\/(\d{2,4}))?\b/))) {
+    const y = x[3] ? (x[3].length === 2 ? 2000 + +x[3] : +x[3]) : base.getFullYear();
+    d = new Date(y, +x[2] - 1, +x[1]);
+    if (!x[3] && d < addDays(base, -1)) d.setFullYear(d.getFullYear() + 1);
+  }
+  if (!d && (x = t.match(/\b(\d{1,2})(?:er)?\s+(janvier|février|fevrier|mars|avril|mai|juin|juillet|août|aout|septembre|octobre|novembre|décembre|decembre)\b/))) {
+    d = new Date(base.getFullYear(), FR_MONTHS[x[2]], +x[1]);
+    if (d < addDays(base, -1)) d.setFullYear(d.getFullYear() + 1);
+  }
+  if (!d && (x = t.match(/\b(lundi|mardi|mercredi|jeudi|vendredi|samedi|dimanche)\b(?:\s+(\d{1,2})\b)?/))) {
+    if (x[2]) {
+      d = new Date(base.getFullYear(), base.getMonth(), +x[2]);
+      if (d < addDays(base, -1)) d.setMonth(d.getMonth() + 1);
+    } else {
+      d = new Date(base);
+      const delta = (FR_DAYS[x[1]] - base.getDay() + 7) % 7 || 7;
+      d.setDate(d.getDate() + delta);
+    }
+  }
+  if (!d || isNaN(d)) return null;
+
+  const h = t.match(/\b(\d{1,2})\s*[h:](\d{2})?\b/);
+  if (h && +h[1] < 24) d.setHours(+h[1], h[2] ? +h[2] : 0, 0, 0);
+  else d.setHours(9, 0, 0, 0);
+  return d;
 }
+
+// Tous les éléments d'agenda : événements manuels + RDV datés des mails
+function agendaItems(){
+  const items = [], undated = [];
+  for (const ev of state.cal.events) {
+    const d = new Date(ev.starts_at);
+    if (!isNaN(d)) items.push({ date: d, title: ev.title, manual: true, id: ev.id });
+  }
+  for (const m of (state.data?.mails || []).filter(m => m.category === 'appt' && !m.status)) {
+    const d = parseMailDate(m);
+    if (d) items.push({ date: d, title: `${m.from || 'Client'} — ${m.subject}`, mail: m });
+    else undated.push(m);
+  }
+  items.sort((a, b) => a.date - b.date);
+  return { items, undated };
+}
+
+async function loadEvents(){
+  try { const r = await API.get('/api/events'); state.cal.events = r?.events || []; state.cal.error = null; }
+  catch (e) { state.cal.events = []; state.cal.error = e.message; }
+}
+
 function gcalLink(m){
   const text    = encodeURIComponent(`RDV — ${m.from || 'client'}`);
   const details = encodeURIComponent(`${m.subject || ''}\n\n${(m.body || '').slice(0, 400)}`);
@@ -511,6 +600,7 @@ async function loadDashboard(){
     const data = await API.get('/api/dashboard');
     if (!data) return; // token expiré → logout géré par mailone.js
     state.data = data;
+    await loadEvents();
     renderDashboard();
   } catch (err) {
     if (err.code === 'NO_ACCOUNT') {
@@ -554,6 +644,7 @@ function renderDashboard(){
   updateCounts();
 
   const list  = document.getElementById('mail-list');
+  if (state.folder === 'agenda') { renderCalendar(list); return; }
   const mails = folderMails();
   if (!mails.length) {
     const [ico, title, txt] = FOLDER_EMPTY[state.folder] || FOLDER_EMPTY.all;
@@ -563,20 +654,6 @@ function renderDashboard(){
     return;
   }
 
-  // Vue Agenda : RDV repérés + ajout au calendrier en un clic
-  if (state.folder === 'agenda') {
-    list.innerHTML = mails.map((m, i) => `
-      <div class="agenda-row card rise" style="animation-delay:${REDUCED?0:Math.min(i,12)*40}ms;cursor:pointer" onclick="openTriage('${esc(String(m.id))}')">
-        <span class="ag-ico">📅</span>
-        <span class="ag-main">
-          <span class="ag-title">${esc(m.from || 'Expéditeur inconnu')}</span>
-          <span class="ag-sub" style="display:block">${esc(m.subject)}</span>
-        </span>
-        ${findDateHint(m) ? `<span class="ag-date">${esc(findDateHint(m))}</span>` : ''}
-        <a class="ag-btn" href="${gcalLink(m)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">＋ Google Agenda</a>
-      </div>`).join('');
-    return;
-  }
 
   list.innerHTML = mails.map((m, i) => `
     <button class="mrow card rise ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"
@@ -787,6 +864,110 @@ async function dismissMail(){
   } finally {
     btn.disabled = false;
   }
+}
+
+// ── Calendrier : rendu + actions ─────────────────────────────
+function renderCalendar(container){
+  const { items, undated } = agendaItems();
+  const byDay = {};
+  for (const it of items) (byDay[dayKey(it.date)] = byDay[dayKey(it.date)] || []).push(it);
+
+  const ref    = state.cal.ref;
+  const first  = new Date(ref.getFullYear(), ref.getMonth(), 1);
+  const start  = addDays(first, -((first.getDay() + 6) % 7));   // lundi précédent
+  const todayK = dayKeyInit();
+  const monthLabel = ref.toLocaleDateString('fr-FR', { month:'long', year:'numeric' });
+
+  let cells = '';
+  for (let i = 0; i < 42; i++) {
+    const d = addDays(start, i);
+    const k = dayKey(d);
+    const evs = byDay[k] || [];
+    cells += `<button class="cal-cell ${d.getMonth()!==ref.getMonth()?'out':''} ${k===todayK?'today':''} ${k===state.cal.selected?'sel':''} ${evs.length?'has':''}" onclick="calSelect('${k}')">
+      <span class="cal-num">${d.getDate()}</span>
+      <span class="cal-evts">${evs.slice(0,2).map(e=>`<span class="cal-pill ${e.mail?'mail':''}">${esc(e.title)}</span>`).join('')}${evs.length>2?`<span class="cal-more">+${evs.length-2} autres</span>`:''}</span>
+    </button>`;
+  }
+
+  const selDate  = new Date(state.cal.selected + 'T12:00:00');
+  const selEvs   = (byDay[state.cal.selected] || []).sort((a,b) => a.date - b.date);
+  const dayLabel = selDate.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+  const hm = d => `${String(d.getHours()).padStart(2,'0')}h${String(d.getMinutes()).padStart(2,'0')}`;
+
+  container.innerHTML = `
+    <div class="card cal-wrap rise">
+      <div class="cal-head">
+        <span class="cal-title">${esc(monthLabel)}</span>
+        <span class="cal-nav">
+          <button onclick="calMove(-1)" aria-label="Mois précédent">‹</button>
+          <button class="today-btn" onclick="calToday()">Aujourd'hui</button>
+          <button onclick="calMove(1)" aria-label="Mois suivant">›</button>
+        </span>
+      </div>
+      <div class="cal-grid">
+        ${['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'].map(d=>`<span class="cal-dow">${d}</span>`).join('')}
+        ${cells}
+      </div>
+
+      <div class="day-title">📌 ${esc(dayLabel)}</div>
+      ${selEvs.length ? selEvs.map(e => e.mail
+        ? `<div class="evt-row card clickable" onclick="openTriage('${esc(String(e.mail.id))}')">
+             <span class="evt-time">${hm(e.date)}</span>
+             <span class="evt-title">${esc(e.title)}</span>
+             <a class="ag-btn" href="${gcalLink(e.mail)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">＋ Google</a>
+           </div>`
+        : `<div class="evt-row card">
+             <span class="evt-time">${hm(e.date)}</span>
+             <span class="evt-title">${esc(e.title)}</span>
+             <button class="evt-x" onclick="delEvent('${esc(String(e.id))}')" title="Supprimer">✕</button>
+           </div>`
+      ).join('') : `<div class="evt-row card" style="color:var(--text-dim);font-size:13.5px">Rien de prévu ce jour — ajoutez un rendez-vous ci-dessous.</div>`}
+
+      <div class="add-form">
+        <input id="ev-title" type="text" placeholder="Nouveau rendez-vous (ex : Visite Mme Durand)" maxlength="120">
+        <input id="ev-time" type="time" value="09:00" style="flex:0 0 110px">
+        <button class="btn btn-primary" style="padding:11px 18px" onclick="addEvent()">＋ Ajouter</button>
+      </div>
+      ${state.cal.error ? `<div style="margin-top:12px;font-size:12.5px;color:var(--urgent)">⚠️ Agenda non initialisé côté base : ${esc(state.cal.error)}</div>` : ''}
+    </div>
+
+    ${undated.length ? `
+      <div class="day-title">📬 Rendez-vous à caler (date non détectée dans le mail)</div>
+      ${undated.map(m => `
+        <div class="agenda-row card" style="cursor:pointer" onclick="openTriage('${esc(String(m.id))}')">
+          <span class="ag-ico">📅</span>
+          <span class="ag-main">
+            <span class="ag-title">${esc(m.from || 'Expéditeur inconnu')}</span>
+            <span class="ag-sub" style="display:block">${esc(m.subject)}</span>
+          </span>
+          <a class="ag-btn" href="${gcalLink(m)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">＋ Google</a>
+        </div>`).join('')}` : ''}
+  `;
+}
+
+function calMove(n){ const r = state.cal.ref; state.cal.ref = new Date(r.getFullYear(), r.getMonth() + n, 1); renderDashboard(); }
+function calToday(){ state.cal.ref = new Date(); state.cal.selected = dayKeyInit(); renderDashboard(); }
+function calSelect(k){ state.cal.selected = k; renderDashboard(); }
+
+async function addEvent(){
+  const title = document.getElementById('ev-title').value.trim();
+  const time  = document.getElementById('ev-time').value || '09:00';
+  if (!title) { toast('⚠️', 'Donnez un titre au rendez-vous.'); return; }
+  const starts = new Date(`${state.cal.selected}T${time}:00`);
+  try {
+    const r = await API.post('/api/events', { title, starts_at: starts.toISOString() });
+    if (r?.event) state.cal.events.push(r.event);
+    toast('📅', 'Rendez-vous ajouté', true);
+    renderDashboard();
+  } catch (e) { toast('⚠️', e.message || 'Ajout impossible.'); }
+}
+async function delEvent(id){
+  try {
+    await API.delete('/api/events/' + encodeURIComponent(id));
+    state.cal.events = state.cal.events.filter(e => String(e.id) !== String(id));
+    renderDashboard();
+    toast('🗑️', 'Rendez-vous supprimé');
+  } catch (e) { toast('⚠️', e.message || 'Suppression impossible.'); }
 }
 
 // ── Connexion boîte mail ─────────────────────────────────────
