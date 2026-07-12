@@ -514,7 +514,8 @@ async function prepareEnglish(m){
 function applyEnglish(m){
   const r = m._en;
   document.getElementById('t-trad').classList.add('on');
-  document.getElementById('t-trad-txt').textContent = r.mailFr || '';
+  document.getElementById('t-trad-txt').textContent =
+    (r.subjectFr ? `Objet : ${r.subjectFr}\n\n` : '') + (r.mailFr || '');
   document.getElementById('ai-title').textContent = 'Réponse en anglais — prête à envoyer';
   state.draftText = r.reply;
   typeDraft(r.reply, () => {
