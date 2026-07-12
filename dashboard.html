@@ -357,14 +357,16 @@ function toast(ico, msg, ok = false){
   clearTimeout(t._h);
   t._h = setTimeout(() => t.classList.remove('on'), 3600);
 }
-// Détection simple d'un mail en anglais
-function isEnglish(t){
-  t = ' ' + String(t).toLowerCase().replace(/[^a-zà-ÿ]+/g, ' ') + ' ';
-  const en = [' the ',' and ',' you ',' your ',' for ',' with ',' this ',' that ',' from ',' will ',' have ',' please ',' hello ',' thanks ',' dear ',' our ',' has ',' ends '];
-  const fr = [' le ',' la ',' les ',' des ',' et ',' vous ',' votre ',' pour ',' avec ',' bonjour ',' merci ',' dans ',' est ',' une ',' nous ',' je ',' pas '];
-  const count = a => a.reduce((s, w) => s + (t.split(w).length - 1), 0);
-  const e = count(en), f = count(fr);
-  return e >= 3 && e > f * 1.5;
+// Détection rapide « probablement pas en français » (le serveur tranche
+// précisément parmi les 20 langues prises en charge)
+function maybeForeign(t){
+  const s = String(t || '');
+  if (/[؀-ۿ぀-ヿ一-鿿Ѐ-ӿͰ-Ͽ]/.test(s)) return true;   // alphabets non latins
+  const low = ' ' + s.toLowerCase().replace(/[^a-zà-ÿ]+/g, ' ') + ' ';
+  const fr = [' le ',' la ',' les ',' des ',' et ',' vous ',' votre ',' pour ',' avec ',' bonjour ',' merci ',' dans ',' est ',' une ',' nous ',' je ',' pas ',' un ',' du '];
+  const f = fr.reduce((n, w) => n + (low.split(w).length - 1), 0);
+  const words = (low.match(/ /g) || []).length;
+  return words >= 8 && f < 2;
 }
 
 // ── Chargement ───────────────────────────────────────────────
@@ -439,7 +441,7 @@ function renderDashboard(){
       <span class="dot ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"></span>
       <span class="m-from">${esc(m.from)}</span>
       <span class="m-subj">${esc(m.subject)}</span>
-      ${isEnglish((m.subject || '') + ' ' + (m.body || '')) ? '<span class="m-en">🇬🇧</span>' : ''}
+      ${maybeForeign((m.subject || '') + ' ' + (m.body || '')) ? '<span class="m-en">🌍</span>' : ''}
       <span class="m-time">${m.status === 'handled' ? '✓ répondu' : m.status === 'dismissed' ? 'ignoré' : fmtTime(m.receivedAt)}</span>
     </button>`).join('');
 }
@@ -469,7 +471,7 @@ function openTriage(id){
   toggleEditUI(false);
   document.getElementById('t-actions').style.visibility = 'hidden';
 
-  if (isEnglish((m.subject || '') + ' ' + (m.body || ''))) {
+  if (maybeForeign((m.subject || '') + ' ' + (m.body || ''))) {
     prepareEnglish(m);
   } else {
     state.draftText = m.aiDraft || '';
@@ -493,7 +495,7 @@ async function prepareEnglish(m){
 
   try {
     const r = await API.post('/api/ai/translate-mail', { subject: m.subject, body: m.body, sender: m.from });
-    if (r && r.lang === 'en' && r.reply) {
+    if (r && r.lang && r.lang !== 'fr' && r.reply) {
       m._en = r;
       applyEnglish(m);
       return;
@@ -516,7 +518,7 @@ function applyEnglish(m){
   document.getElementById('t-trad').classList.add('on');
   document.getElementById('t-trad-txt').textContent =
     (r.subjectFr ? `Objet : ${r.subjectFr}\n\n` : '') + (r.mailFr || '');
-  document.getElementById('ai-title').textContent = 'Réponse en anglais — prête à envoyer';
+  document.getElementById('ai-title').textContent = `Réponse en ${r.langName || 'la langue du client'} — prête à envoyer`;
   state.draftText = r.reply;
   typeDraft(r.reply, () => {
     if (r.replyFr) {
