@@ -144,6 +144,11 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 'use strict';
 if (!Auth.requireAuth()) throw new Error('redirect login');
 
+// Page réservée à l'administrateur MailOne — les clients sont renvoyés au dashboard
+API.get('/api/auth/me').then(r => {
+  if (!r?.user?.isAdmin) window.location.replace('dashboard.html');
+}).catch(() => window.location.replace('dashboard.html'));
+
 const STATUT_LABELS = { a_contacter:'À contacter', contacte:'Contacté', relance:'Relancé', repondu:'A répondu', client:'✅ Client', perdu:'Perdu' };
 let PROSPECTS = null;
 

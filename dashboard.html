@@ -342,8 +342,8 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
       <div class="side-sep"></div>
       <button class="snav" data-f="agenda"  onclick="setFolder('agenda',this)"><span class="ic">🗓️</span>Agenda<span class="ct" id="ct-agenda">–</span></button>
       <button class="snav" data-f="contacts" onclick="setFolder('contacts',this)"><span class="ic">👥</span>Carnet clients<span class="ct" id="ct-contacts">–</span></button>
-      <div class="side-sep"></div>
-      <a class="snav" href="agents.html" style="text-decoration:none"><span class="ic">🧲</span>Prospection</a>
+      <div class="side-sep" id="admin-sep" style="display:none"></div>
+      <a class="snav" href="agents.html" id="admin-link" style="text-decoration:none;display:none"><span class="ic">🧲</span>Prospection</a>
     </aside>
 
     <div>
@@ -1117,6 +1117,14 @@ window.addEventListener('message', (e) => {
   if (e.data?.type === 'oauth_success') { hideSetup(); toast('✅', 'Boîte connectée — chargement…', true); loadDashboard(); }
   else if (e.data?.type === 'oauth_error') toast('❌', 'Connexion échouée. Réessayez.');
 });
+
+// Outils marketing : réservés à l'administrateur MailOne
+API.get('/api/auth/me').then(r => {
+  if (r?.user?.isAdmin) {
+    document.getElementById('admin-link').style.display = '';
+    document.getElementById('admin-sep').style.display = '';
+  }
+}).catch(() => {});
 
 loadDashboard();
 </script>
