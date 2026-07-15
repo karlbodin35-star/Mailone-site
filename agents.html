@@ -92,17 +92,37 @@ input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);
 
   <!-- ── AGENT CONTENU ─────────────────────────────────────── -->
   <section class="panel on card pane" id="panel-content">
-    <label for="c-theme">Le thème de votre publication</label>
-    <input id="c-theme" type="text" placeholder="Ex : les urgences plomberie en été, la relance client, un chantier réussi…" maxlength="120">
     <div class="row2">
-      <div><label for="c-platform">Réseau</label>
+      <div><label for="c-cat">Type de visuel</label>
+      <select id="c-cat">
+        <option value="benefice">💡 Bénéfice produit</option>
+        <option value="citation">💬 Citation</option>
+        <option value="chiffre">🔢 Chiffre clé</option>
+        <option value="avantapres">↔️ Avant / Après</option>
+        <option value="cta">🚀 Appel à l'action</option>
+      </select></div>
+      <div><label for="c-format">Format</label>
+      <select id="c-format"><option value="post">Post carré (1080×1080)</option><option value="story">Story (1080×1920)</option></select></div>
+    </div>
+    <div class="row2">
+      <div><label for="c-metier">Métier ciblé (facultatif)</label><input id="c-metier" type="text" placeholder="plombier, électricien…" maxlength="40"></div>
+      <div><label for="c-ville">Ville (facultatif)</label><input id="c-ville" type="text" placeholder="Rennes" maxlength="40"></div>
+    </div>
+    <div class="row2">
+      <div><label for="c-platform">Réseau (pour les hashtags)</label>
       <select id="c-platform"><option value="instagram">Instagram</option><option value="linkedin">LinkedIn</option></select></div>
-      <div><label>&nbsp;</label><button class="btn btn-primary" style="width:100%" id="c-btn" onclick="genContent()">✨ Générer le post</button></div>
+      <div><label>&nbsp;</label><button class="btn btn-primary" style="width:100%" id="c-btn" onclick="genContent()">✨ Générer image + texte</button></div>
     </div>
     <div class="result" id="c-result">
-      <h3>Votre post <button class="copy" onclick="copyText('c-text',this)">📋 Copier</button></h3>
+      <h3>Votre image
+        <span>
+          <button class="copy" onclick="genContent()">🔄 Une autre</button>
+          <button class="copy" onclick="downloadPNG(this)">⬇️ Télécharger le PNG</button>
+        </span>
+      </h3>
+      <img id="c-img" alt="Aperçu de la publication" style="display:block;max-width:100%;max-height:560px;margin:6px auto 16px;border-radius:14px;border:1px solid rgba(255,255,255,.12)">
+      <h3>La légende à coller <button class="copy" onclick="copyText('c-text',this)">📋 Copier</button></h3>
       <pre id="c-text"></pre>
-      <div class="visual" id="c-visual"></div>
     </div>
   </section>
 
@@ -163,19 +183,49 @@ function showTab(name, el){
 }
 
 // ── Agent contenu ────────────────────────────────────────────
+let CURRENT_POST = null;
+
 async function genContent(){
   const btn = document.getElementById('c-btn');
-  btn.disabled = true; btn.textContent = 'Rédaction…';
+  btn.disabled = true; btn.textContent = 'Création de l\'image…';
   try {
     const r = await API.post('/api/agents/content', {
-      theme: document.getElementById('c-theme').value,
+      category: document.getElementById('c-cat').value,
+      format:   document.getElementById('c-format').value,
       platform: document.getElementById('c-platform').value,
+      metier:   document.getElementById('c-metier').value,
+      ville:    document.getElementById('c-ville').value,
     });
-    document.getElementById('c-text').textContent = r.post.text;
-    document.getElementById('c-visual').innerHTML = '<b>💡 Visuel suggéré :</b> ' + esc(r.post.visual);
+    CURRENT_POST = r;
+    document.getElementById('c-img').src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(r.svg);
+    document.getElementById('c-text').textContent = r.caption;
     document.getElementById('c-result').classList.add('on');
   } catch (e) { toast('⚠️ ' + (e.message || 'Erreur')); }
-  finally { btn.disabled = false; btn.textContent = '✨ Générer le post'; }
+  finally { btn.disabled = false; btn.textContent = '✨ Générer image + texte'; }
+}
+
+// Conversion SVG → PNG dans le navigateur (canvas), puis téléchargement
+function downloadPNG(btn){
+  if (!CURRENT_POST) return;
+  const [W, H] = CURRENT_POST.format === 'story' ? [1080, 1920] : [1080, 1080];
+  btn.textContent = '⏳…';
+  const img = new Image();
+  img.onload = () => {
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    c.getContext('2d').drawImage(img, 0, 0, W, H);
+    c.toBlob(b => {
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(b);
+      a.download = `mailone-${CURRENT_POST.id}-${CURRENT_POST.format}.png`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      btn.textContent = '⬇️ Télécharger le PNG';
+      toast('✅ Image téléchargée — prête à poster');
+    }, 'image/png');
+  };
+  img.onerror = () => { btn.textContent = '⬇️ Télécharger le PNG'; toast('⚠️ Conversion impossible'); };
+  img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(CURRENT_POST.svg);
 }
 
 // ── Agent prospection ────────────────────────────────────────
