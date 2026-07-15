@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MailOne — Agents marketing</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#07090F;--bg-2:#0C1018;
+  --glass:rgba(255,255,255,0.04);--glass-border:rgba(255,255,255,0.08);--glass-hover:rgba(255,255,255,0.07);
+  --text:#EDF0F5;--text-dim:#8B93A5;
+  --accent:#5B8CFF;--accent-2:#9F7BFF;--accent-glow:rgba(91,140,255,0.35);
+  --urgent:#FF5C5C;--ok:#3DD68C;--radius:16px;
+}
+html,body{min-height:100%}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden}
+.orb{position:fixed;border-radius:50%;filter:blur(90px);opacity:.35;pointer-events:none;z-index:0}
+.orb-1{width:480px;height:480px;background:#1E3A8A;top:-140px;left:-120px}
+.orb-2{width:420px;height:420px;background:#4C1D95;bottom:-160px;right:-100px}
+.gridbg{position:fixed;inset:0;z-index:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:48px 48px}
+.wrap{position:relative;z-index:1;max-width:860px;margin:0 auto;padding:0 22px 80px}
+header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 8px}
+.logo{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:21px;color:#fff;text-decoration:none}
+.logo em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.hdr-link{font-size:13.5px;color:var(--text-dim);text-decoration:none}
+.hdr-link:hover{color:var(--text)}
+h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(24px,4vw,32px);margin:30px 0 6px}
+.sub{font-size:15px;color:var(--text-dim);line-height:1.6;margin-bottom:24px}
+.card{background:var(--glass);border:1px solid var(--glass-border);border-radius:var(--radius);backdrop-filter:blur(14px)}
+.tabs{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+.tab{font-family:'Space Grotesk',sans-serif;font-size:13.5px;font-weight:600;padding:11px 18px;border-radius:11px;border:1px solid var(--glass-border);background:var(--glass);color:var(--text-dim);cursor:pointer;transition:all .2s}
+.tab:hover{color:var(--text)}
+.tab.active{background:linear-gradient(90deg,var(--accent),#7B6CFF);color:#fff;border-color:transparent;box-shadow:0 6px 20px var(--accent-glow)}
+.panel{display:none}.panel.on{display:block}
+.pane{padding:24px}
+label{display:block;font-size:12.5px;color:var(--text-dim);font-weight:600;margin:14px 0 5px}
+input,select,textarea{width:100%;padding:12px 13px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14.5px;color-scheme:dark}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(91,140,255,.15)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:600px){.row2{grid-template-columns:1fr}}
+.btn{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14px;border:none;border-radius:11px;padding:13px 22px;cursor:pointer;color:var(--text);transition:transform .2s,box-shadow .2s}
+.btn-primary{background:linear-gradient(90deg,var(--accent),#7B6CFF);color:#fff;box-shadow:0 6px 24px var(--accent-glow)}
+.btn-primary:hover{transform:translateY(-2px)}
+.btn-ghost{background:var(--glass);border:1px solid var(--glass-border)}
+.btn:disabled{opacity:.55;cursor:default;transform:none!important}
+.result{margin-top:18px;padding:18px;border-radius:12px;background:rgba(91,140,255,.08);border:1px solid rgba(91,140,255,.25);display:none}
+.result.on{display:block}
+.result h3{font-family:'Space Grotesk',sans-serif;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.result pre{white-space:pre-wrap;word-break:break-word;font-family:'DM Sans',sans-serif;font-size:14.5px;line-height:1.75}
+.copy{font-size:11.5px;padding:6px 12px;border-radius:8px;border:1px solid rgba(91,140,255,.35);background:transparent;color:var(--accent);cursor:pointer;font-family:'Space Grotesk',sans-serif;font-weight:600}
+.copy:hover{background:rgba(91,140,255,.12)}
+.visual{margin-top:12px;padding:12px 14px;border-radius:10px;background:rgba(61,214,140,.08);border:1px solid rgba(61,214,140,.25);font-size:13px;color:var(--text);line-height:1.6}
+.visual b{color:var(--ok)}
+.p-row{display:flex;align-items:center;gap:12px;padding:14px 16px;margin-bottom:9px;flex-wrap:wrap}
+.p-name{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:14.5px;min-width:130px}
+.p-meta{font-size:12.5px;color:var(--text-dim);flex:1;min-width:120px}
+.p-due{font-family:'Space Grotesk',sans-serif;font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(255,92,92,.15);color:var(--urgent)}
+.p-next{font-size:12px;color:var(--text-dim)}
+.p-row select{width:auto;padding:8px 10px;font-size:12.5px}
+.evt-x{border:none;background:transparent;color:var(--text-dim);cursor:pointer;font-size:14px}
+.evt-x:hover{color:var(--urgent)}
+.note{margin-top:14px;font-size:12.5px;color:var(--text-dim)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,80px);opacity:0;z-index:60;background:var(--bg-2);border:1px solid var(--glass-border);border-radius:12px;padding:13px 20px;font-size:13.5px;transition:all .35s;max-width:calc(100vw - 40px)}
+.toast.on{transform:translate(-50%,0);opacity:1}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="orb orb-1"></div><div class="orb orb-2"></div><div class="gridbg"></div>
+
+<div class="wrap">
+  <header>
+    <a class="logo" href="dashboard.html">Mail<em>One</em></a>
+    <nav style="display:flex;gap:16px">
+      <a class="hdr-link" href="dashboard.html">← Mes mails</a>
+      <a class="hdr-link" href="#" onclick="Auth.logout();return false">Déconnexion</a>
+    </nav>
+  </header>
+
+  <h1>🧲 Trouver des clients</h1>
+  <p class="sub">Trois assistants pour votre communication — tout est <b style="color:var(--text)">brouillon</b> : rien ne part sans vous.</p>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('content',this)">📣 Publications</button>
+    <button class="tab" onclick="showTab('prospect',this)">✉️ Prospection</button>
+    <button class="tab" onclick="showTab('suivi',this)">📊 Suivi</button>
+  </div>
+
+  <!-- ── AGENT CONTENU ─────────────────────────────────────── -->
+  <section class="panel on card pane" id="panel-content">
+    <label for="c-theme">Le thème de votre publication</label>
+    <input id="c-theme" type="text" placeholder="Ex : les urgences plomberie en été, la relance client, un chantier réussi…" maxlength="120">
+    <div class="row2">
+      <div><label for="c-platform">Réseau</label>
+      <select id="c-platform"><option value="instagram">Instagram</option><option value="linkedin">LinkedIn</option></select></div>
+      <div><label>&nbsp;</label><button class="btn btn-primary" style="width:100%" id="c-btn" onclick="genContent()">✨ Générer le post</button></div>
+    </div>
+    <div class="result" id="c-result">
+      <h3>Votre post <button class="copy" onclick="copyText('c-text',this)">📋 Copier</button></h3>
+      <pre id="c-text"></pre>
+      <div class="visual" id="c-visual"></div>
+    </div>
+  </section>
+
+  <!-- ── AGENT PROSPECTION ─────────────────────────────────── -->
+  <section class="panel card pane" id="panel-prospect">
+    <div class="row2">
+      <div><label for="p-metier">Métier du prospect</label><input id="p-metier" type="text" placeholder="plombier, électricien, maçon…" maxlength="60"></div>
+      <div><label for="p-ville">Ville</label><input id="p-ville" type="text" placeholder="Rennes" maxlength="60"></div>
+    </div>
+    <label for="p-taille">Taille (facultatif)</label>
+    <input id="p-taille" type="text" placeholder="solo, 2-3 personnes, 10 salariés…" maxlength="60">
+    <div style="margin-top:16px"><button class="btn btn-primary" id="p-btn" onclick="genProspect()">✨ Générer les 3 messages</button></div>
+    <div class="result" id="p-email"><h3>📧 Email <button class="copy" onclick="copyText('p-email-txt',this)">📋 Copier</button></h3><pre id="p-email-txt"></pre></div>
+    <div class="result" id="p-sms"><h3>📱 SMS <button class="copy" onclick="copyText('p-sms-txt',this)">📋 Copier</button></h3><pre id="p-sms-txt"></pre></div>
+    <div class="result" id="p-li"><h3>💼 LinkedIn <button class="copy" onclick="copyText('p-li-txt',this)">📋 Copier</button></h3><pre id="p-li-txt"></pre></div>
+    <p class="note">⚠️ Brouillons à copier-coller — MailOne n'envoie jamais de prospection à votre place.</p>
+  </section>
+
+  <!-- ── AGENT SUIVI / RELANCES ────────────────────────────── -->
+  <section class="panel card pane" id="panel-suivi">
+    <div class="row2">
+      <div><label for="s-name">Nouveau prospect</label><input id="s-name" type="text" placeholder="Nom / entreprise" maxlength="80"></div>
+      <div><label for="s-canal">Canal</label>
+      <select id="s-canal"><option value="email">Email</option><option value="sms">SMS</option><option value="linkedin">LinkedIn</option><option value="tel">Téléphone</option></select></div>
+    </div>
+    <div class="row2">
+      <div><label for="s-metier">Métier</label><input id="s-metier" type="text" maxlength="60"></div>
+      <div><label for="s-ville">Ville</label><input id="s-ville" type="text" maxlength="60"></div>
+    </div>
+    <div style="margin-top:16px"><button class="btn btn-primary" onclick="addProspect()">＋ Ajouter au suivi</button></div>
+    <div id="s-list" style="margin-top:22px"></div>
+  </section>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="mailone.js"></script>
+<script>
+'use strict';
+if (!Auth.requireAuth()) throw new Error('redirect login');
+
+const STATUT_LABELS = { a_contacter:'À contacter', contacte:'Contacté', relance:'Relancé', repondu:'A répondu', client:'✅ Client', perdu:'Perdu' };
+let PROSPECTS = null;
+
+function esc(s){ return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function toast(msg){ const t = document.getElementById('toast'); t.textContent = msg; t.classList.add('on'); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove('on'), 3200); }
+function copyText(id, btn){ navigator.clipboard.writeText(document.getElementById(id).textContent).then(() => { btn.textContent = '✅ Copié'; setTimeout(() => btn.textContent = '📋 Copier', 1800); }); }
+
+function showTab(name, el){
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === el));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('on', p.id === 'panel-' + name));
+  if (name === 'suivi' && PROSPECTS === null) loadProspects();
+}
+
+// ── Agent contenu ────────────────────────────────────────────
+async function genContent(){
+  const btn = document.getElementById('c-btn');
+  btn.disabled = true; btn.textContent = 'Rédaction…';
+  try {
+    const r = await API.post('/api/agents/content', {
+      theme: document.getElementById('c-theme').value,
+      platform: document.getElementById('c-platform').value,
+    });
+    document.getElementById('c-text').textContent = r.post.text;
+    document.getElementById('c-visual').innerHTML = '<b>💡 Visuel suggéré :</b> ' + esc(r.post.visual);
+    document.getElementById('c-result').classList.add('on');
+  } catch (e) { toast('⚠️ ' + (e.message || 'Erreur')); }
+  finally { btn.disabled = false; btn.textContent = '✨ Générer le post'; }
+}
+
+// ── Agent prospection ────────────────────────────────────────
+async function genProspect(){
+  const btn = document.getElementById('p-btn');
+  btn.disabled = true; btn.textContent = 'Rédaction…';
+  try {
+    const r = await API.post('/api/agents/prospect', {
+      metier: document.getElementById('p-metier').value,
+      ville:  document.getElementById('p-ville').value,
+      taille: document.getElementById('p-taille').value,
+    });
+    document.getElementById('p-email-txt').textContent = `Objet : ${r.drafts.email.subject}\n\n${r.drafts.email.body}`;
+    document.getElementById('p-sms-txt').textContent   = r.drafts.sms;
+    document.getElementById('p-li-txt').textContent    = r.drafts.linkedin;
+    ['p-email','p-sms','p-li'].forEach(id => document.getElementById(id).classList.add('on'));
+  } catch (e) { toast('⚠️ ' + (e.message || 'Erreur')); }
+  finally { btn.disabled = false; btn.textContent = '✨ Générer les 3 messages'; }
+}
+
+// ── Agent suivi / relances ───────────────────────────────────
+async function loadProspects(){
+  try { const r = await API.get('/api/agents/prospects'); PROSPECTS = r?.prospects || []; }
+  catch (e) { document.getElementById('s-list').innerHTML = `<div class="note">⚠️ Suivi indisponible : ${esc(e.message)}</div>`; return; }
+  renderProspects();
+}
+function renderProspects(){
+  const box = document.getElementById('s-list');
+  if (!PROSPECTS.length) { box.innerHTML = '<div class="note">Aucun prospect suivi — ajoutez votre premier contact ci-dessus. MailOne vous dira quand relancer.</div>'; return; }
+  box.innerHTML = PROSPECTS.map(p => `
+    <div class="p-row card">
+      <span class="p-name">${esc(p.name)}</span>
+      <span class="p-meta">${esc([p.metier, p.ville, p.canal].filter(Boolean).join(' · '))}</span>
+      ${p.relance_due ? '<span class="p-due">🔔 À relancer</span>' :
+        p.next_action_at ? `<span class="p-next">relance le ${new Date(p.next_action_at).toLocaleDateString('fr-FR')}</span>` : ''}
+      <select onchange="setStatut('${esc(String(p.id))}', this.value)">
+        ${Object.entries(STATUT_LABELS).map(([k, v]) => `<option value="${k}" ${p.statut === k ? 'selected' : ''}>${v}</option>`).join('')}
+      </select>
+      <button class="evt-x" onclick="delProspect('${esc(String(p.id))}')" title="Supprimer">✕</button>
+    </div>`).join('');
+}
+async function addProspect(){
+  const name = document.getElementById('s-name').value.trim();
+  if (!name) { toast('⚠️ Indiquez un nom.'); return; }
+  try {
+    const r = await API.post('/api/agents/prospects', {
+      name, canal: document.getElementById('s-canal').value,
+      metier: document.getElementById('s-metier').value, ville: document.getElementById('s-ville').value,
+    });
+    PROSPECTS = PROSPECTS || []; PROSPECTS.unshift(r.prospect);
+    document.getElementById('s-name').value = '';
+    renderProspects(); toast('✅ Prospect ajouté');
+  } catch (e) { toast('⚠️ ' + (e.message || 'Erreur')); }
+}
+async function setStatut(id, statut){
+  try {
+    const r = await API.request('/api/agents/prospects/' + encodeURIComponent(id), { method: 'PATCH', body: JSON.stringify({ statut }) });
+    PROSPECTS = PROSPECTS.map(p => String(p.id) === String(id) ? r.prospect : p);
+    renderProspects();
+  } catch (e) { toast('⚠️ ' + (e.message || 'Erreur')); }
+}
+async function delProspect(id){
+  try {
+    await API.delete('/api/agents/prospects/' + encodeURIComponent(id));
+    PROSPECTS = PROSPECTS.filter(p => String(p.id) !== String(id));
+    renderProspects();
+  } catch (e) { toast('⚠️ ' + (e.message || 'Erreur')); }
+}
+</script>
+</body>
+</html>
