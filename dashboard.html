@@ -114,6 +114,14 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 .m-subj{font-size:14.5px;color:var(--text-dim);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .m-time{font-family:'Space Grotesk',sans-serif;font-size:12px;color:var(--text-dim);white-space:nowrap;flex-shrink:0}
 .m-en{font-size:11px;flex-shrink:0}
+.age{font-family:'Space Grotesk',sans-serif;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;flex-shrink:0}
+.age.green{background:rgba(61,214,140,.15);color:var(--ok)}
+.age.orange{background:rgba(255,196,107,.15);color:#FFC46B}
+.age.red{background:rgba(255,92,92,.15);color:var(--urgent);animation:pulse 1.6s ease-in-out infinite}
+.fbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px;font-size:13.5px;color:var(--text-dim);padding:0 4px}
+.fbar b{color:var(--text)}
+.fbar select,.fbar input{padding:9px 12px;border-radius:9px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:var(--text);font-family:'DM Sans',sans-serif;font-size:13.5px;color-scheme:dark}
+.fbar input:focus,.fbar select:focus{outline:none;border-color:var(--accent)}
 
 /* ── Boutons ───────────────────────────────────────────────── */
 .btn{
@@ -329,9 +337,13 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
       <button class="snav" data-f="quote"   onclick="setFolder('quote',this)"><span class="ic">📋</span>Devis<span class="ct" id="ct-quote">–</span></button>
       <button class="snav" data-f="appt"    onclick="setFolder('appt',this)"><span class="ic">📅</span>Rendez-vous<span class="ct" id="ct-appt">–</span></button>
       <button class="snav" data-f="invoice" onclick="setFolder('invoice',this)"><span class="ic">💰</span>Factures<span class="ct" id="ct-invoice">–</span></button>
+      <button class="snav" data-f="waiting" onclick="setFolder('waiting',this)"><span class="ic">⏰</span>Sans réponse<span class="ct" id="ct-waiting">–</span></button>
       <button class="snav" data-f="done"    onclick="setFolder('done',this)"><span class="ic">✅</span>Traités<span class="ct" id="ct-done">–</span></button>
       <div class="side-sep"></div>
       <button class="snav" data-f="agenda"  onclick="setFolder('agenda',this)"><span class="ic">🗓️</span>Agenda<span class="ct" id="ct-agenda">–</span></button>
+      <button class="snav" data-f="contacts" onclick="setFolder('contacts',this)"><span class="ic">👥</span>Carnet clients<span class="ct" id="ct-contacts">–</span></button>
+      <div class="side-sep"></div>
+      <a class="snav" href="agents.html" style="text-decoration:none"><span class="ic">🧲</span>Prospection</a>
     </aside>
 
     <div>
@@ -376,6 +388,7 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
         <div class="ai-actions" id="t-actions" style="visibility:hidden">
           <button class="btn btn-primary" id="btn-send" onclick="sendReply()">Envoyer la réponse</button>
           <button class="btn btn-ghost" id="btn-edit" onclick="toggleEdit(true)">Modifier</button>
+          <button class="btn btn-ghost" id="btn-relance" onclick="useRelanceDraft()" style="display:none">📨 Brouillon de relance</button>
           <button class="btn btn-ghost" id="btn-cancel" onclick="toggleEdit(false)" style="display:none">Annuler</button>
           <button class="btn btn-danger-ghost" id="btn-dismiss" onclick="dismissMail()">Ignorer</button>
         </div>
@@ -443,6 +456,8 @@ const FOLDER_EMPTY = {
   appt:    ['📅', 'Aucun rendez-vous en attente', 'Les demandes de rendez-vous repérées dans vos mails apparaîtront ici.'],
   invoice: ['💰', 'Aucune facture en attente', 'Les mails liés aux paiements et factures apparaîtront ici.'],
   done:    ['🗂️', 'Aucun mail traité', 'Les mails auxquels vous avez répondu (ou que vous avez ignorés) apparaîtront ici.'],
+  waiting: ['🎉', 'Personne n\'attend', 'Aucun mail ne patiente au-delà du seuil — tous vos clients ont leur réponse.'],
+  contacts:['👥', 'Carnet vide', 'MailOne remplit votre carnet automatiquement : nom, email, téléphone et adresse repérés dans les mails de vos clients.'],
   agenda:  ['🗓️', 'Agenda vide', 'Dès qu\'un mail parle de rendez-vous, il apparaîtra ici avec un bouton pour l\'ajouter à votre calendrier.'],
 };
 
@@ -456,6 +471,10 @@ function setFolder(f, el){
   renderDashboard();
 }
 
+// Seuil « sans réponse » configurable (défaut 3 jours)
+function followThreshold(){ return parseInt(localStorage.getItem('mailone_follow_days')) || 3; }
+function ageBucket(days){ const t = followThreshold(); return days < t ? 'green' : days < t + 3 ? 'orange' : 'red'; }
+
 function folderMails(){
   const mails = state.data?.mails || [];
   switch (state.folder) {
@@ -465,6 +484,8 @@ function folderMails(){
     case 'appt':
     case 'agenda':  return mails.filter(m => m.category === 'appt' && !m.status);
     case 'done':    return mails.filter(m => m.status);
+    case 'waiting': return mails.filter(m => !m.status && (m.waitingDays || 0) >= followThreshold())
+                                .sort((a, b) => (b.waitingDays || 0) - (a.waitingDays || 0));
     default:        return mails;
   }
 }
@@ -478,11 +499,13 @@ function updateCounts(){
     appt:    mails.filter(m => m.category === 'appt'    && !m.status).length,
     invoice: mails.filter(m => m.category === 'invoice' && !m.status).length,
     done:    mails.filter(m => m.status).length,
+    waiting: mails.filter(m => !m.status && (m.waitingDays || 0) >= followThreshold()).length,
   };
-  counts.agenda = counts.appt + (state.cal.events?.length || 0);
+  counts.agenda   = counts.appt + (state.cal.events?.length || 0);
+  counts.contacts = state.contacts ? state.contacts.length : '–';
   for (const [k, v] of Object.entries(counts)) {
     const el = document.getElementById('ct-' + k);
-    if (el) { el.textContent = v; el.classList.toggle('hot', k === 'urgent' && v > 0); }
+    if (el) { el.textContent = v; el.classList.toggle('hot', (k === 'urgent' || k === 'waiting') && Number(v) > 0); }
   }
 }
 
@@ -644,7 +667,8 @@ function renderDashboard(){
   updateCounts();
 
   const list  = document.getElementById('mail-list');
-  if (state.folder === 'agenda') { renderCalendar(list); return; }
+  if (state.folder === 'agenda')   { renderCalendar(list); return; }
+  if (state.folder === 'contacts') { renderContacts(list); return; }
   const mails = folderMails();
   if (!mails.length) {
     const [ico, title, txt] = FOLDER_EMPTY[state.folder] || FOLDER_EMPTY.all;
@@ -655,15 +679,67 @@ function renderDashboard(){
   }
 
 
-  list.innerHTML = mails.map((m, i) => `
+  const seuilBar = state.folder === 'waiting' ? `
+    <div class="fbar">
+      <span>Mails de clients restés <b>sans réponse de votre part</b> — les plus anciens d'abord.</span>
+      <label>Seuil :
+        <select onchange="localStorage.setItem('mailone_follow_days', this.value); renderDashboard()">
+          ${[1,2,3,5,7].map(d => `<option value="${d}" ${followThreshold()===d?'selected':''}>${d} jour${d>1?'s':''}</option>`).join('')}
+        </select>
+      </label>
+    </div>` : '';
+
+  list.innerHTML = seuilBar + mails.map((m, i) => `
     <button class="mrow card rise ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"
             style="animation-delay:${REDUCED?0:Math.min(i,12)*40}ms" onclick="openTriage('${esc(String(m.id))}')">
       <span class="dot ${m.urgent ? 'urgent' : ''} ${m.status ? 'done' : ''}"></span>
       <span class="m-from">${esc(m.from || 'Expéditeur inconnu')}</span>
       <span class="m-subj">${esc(m.subject)}</span>
+      ${!m.status && (m.waitingDays || 0) >= followThreshold() ? `<span class="age ${ageBucket(m.waitingDays)}">${m.waitingDays} j</span>` : ''}
       ${maybeForeign((m.subject || '') + ' ' + (m.body || '')) ? '<span class="m-en">🌍</span>' : ''}
       <span class="m-time">${m.status === 'handled' ? '✓ répondu' : m.status === 'dismissed' ? 'ignoré' : fmtTime(m.receivedAt)}</span>
     </button>`).join('');
+}
+
+// ── Carnet clients ───────────────────────────────────────────
+async function renderContacts(container){
+  if (!state.contacts) {
+    container.innerHTML = '<div class="card skeleton" style="min-height:50px;padding:15px 18px"><div class="sk-line" style="width:80%;margin:0"></div></div>'.repeat(3);
+    try { const r = await API.get('/api/contacts'); state.contacts = r?.contacts || []; }
+    catch (e) {
+      container.innerHTML = `<div class="card state rise"><div class="ico">⚠️</div><h2>Carnet indisponible</h2><p>${esc(e.message)}</p></div>`;
+      return;
+    }
+    updateCounts();
+  }
+  const q = (state.contactQuery || '').toLowerCase();
+  const rows = state.contacts.filter(c =>
+    !q || `${c.name} ${c.email} ${c.phone} ${c.address}`.toLowerCase().includes(q));
+
+  const search = `<div class="fbar"><input type="search" placeholder="🔍 Rechercher un client…" value="${esc(state.contactQuery || '')}"
+    oninput="state.contactQuery=this.value; renderDashboard()" style="flex:1"></div>`;
+
+  if (!state.contacts.length) {
+    const [ico, title, txt] = FOLDER_EMPTY.contacts;
+    container.innerHTML = `<div class="card state ok rise"><div class="ico">${ico}</div><h2>${title}</h2><p>${txt}</p></div>`;
+    return;
+  }
+
+  container.innerHTML = search + (rows.length ? rows.map((c, i) => `
+    <div class="mrow card rise" style="animation-delay:${REDUCED?0:Math.min(i,12)*30}ms;cursor:default">
+      <span class="dot done"></span>
+      <span class="m-from">${esc(c.name || c.email.split('@')[0])}</span>
+      <span class="m-subj">${esc(c.email)}${c.phone ? ' · 📞 ' + esc(c.phone) : ''}${c.address ? ' · 📍 ' + esc(c.address) : ''}</span>
+      <button class="evt-x" onclick="delContact('${esc(String(c.id))}')" title="Supprimer">✕</button>
+    </div>`).join('') : `<div class="card state"><p>Aucun client ne correspond à « ${esc(state.contactQuery)} ».</p></div>`);
+}
+async function delContact(id){
+  try {
+    await API.delete('/api/contacts/' + encodeURIComponent(id));
+    state.contacts = state.contacts.filter(c => String(c.id) !== String(id));
+    renderDashboard();
+    toast('🗑️', 'Contact supprimé');
+  } catch (e) { toast('⚠️', e.message || 'Suppression impossible.'); }
 }
 
 // ── Vue mail + réponse ───────────────────────────────────────
@@ -687,6 +763,10 @@ function openTriage(id){
   document.getElementById('t-trad').classList.remove('on');
   document.getElementById('t-draft-trad').classList.remove('on');
   document.getElementById('ai-title').textContent = 'Réponse rédigée par MailOne';
+
+  // Bouton relance visible si le mail attend depuis longtemps
+  document.getElementById('btn-relance').style.display =
+    (!m.status && (m.waitingDays || 0) >= followThreshold()) ? '' : 'none';
 
   toggleEditUI(false);
   document.getElementById('t-actions').style.visibility = 'hidden';
@@ -811,6 +891,20 @@ function getDraftText(){
   return state.editing
     ? document.getElementById('t-edit').value
     : (state.draftText || document.getElementById('t-draft').textContent);
+}
+
+// ── Relance en 1 clic (brouillon uniquement — jamais d'envoi auto) ──
+function useRelanceDraft(){
+  const m = state.current;
+  if (!m) return;
+  const prenom = (m.from || '').split(' ')[0];
+  const salut  = prenom ? `Bonjour ${prenom},` : 'Bonjour,';
+  const base   = (m.aiDraft || '').replace(/^Bonjour[^,\n]*,\s*/i, '');
+  state.draftText = `${salut}\n\nToutes mes excuses pour le délai de réponse — votre message du ${new Date(m.receivedAt).toLocaleDateString('fr-FR')} mérite toute mon attention.\n\n${base}`;
+  toggleEditUI(false);
+  state.editing = false;
+  typeDraft(state.draftText);
+  toast('📨', 'Brouillon de relance prêt — relisez puis envoyez.');
 }
 
 // ── Actions ──────────────────────────────────────────────────
