@@ -595,16 +595,10 @@ function toast(ico, msg, ok = false){
   clearTimeout(t._h);
   t._h = setTimeout(() => t.classList.remove('on'), 3600);
 }
-// Détection rapide « probablement pas en français » (le serveur tranche
-// précisément parmi les 20 langues prises en charge)
+// Indicateur 🌍 fiable uniquement pour les alphabets non latins ;
+// pour le reste, c'est le SERVEUR qui tranche à l'ouverture du mail.
 function maybeForeign(t){
-  const s = String(t || '');
-  if (/[؀-ۿ぀-ヿ一-鿿Ѐ-ӿͰ-Ͽ]/.test(s)) return true;   // alphabets non latins
-  const low = ' ' + s.toLowerCase().replace(/[^a-zà-ÿ]+/g, ' ') + ' ';
-  const fr = [' le ',' la ',' les ',' des ',' et ',' vous ',' votre ',' pour ',' avec ',' bonjour ',' merci ',' dans ',' est ',' une ',' nous ',' je ',' pas ',' un ',' du '];
-  const f = fr.reduce((n, w) => n + (low.split(w).length - 1), 0);
-  const words = (low.match(/ /g) || []).length;
-  return words >= 8 && f < 2;
+  return /[؀-ۿ぀-ヿ一-鿿Ѐ-ӿͰ-Ͽ]/.test(String(t || ''));
 }
 
 // ── Chargement ───────────────────────────────────────────────
@@ -771,11 +765,11 @@ function openTriage(id){
   toggleEditUI(false);
   document.getElementById('t-actions').style.visibility = 'hidden';
 
-  if (maybeForeign((m.subject || '') + ' ' + (m.body || ''))) {
-    prepareEnglish(m);
-  } else {
+  if (m._fr) {                       // déjà vérifié : mail français
     state.draftText = m.aiDraft || '';
     typeDraft(state.draftText);
+  } else {
+    prepareEnglish(m);               // le serveur détecte la langue (20 langues)
   }
 }
 
@@ -788,19 +782,20 @@ async function prepareEnglish(m){
   // Déjà traduit lors d'un clic précédent
   if (m._en) { applyEnglish(m); return; }
 
-  tradBox.classList.add('on');
-  tradTxt.innerHTML = '<span class="trad-wait">Traduction en cours…</span>';
   gen.style.display = '';
-  gen.textContent = 'MailOne traduit le mail et rédige votre réponse…';
+  gen.textContent = 'MailOne analyse le mail…';
 
   try {
     const r = await API.post('/api/ai/translate-mail', { subject: m.subject, body: m.body, sender: m.from });
     if (r && r.lang && r.lang !== 'fr' && r.reply) {
       m._en = r;
+      tradBox.classList.add('on');
+      tradTxt.innerHTML = '<span class="trad-wait">Traduction en cours…</span>';
       applyEnglish(m);
       return;
     }
-    // L'IA juge le mail français → comportement normal
+    // Mail français → comportement normal (mémorisé pour ne plus re-vérifier)
+    m._fr = true;
     tradBox.classList.remove('on');
     state.draftText = m.aiDraft || '';
     typeDraft(state.draftText);
