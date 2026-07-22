@@ -223,6 +223,46 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
 .imap-note{display:none;margin-top:12px;padding:10px 13px;border-radius:9px;font-size:12.5px;line-height:1.55;background:rgba(255,196,107,.1);border:1px solid rgba(255,196,107,.3);color:#FFC46B}
 .imap-err{display:none;margin-top:12px;font-size:13px;color:var(--urgent)}
 
+/* ── Pièces jointes ────────────────────────────────────────── */
+.atts-title{display:flex;align-items:center;justify-content:space-between;gap:10px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);margin:20px 0 10px}
+.atts-row{display:flex;flex-wrap:wrap;gap:10px}
+.att-chip{
+  display:flex;align-items:center;gap:10px;max-width:100%;
+  padding:9px 12px;border-radius:12px;cursor:pointer;text-align:left;
+  background:var(--glass);border:1px solid var(--glass-border);color:var(--text);
+  font-family:'DM Sans',sans-serif;transition:background .2s,box-shadow .2s;
+}
+.att-chip:hover{background:var(--glass-hover);box-shadow:0 0 18px rgba(91,140,255,.18)}
+.att-thumb{width:46px;height:46px;border-radius:9px;background:rgba(91,140,255,.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;overflow:hidden}
+.att-thumb img{width:100%;height:100%;object-fit:cover}
+.att-meta{min-width:0}
+.att-name{display:block;font-size:12.5px;font-weight:600;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.att-size{display:block;font-size:11px;color:var(--text-dim)}
+.att-dl{flex-shrink:0;font-size:14px;padding:6px;border-radius:8px;color:var(--accent)}
+.att-dl:hover{background:rgba(91,140,255,.15)}
+.att-x{flex-shrink:0;border:none;background:transparent;color:var(--text-dim);cursor:pointer;font-size:13px;padding:4px}
+.att-x:hover{color:var(--urgent)}
+.att-zone{margin-top:16px}
+.att-zone.drag{outline:2px dashed var(--accent);outline-offset:6px;border-radius:12px;background:rgba(91,140,255,.06)}
+.att-hint{font-size:12px;color:var(--text-dim);margin-top:8px}
+.att-warn{display:none;margin-top:10px;padding:10px 13px;border-radius:9px;font-size:13px;background:rgba(255,92,92,.1);border:1px solid rgba(255,92,92,.35);color:var(--urgent)}
+.att-progress{margin-top:12px}
+.att-bar-track{height:8px;border-radius:5px;background:rgba(255,255,255,.08);overflow:hidden}
+.att-bar{height:100%;width:0%;border-radius:5px;background:linear-gradient(90deg,var(--accent),#7B6CFF);box-shadow:0 0 12px var(--accent-glow);transition:width .2s}
+.att-ptxt{font-size:12px;color:var(--text-dim);margin-top:6px;display:block}
+.scope-fix{display:none;margin-top:14px;padding:14px 16px;border-radius:12px;background:rgba(255,196,107,.1);border:1px solid rgba(255,196,107,.35);font-size:13.5px;line-height:1.6}
+
+/* ── Modale aperçu ─────────────────────────────────────────── */
+.pv{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.8);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:24px}
+.pv.on{display:flex}
+.pv-box{position:relative;max-width:min(920px,94vw);max-height:90vh;display:flex;flex-direction:column;background:#0C1018;border:1px solid rgba(255,255,255,.14);border-radius:16px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.6)}
+.pv-head{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--glass-border)}
+.pv-name{flex:1;font-size:13.5px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pv-close{border:none;background:var(--glass);color:var(--text);width:32px;height:32px;border-radius:9px;cursor:pointer}
+.pv-body{overflow:auto;display:flex;align-items:center;justify-content:center;min-height:200px}
+.pv-body img{max-width:100%;max-height:78vh;display:block}
+.pv-body iframe{width:min(880px,92vw);height:78vh;border:none;background:#fff}
+
 /* ── Toast ─────────────────────────────────────────────────── */
 .toast{
   position:fixed;bottom:24px;left:50%;transform:translate(-50%,80px);opacity:0;z-index:60;
@@ -318,6 +358,7 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
   <header>
     <a class="logo" href="dashboard.html">Mail<em>One</em></a>
     <nav class="hdr-actions">
+      <a class="hdr-link" id="btn-compose" href="#" onclick="openCompose();return false" style="display:none">✍️ Nouveau mail</a>
       <a class="hdr-link" href="account.html">Compte</a>
       <a class="hdr-link" href="#" onclick="Auth.logout();return false">Déconnexion</a>
     </nav>
@@ -367,6 +408,7 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
           <span class="meta-chip" id="t-date"></span>
         </div>
         <div class="orig-body" id="t-body"></div>
+        <div id="t-atts"></div>
         <div class="trad" id="t-trad">
           <div class="trad-lbl">🇫🇷 Traduction du mail</div>
           <div class="trad-txt" id="t-trad-txt"></div>
@@ -385,7 +427,28 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
           <div class="trad-txt" id="t-draft-trad-txt"></div>
         </div>
         <div class="gen-label" id="t-gen" style="display:none">MailOne rédige votre réponse…</div>
+
+        <!-- Pièces jointes de la réponse (Gmail direct uniquement) -->
+        <div class="att-zone" id="att-zone">
+          <div class="atts-row" id="att-list"></div>
+          <div class="att-warn" id="att-warn"></div>
+          <div class="att-hint" id="att-hint" style="display:none">…ou glissez vos fichiers dans cette carte</div>
+          <div class="att-progress" id="att-progress" style="display:none">
+            <div class="att-bar-track"><div class="att-bar" id="att-bar"></div></div>
+            <span class="att-ptxt" id="att-ptxt">Envoi en cours…</span>
+          </div>
+          <div class="scope-fix" id="scope-fix">
+            🔐 <b>MailOne n'a pas encore l'autorisation d'envoyer depuis votre Gmail.</b><br>
+            Reconnectez votre boîte (2 clics) et cochez les deux cases sur l'écran Google.<br>
+            <button class="btn btn-primary" style="margin-top:10px;padding:11px 18px" onclick="connectOAuth('gmail')">Reconnecter Gmail →</button>
+          </div>
+        </div>
+        <input type="file" id="file-input" multiple accept=".pdf,image/*,.doc,.docx,.xls,.xlsx,.dwg,application/pdf" style="display:none" onchange="addFiles(this.files,'reply');this.value=''">
+        <input type="file" id="photo-input" accept="image/*" capture="environment" style="display:none" onchange="addFiles(this.files,'reply');this.value=''">
+
         <div class="ai-actions" id="t-actions" style="visibility:hidden">
+          <button class="btn btn-ghost" id="btn-attach" onclick="document.getElementById('file-input').click()" style="display:none">📎 Joindre</button>
+          <button class="btn btn-ghost" id="btn-photo" onclick="document.getElementById('photo-input').click()" style="display:none">📷 Photo</button>
           <button class="btn btn-primary" id="btn-send" onclick="sendReply()">Envoyer la réponse</button>
           <button class="btn btn-ghost" id="btn-edit" onclick="toggleEdit(true)">Modifier</button>
           <button class="btn btn-ghost" id="btn-relance" onclick="useRelanceDraft()" style="display:none">📨 Brouillon de relance</button>
@@ -436,8 +499,50 @@ h1{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:clamp(26px,4
   </div>
 </div>
 
+<!-- ══ APERÇU PIÈCE JOINTE ══════════════════════════════════ -->
+<div class="pv" id="pv" onclick="if(event.target===this)closePv()">
+  <div class="pv-box">
+    <div class="pv-head">
+      <span class="pv-name" id="pv-name"></span>
+      <button class="btn btn-ghost" style="padding:8px 14px;font-size:12.5px" id="pv-dl" onclick="pvDownload()">⬇️ Télécharger</button>
+      <button class="pv-close" onclick="closePv()">✕</button>
+    </div>
+    <div class="pv-body" id="pv-body"></div>
+  </div>
+</div>
+
+<!-- ══ COMPOSER UN NOUVEAU MAIL ═════════════════════════════ -->
+<div class="ov" id="compose-ov">
+  <div class="ov-card" style="max-width:520px">
+    <button class="ov-close" onclick="closeCompose()">✕</button>
+    <div class="ov-title">✍️ Nouveau mail</div>
+    <div class="imap-box on" style="display:block">
+      <label for="nc-to">Destinataire</label>
+      <input id="nc-to" type="email" placeholder="client@exemple.fr" autocomplete="off">
+      <label for="nc-subj">Objet</label>
+      <input id="nc-subj" type="text" maxlength="150" placeholder="Objet du mail">
+      <label for="nc-body">Message</label>
+      <textarea id="nc-body" rows="7" style="width:100%;padding:12px 13px;border-radius:10px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.05);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14.5px;resize:vertical;color-scheme:dark"></textarea>
+      <div class="atts-row" id="natt-list" style="margin-top:12px"></div>
+      <div class="att-warn" id="natt-warn"></div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn btn-ghost" style="padding:11px 16px" onclick="document.getElementById('nc-files').click()">📎 Joindre</button>
+        <button class="btn btn-ghost" style="padding:11px 16px" id="nc-photo-btn" onclick="document.getElementById('nc-photo').click()">📷 Photo</button>
+      </div>
+      <input type="file" id="nc-files" multiple accept=".pdf,image/*,.doc,.docx,.xls,.xlsx,.dwg,application/pdf" style="display:none" onchange="addFiles(this.files,'compose');this.value=''">
+      <input type="file" id="nc-photo" accept="image/*" capture="environment" style="display:none" onchange="addFiles(this.files,'compose');this.value=''">
+      <div class="att-progress" id="natt-progress" style="display:none">
+        <div class="att-bar-track"><div class="att-bar" id="natt-bar"></div></div>
+        <span class="att-ptxt" id="natt-ptxt">Envoi en cours…</span>
+      </div>
+      <button class="btn btn-primary btn-block" id="nc-send" style="margin-top:16px" onclick="sendCompose()">Envoyer →</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
+<script src="jszip.min.js"></script>
 <script src="mailone.js"></script>
 <script>
 'use strict';
@@ -762,6 +867,13 @@ function openTriage(id){
   document.getElementById('btn-relance').style.display =
     (!m.status && (m.waitingDays || 0) >= followThreshold()) ? '' : 'none';
 
+  // Pièces jointes : reçues (direct Gmail) + reset des fichiers à joindre
+  state.replyFiles = [];
+  renderFiles('reply');
+  document.getElementById('scope-fix').style.display = 'none';
+  attProgress('reply', null);
+  loadAtts(m);
+
   toggleEditUI(false);
   document.getElementById('t-actions').style.visibility = 'hidden';
 
@@ -914,6 +1026,10 @@ async function sendReply(){
   const m = state.current;
   const content = getDraftText().trim();
   if (!content) { toast('⚠️', 'La réponse est vide.'); return; }
+
+  // Compte Gmail → envoi DIRECT navigateur → Gmail (pièces jointes incluses)
+  if (GMAIL_DIRECT) return sendReplyGmail(content);
+  if (state.replyFiles.length) { toast('📎', 'Les pièces jointes nécessitent une boîte Gmail connectée en 2 clics.'); return; }
 
   const btn = document.getElementById('btn-send');
   btn.disabled = true; btn.textContent = 'Envoi en cours…';
@@ -1113,6 +1229,389 @@ window.addEventListener('message', (e) => {
   else if (e.data?.type === 'oauth_error') toast('❌', 'Connexion échouée. Réessayez.');
 });
 
+// ════════════════════════════════════════════════════════════
+// PIÈCES JOINTES — échange DIRECT navigateur ↔ Gmail.
+// Le contenu des fichiers ne transite JAMAIS par nos serveurs :
+// le backend ne fournit que le token OAuth de l'utilisateur.
+// ════════════════════════════════════════════════════════════
+let GMAIL_DIRECT = false;
+const gmail = {
+  token: null,
+  async getToken(force = false){
+    if (this.token && !force) return this.token;
+    const r = await API.get('/api/oauth/gmail-token');
+    this.token = r.accessToken;
+    return this.token;
+  },
+  async call(path, opts = {}, retried = false){
+    const tok = await this.getToken();
+    const res = await fetch('https://gmail.googleapis.com/gmail/v1/users/me/' + path, {
+      ...opts, headers: { ...(opts.headers || {}), Authorization: 'Bearer ' + tok },
+    });
+    if (res.status === 401 && !retried) { await this.getToken(true); return this.call(path, opts, true); }
+    if (res.status === 403) { const e = new Error('autorisation Gmail insuffisante'); e.code = 'SCOPE'; throw e; }
+    if (!res.ok) throw new Error('Gmail ' + res.status);
+    return res.json();
+  },
+};
+
+async function initGmailDirect(){
+  try { await gmail.getToken(); GMAIL_DIRECT = true; } catch { GMAIL_DIRECT = false; }
+  const mobile = /Android|iPhone|iPad/i.test(navigator.userAgent);
+  document.getElementById('btn-attach').style.display  = GMAIL_DIRECT ? '' : 'none';
+  document.getElementById('btn-photo').style.display   = GMAIL_DIRECT && mobile ? '' : 'none';
+  document.getElementById('att-hint').style.display    = GMAIL_DIRECT ? '' : 'none';
+  document.getElementById('btn-compose').style.display = GMAIL_DIRECT ? '' : 'none';
+  document.getElementById('nc-photo-btn').style.display = mobile ? '' : 'none';
+}
+
+function fmtSize(b){
+  if (b >= 1048576) return (b / 1048576).toFixed(1).replace('.', ',') + ' Mo';
+  if (b >= 1024)    return Math.round(b / 1024) + ' Ko';
+  return b + ' o';
+}
+function iconFor(a){
+  const n = (a.name || '').toLowerCase();
+  if (/^image\//.test(a.mime)) return '🖼️';
+  if (/pdf/.test(a.mime) || n.endsWith('.pdf')) return '📄';
+  if (/\.docx?$/.test(n)) return '📝';
+  if (/\.xlsx?$/.test(n)) return '📊';
+  if (/\.dwg$/.test(n))  return '📐';
+  return '📎';
+}
+function b64urlToBytes(s){
+  const bin = atob(s.replace(/-/g, '+').replace(/_/g, '/'));
+  const out = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+function blobToB64(blob){
+  return new Promise((ok, ko) => {
+    const r = new FileReader();
+    r.onload = () => ok(String(r.result).split(',')[1]);
+    r.onerror = () => ko(new Error('lecture du fichier impossible'));
+    r.readAsDataURL(blob);
+  });
+}
+const chunk76 = s => (s.match(/.{1,76}/g) || []).join('\r\n');
+
+// ── Réception : pièces jointes du mail ouvert ────────────────
+async function loadAtts(m){
+  const box = document.getElementById('t-atts');
+  box.innerHTML = '';
+  if (!GMAIL_DIRECT) return;
+  try {
+    if (!m._msg) m._msg = await gmail.call(`messages/${encodeURIComponent(m.id)}?format=full&fields=threadId,payload`);
+    const atts = [];
+    (function walk(p){
+      if (!p) return;
+      const dispo = ((p.headers || []).find(h => /^content-disposition$/i.test(h.name)) || {}).value || '';
+      // Vraie pièce jointe = un nom de fichier ET pas « inline » (images du corps)
+      if (p.filename && p.body && p.body.attachmentId && !/^\s*inline/i.test(dispo)) {
+        atts.push({ id: p.body.attachmentId, name: p.filename, mime: p.mimeType || 'application/octet-stream', size: p.body.size || 0 });
+      }
+      (p.parts || []).forEach(walk);
+    })(m._msg.payload);
+    m._atts = atts;
+    if (!atts.length) return;
+
+    box.innerHTML = `<div class="atts-title"><span>📎 ${atts.length} pièce${atts.length > 1 ? 's' : ''} jointe${atts.length > 1 ? 's' : ''}</span>
+        ${atts.length > 1 ? '<button class="ag-btn" onclick="zipAll(this)">⬇️ Tout télécharger (.zip)</button>' : ''}</div>
+      <div class="atts-row">` + atts.map((a, i) => `
+        <button class="att-chip" onclick="openAtt(${i})" title="Aperçu / télécharger">
+          <span class="att-thumb" id="thumb-${i}">${iconFor(a)}</span>
+          <span class="att-meta"><span class="att-name">${esc(a.name)}</span><span class="att-size">${fmtSize(a.size)}</span></span>
+          <span class="att-dl" onclick="event.stopPropagation();dlAtt(${i}, this)" title="Télécharger">⬇️</span>
+        </button>`).join('') + '</div>';
+
+    // Miniatures pour les images raisonnables
+    atts.forEach((a, i) => {
+      if (/^image\//.test(a.mime) && a.size < 1500000) {
+        attBlob(i).then(b => {
+          const t = document.getElementById('thumb-' + i);
+          if (t) t.innerHTML = `<img src="${URL.createObjectURL(b)}" alt="">`;
+        }).catch(() => {});
+      }
+    });
+  } catch (e) {
+    if (e.code === 'SCOPE') showScopeFix();
+  }
+}
+
+async function attBlob(i, onProgress){
+  const m = state.current, a = m._atts[i];
+  m._blobs = m._blobs || {};
+  if (m._blobs[i]) return m._blobs[i];
+  const tok = await gmail.getToken();
+  const data = await new Promise((ok, ko) => {
+    const x = new XMLHttpRequest();
+    x.open('GET', `https://gmail.googleapis.com/gmail/v1/users/me/messages/${encodeURIComponent(m.id)}/attachments/${encodeURIComponent(a.id)}`);
+    x.setRequestHeader('Authorization', 'Bearer ' + tok);
+    x.onprogress = ev => { if (onProgress && ev.total) onProgress(ev.loaded / ev.total); };
+    x.onload = () => x.status === 200 ? ok(JSON.parse(x.responseText)) : ko(Object.assign(new Error('Gmail ' + x.status), { code: x.status === 403 ? 'SCOPE' : undefined }));
+    x.onerror = () => ko(new Error('Problème de connexion — réessayez.'));
+    x.send();
+  });
+  const blob = new Blob([b64urlToBytes(data.data)], { type: a.mime });
+  m._blobs[i] = blob;
+  return blob;
+}
+
+async function dlAtt(i, el){
+  const a = state.current._atts[i];
+  const orig = el ? el.textContent : '';
+  try {
+    const blob = await attBlob(i, p => { if (el) el.textContent = Math.round(p * 100) + '%'; });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = a.name;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    toast('✅', `« ${a.name} » téléchargé`, true);
+  } catch (e) {
+    if (e.code === 'SCOPE') showScopeFix();
+    else toast('⚠️', 'Téléchargement impossible — vérifiez votre connexion.');
+  } finally { if (el) el.textContent = orig || '⬇️'; }
+}
+
+let pvCurrent = null;
+async function openAtt(i){
+  const a = state.current._atts[i];
+  if (!/^image\//.test(a.mime) && !/pdf/.test(a.mime)) return dlAtt(i, null);
+  try {
+    const blob = await attBlob(i);
+    const url = URL.createObjectURL(blob);
+    pvCurrent = { blob, name: a.name };
+    document.getElementById('pv-name').textContent = a.name;
+    document.getElementById('pv-body').innerHTML = /^image\//.test(a.mime)
+      ? `<img src="${url}" alt="${esc(a.name)}">`
+      : `<iframe src="${url}" title="${esc(a.name)}"></iframe>`;
+    document.getElementById('pv').classList.add('on');
+  } catch (e) {
+    if (e.code === 'SCOPE') showScopeFix();
+    else toast('⚠️', 'Aperçu impossible — vérifiez votre connexion.');
+  }
+}
+function closePv(){ document.getElementById('pv').classList.remove('on'); document.getElementById('pv-body').innerHTML = ''; pvCurrent = null; }
+function pvDownload(){
+  if (!pvCurrent) return;
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(pvCurrent.blob);
+  link.download = pvCurrent.name;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+async function zipAll(btn){
+  const m = state.current;
+  const orig = btn.textContent;
+  try {
+    const zip = new JSZip();
+    for (let i = 0; i < m._atts.length; i++) {
+      btn.textContent = `⏳ ${i + 1}/${m._atts.length}…`;
+      zip.file(m._atts[i].name, await attBlob(i));
+    }
+    btn.textContent = '⏳ compression…';
+    const blob = await zip.generateAsync({ type: 'blob' }, meta => { btn.textContent = `⏳ ${Math.round(meta.percent)}%`; });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `pieces-jointes-${(m.from || 'mail').replace(/[^a-z0-9]+/gi, '-').toLowerCase()}.zip`;
+    link.click();
+    URL.revokeObjectURL(link.href);
+    toast('✅', 'Archive .zip téléchargée', true);
+  } catch (e) {
+    if (e.code === 'SCOPE') showScopeFix();
+    else toast('⚠️', 'Téléchargement impossible — vérifiez votre connexion.');
+  } finally { btn.textContent = orig; }
+}
+
+// ── Envoi : fichiers joints à la réponse / au nouveau mail ───
+const MAX_TOTAL = 18 * 1024 * 1024;   // ≈ 25 Mo une fois encodé pour Gmail
+state.replyFiles = [];
+state.composeFiles = [];
+const filesOf = ctx => ctx === 'compose' ? state.composeFiles : state.replyFiles;
+
+function compressImage(file){
+  return new Promise((ok, ko) => {
+    const img = new Image();
+    img.onload = () => {
+      const MAXDIM = 2000;
+      const r = Math.min(1, MAXDIM / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * r);
+      c.height = Math.round(img.height * r);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      c.toBlob(b => b ? ok(new File([b], file.name.replace(/\.\w+$/, '.jpg'), { type: 'image/jpeg' })) : ko(new Error('canvas')), 'image/jpeg', 0.85);
+      URL.revokeObjectURL(img.src);
+    };
+    img.onerror = () => ko(new Error('format non décodable'));
+    img.src = URL.createObjectURL(file);
+  });
+}
+
+async function addFiles(list, ctx){
+  for (const f of Array.from(list || [])) {
+    const okType = /^image\//.test(f.type) || f.type === 'application/pdf'
+      || /\.(pdf|jpe?g|png|heic|heif|gif|webp|docx?|xlsx?|dwg)$/i.test(f.name);
+    if (!okType) { toast('⚠️', `« ${f.name} » : ce type de fichier n'est pas pris en charge.`); continue; }
+    let blob = f;
+    if (/^image\/(jpeg|png|webp)$/.test(f.type) && f.size > 5 * 1024 * 1024) {
+      toast('🗜️', `Compression de « ${f.name} »…`);
+      blob = await compressImage(f).catch(() => f);
+    }
+    filesOf(ctx).push({
+      name: blob.name || f.name,
+      blob,
+      mime: blob.type || f.type || 'application/octet-stream',
+      size: blob.size,
+      thumb: /^image\//.test(blob.type || f.type) ? URL.createObjectURL(blob) : null,
+    });
+  }
+  renderFiles(ctx);
+}
+function removeFile(ctx, i){
+  const arr = filesOf(ctx);
+  if (arr[i]?.thumb) URL.revokeObjectURL(arr[i].thumb);
+  arr.splice(i, 1);
+  renderFiles(ctx);
+}
+function renderFiles(ctx){
+  const arr  = filesOf(ctx);
+  const list = document.getElementById(ctx === 'compose' ? 'natt-list' : 'att-list');
+  const warn = document.getElementById(ctx === 'compose' ? 'natt-warn' : 'att-warn');
+  list.innerHTML = arr.map((f, i) => `
+    <span class="att-chip" style="cursor:default">
+      <span class="att-thumb">${f.thumb ? `<img src="${f.thumb}" alt="">` : iconFor(f)}</span>
+      <span class="att-meta"><span class="att-name">${esc(f.name)}</span><span class="att-size">${fmtSize(f.size)}</span></span>
+      <button class="att-x" onclick="removeFile('${ctx}',${i})" title="Retirer">✕</button>
+    </span>`).join('');
+  const total = arr.reduce((s, f) => s + f.size, 0);
+  const over = total > MAX_TOTAL;
+  warn.style.display = over ? 'block' : 'none';
+  if (over) warn.textContent = `⚠️ Vos fichiers font ${fmtSize(total)} au total — Gmail limite un mail à 25 Mo. Retirez ou compressez une pièce.`;
+  return !over;
+}
+
+async function buildMime({ to, subject, text, files, inReplyTo }){
+  const B = 'mailone_' + Math.random().toString(36).slice(2);
+  const encHdr = s => `=?UTF-8?B?${btoa(unescape(encodeURIComponent(s)))}?=`;
+  let out = `To: ${to}\r\nSubject: ${encHdr(subject)}\r\nMIME-Version: 1.0\r\n`;
+  if (inReplyTo) out += `In-Reply-To: ${inReplyTo}\r\nReferences: ${inReplyTo}\r\n`;
+  out += `Content-Type: multipart/mixed; boundary="${B}"\r\n\r\n`;
+  out += `--${B}\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: base64\r\n\r\n${chunk76(btoa(unescape(encodeURIComponent(text))))}\r\n`;
+  for (const f of files) {
+    const safe = f.name.replace(/["\r\n]/g, '');
+    out += `--${B}\r\nContent-Type: ${f.mime}; name="${safe}"\r\nContent-Disposition: attachment; filename="${safe}"\r\nContent-Transfer-Encoding: base64\r\n\r\n${chunk76(await blobToB64(f.blob))}\r\n`;
+  }
+  return out + `--${B}--`;
+}
+
+function sendViaGmail(raw, threadId, onProgress){
+  return gmail.getToken().then(tok => new Promise((ok, ko) => {
+    const x = new XMLHttpRequest();
+    x.open('POST', 'https://gmail.googleapis.com/gmail/v1/users/me/messages/send');
+    x.setRequestHeader('Authorization', 'Bearer ' + tok);
+    x.setRequestHeader('Content-Type', 'application/json');
+    x.upload.onprogress = ev => { if (onProgress && ev.total) onProgress(ev.loaded / ev.total); };
+    x.onload = () => (x.status >= 200 && x.status < 300)
+      ? ok(JSON.parse(x.responseText))
+      : ko(Object.assign(new Error('Gmail ' + x.status), { code: x.status === 403 ? 'SCOPE' : undefined }));
+    x.onerror = () => ko(new Error('Problème de connexion — réessayez.'));
+    const rawB64 = btoa(raw).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    x.send(JSON.stringify(threadId ? { raw: rawB64, threadId } : { raw: rawB64 }));
+  }));
+}
+
+function showScopeFix(){ document.getElementById('scope-fix').style.display = 'block'; }
+function attProgress(ctx, pct, txt){
+  const wrap = document.getElementById(ctx === 'compose' ? 'natt-progress' : 'att-progress');
+  const bar  = document.getElementById(ctx === 'compose' ? 'natt-bar' : 'att-bar');
+  const ptxt = document.getElementById(ctx === 'compose' ? 'natt-ptxt' : 'att-ptxt');
+  if (pct === null) { wrap.style.display = 'none'; return; }
+  wrap.style.display = '';
+  bar.style.width = Math.round(pct * 100) + '%';
+  ptxt.textContent = txt || `Envoi en cours… ${Math.round(pct * 100)} %`;
+}
+
+// Envoi direct de la RÉPONSE via Gmail (avec ou sans pièces jointes)
+async function sendReplyGmail(content){
+  const m = state.current;
+  if (!renderFiles('reply')) { toast('⚠️', 'Fichiers trop lourds pour Gmail (25 Mo max).'); return; }
+  const btn = document.getElementById('btn-send');
+  btn.disabled = true; btn.textContent = 'Préparation…';
+  try {
+    if (!m._msg) m._msg = await gmail.call(`messages/${encodeURIComponent(m.id)}?format=full&fields=threadId,payload`);
+    const hdr = name => ((m._msg.payload?.headers || []).find(h => h.name.toLowerCase() === name) || {}).value || '';
+    const raw = await buildMime({
+      to:        m.fromEmail,
+      subject:   /^re\s*:/i.test(m.subject) ? m.subject : `Re: ${m.subject}`,
+      text:      content,
+      files:     state.replyFiles,
+      inReplyTo: hdr('message-id'),
+    });
+    attProgress('reply', 0);
+    await sendViaGmail(raw, m._msg.threadId, p => attProgress('reply', p));
+    attProgress('reply', null);
+    await API.post(`/api/mails/${encodeURIComponent(m.id)}/handled`, {});
+    state.replyFiles = [];
+    setCurrentStatus('handled');
+    closeTriage();
+    toast('✅', 'Réponse envoyée' + (raw.length > 4000 ? ' avec pièces jointes' : '') + ' — mail classé comme traité', true);
+  } catch (e) {
+    attProgress('reply', null);
+    if (e.code === 'SCOPE') showScopeFix();
+    else toast('⚠️', e.message || 'Envoi impossible.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Envoyer la réponse';
+  }
+}
+
+// ── Composer un nouveau mail ─────────────────────────────────
+function openCompose(){ document.getElementById('compose-ov').classList.add('on'); document.getElementById('nc-to').focus(); }
+function closeCompose(){ document.getElementById('compose-ov').classList.remove('on'); }
+async function sendCompose(){
+  const to   = document.getElementById('nc-to').value.trim();
+  const subj = document.getElementById('nc-subj').value.trim();
+  const body = document.getElementById('nc-body').value.trim();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(to)) { toast('⚠️', 'Adresse du destinataire invalide.'); return; }
+  if (!subj && !body) { toast('⚠️', 'Écrivez un objet ou un message.'); return; }
+  if (!renderFiles('compose')) { toast('⚠️', 'Fichiers trop lourds pour Gmail (25 Mo max).'); return; }
+  const btn = document.getElementById('nc-send');
+  btn.disabled = true; btn.textContent = 'Envoi…';
+  try {
+    const raw = await buildMime({ to, subject: subj || '(sans objet)', text: body, files: state.composeFiles });
+    attProgress('compose', 0);
+    await sendViaGmail(raw, null, p => attProgress('compose', p));
+    attProgress('compose', null);
+    state.composeFiles = [];
+    renderFiles('compose');
+    ['nc-to', 'nc-subj', 'nc-body'].forEach(id => document.getElementById(id).value = '');
+    closeCompose();
+    toast('✅', 'Mail envoyé', true);
+  } catch (e) {
+    attProgress('compose', null);
+    if (e.code === 'SCOPE') { closeCompose(); showScopeFix(); toast('🔐', 'Reconnectez Gmail pour autoriser l\'envoi.'); }
+    else toast('⚠️', e.message || 'Envoi impossible.');
+  } finally {
+    btn.disabled = false; btn.textContent = 'Envoyer →';
+  }
+}
+
+// Glisser-déposer dans la carte réponse
+(function(){
+  const pane = document.querySelector('.ai-pane');
+  const zone = document.getElementById('att-zone');
+  ['dragover', 'dragenter'].forEach(ev => pane.addEventListener(ev, e => {
+    if (!GMAIL_DIRECT) return;
+    e.preventDefault(); zone.classList.add('drag');
+  }));
+  ['dragleave', 'drop'].forEach(ev => pane.addEventListener(ev, e => {
+    e.preventDefault(); zone.classList.remove('drag');
+    if (ev === 'drop' && GMAIL_DIRECT && e.dataTransfer?.files?.length) addFiles(e.dataTransfer.files, 'reply');
+  }));
+})();
+
 // Outils marketing : réservés à l'administrateur MailOne
 API.get('/api/auth/me').then(r => {
   if (r?.user?.isAdmin) {
@@ -1121,6 +1620,7 @@ API.get('/api/auth/me').then(r => {
   }
 }).catch(() => {});
 
+initGmailDirect();
 loadDashboard();
 </script>
 </body>
